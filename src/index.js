@@ -8,10 +8,10 @@ import { Toaster } from "react-hot-toast";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
-  <>
-    <Toaster />
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </>
+  <React.StrictMode>
+    {/* <Toaster /> */}
+    {/* <Provider store={store}> */}
+    <App />
+    {/* </Provider> */}
+  </React.StrictMode>
 );

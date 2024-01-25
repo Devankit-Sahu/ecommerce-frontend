@@ -3,11 +3,9 @@ module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
-      boxShadow: {
-        "3xl": "0 0 10px rgba(0,0,0,0.204)",
-      },
-      screens: {
-        md: "960px",
+      gridTemplateColumns: {
+        "300": "300px minmax(0,1fr)",
+        "200": "200px minmax(0,1fr)",
       },
     },
   },

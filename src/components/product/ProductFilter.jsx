@@ -7,9 +7,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { useSelector } from "react-redux";
 
 const ProductFilter = ({ price, setPrice, categories, setCategories }) => {
-  const category = useSelector((state) => state.allcat.categories);
-  const [showFilter, setShowFilter] = useState(false);
-  const [isOpenCat, setIsOpenCat] = useState(false);
+  //   const category = useSelector((state) => state.allcat.categories);
 
   const priceHandler = (event, newValue) => {
     setPrice(newValue);
@@ -25,45 +23,35 @@ const ProductFilter = ({ price, setPrice, categories, setCategories }) => {
   };
 
   return (
-    <>
-      <span
-        className="cursor-pointer absolute left-0 top-[2%] md:hidden"
-        onClick={() => setShowFilter(true)}
-      >
-        <MenuOutlinedIcon />
-      </span>
-      <div
-        className={`w-[24%] bg-white absolute z-50 ${
-          showFilter ? " left-0" : " left-[-270px]"
-        } md:relative md:left-0 transition-all ease-in duration-[.4]`}
-      >
-        <div className="w-full flex items-center justify-between my-3 py-2 border-b border-[#d3d0d0] px-4 md:px-0">
-          <span className="p-2 text-gray-800 hover:text-gray-700 font-medium">
-            Filters
-          </span>
-          <span
-            className="cursor-pointer inline-block md:hidden"
-            onClick={() => {
-              setShowFilter(false);
-            }}
-          >
-            <CloseIcon />
-          </span>
-        </div>
+    <div className="w-full">
+      <h2 className="p-2 text-gray-800 hover:text-gray-700 font-medium">
+        Filters
+      </h2>
+      {/* category filter */}
+      <div className="w-full border-b border-[#b2b1b1] px-2">
+        <h3 className="font-medium text-gray-900 border-b-[1px] border-solid border-b-[rgb(204,204,204)] py-2">
+          Category
+        </h3>
+        <ul className="w-full">
+          <li className="flex items-center gap-3 px-2 py-2 hover:bg-[rgb(255,187,56)] transition-all duration-300 ease-in-out">
+            <input type="checkbox" name="" id="mens" />
+            <label htmlFor="mens">Mens</label>
+          </li>
+          <li className="flex items-center gap-3 px-2 py-2 hover:bg-[rgb(255,187,56)] transition-all duration-300 ease-in-out">
+            <input type="checkbox" name="" id="womens" />
+            <label htmlFor="womens">Womens</label>
+          </li>
+          <li className="flex items-center gap-3 px-2 py-2 hover:bg-[rgb(255,187,56)] transition-all duration-300 ease-in-out">
+            <input type="checkbox" name="" id="kids" />
+            <label htmlFor="kids">Kids</label>
+          </li>
+          <li className="flex items-center gap-3 px-2 py-2 hover:bg-[rgb(255,187,56)] transition-all duration-300 ease-in-out">
+            <input type="checkbox" name="" id="watches" />
+            <label htmlFor="watches">Watches</label>
+          </li>
+        </ul>
 
-        {/* category filter */}
-        <div className="w-full border-b border-[#b2b1b1] py-4 px-1">
-          <div className="flex justify-between">
-            <h3 className="font-medium text-gray-900">Category</h3>
-            <div
-              onClick={() => setIsOpenCat((prev) => !prev)}
-              className="cursor-pointer"
-            >
-              {isOpenCat ? <MinimizeIcon /> : <AddIcon />}
-            </div>
-          </div>
-          <div className={isOpenCat ? "block" : "hidden"}>
-            {category.map((cat, catIndex) => (
+        {/* {category.map((cat, catIndex) => (
               <div
                 key={catIndex}
                 className="flex items-center my-3 cursor-pointer"
@@ -84,27 +72,25 @@ const ProductFilter = ({ price, setPrice, categories, setCategories }) => {
                   {cat.categoryName}
                 </label>
               </div>
-            ))}
-          </div>
-        </div>
+            ))} */}
+      </div>
 
-        {/* price filter */}
-        <div className="w-full border-b border-[#b2b1b1] px-1 py-4">
-          <h3 className="font-medium text-gray-900 mb-4">Price</h3>
-          <div className="w-[80%] mx-auto pl-2">
-            <Slider
-              aria-labelledby="range-slider"
-              onChange={priceHandler}
-              valueLabelDisplay="auto"
-              value={price}
-              color="secondary"
-              min={0}
-              max={30000}
-            />
-          </div>
+      {/* price filter */}
+      <div className="w-full border-b border-[#b2b1b1] px-1 py-4">
+        <h3 className="font-medium text-gray-900 mb-4">Price</h3>
+        <div className="w-[80%] mx-auto pl-2">
+          <Slider
+            aria-labelledby="range-slider"
+            onChange={priceHandler}
+            valueLabelDisplay="auto"
+            value={price}
+            color="secondary"
+            min={0}
+            max={30000}
+          />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

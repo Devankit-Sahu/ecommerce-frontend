@@ -8,49 +8,51 @@ import { updateProfileReset } from "../redux/features/profile/updateProfileSlice
 import { updateUser } from "../redux/features/profile/updateProfileAction";
 
 const UpdateProfile = () => {
-  const { user } = useSelector((state) => state.auth);
-  const {loading,isUpdated} = useSelector((state)=>state.updateProfile);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [avatar, setAvatar] = useState("");
-  const [avatarPreview, setAvatarPreview] = useState("");
+  // const { user } = useSelector((state) => state.auth);
+  // const {loading,isUpdated} = useSelector((state)=>state.updateProfile);
+  // const [name, setName] = useState("");
+  // const [email, setEmail] = useState("");
+  // const [avatar, setAvatar] = useState("");
+  // const [avatarPreview, setAvatarPreview] = useState("");
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const updateprofileSubmit = (e) => {
-    e.preventDefault();
-    dispatch(updateUser({name,email,avatar}));
-  };
-  const updateprofileDataChange = (e) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-        setAvatarPreview(reader.result);
-        setAvatar(reader.result);
-      }
-    };
-    reader.readAsDataURL(e.target.files[0]);
-  };
+  // const dispatch = useDispatch();
+  // const navigate = useNavigate();
+  // const updateprofileSubmit = (e) => {
+  //   e.preventDefault();
+  //   dispatch(updateUser({name,email,avatar}));
+  // };
+  // const updateprofileDataChange = (e) => {
+  //   const reader = new FileReader();
+  //   reader.onload = () => {
+  //     if (reader.readyState === 2) {
+  //       setAvatarPreview(reader.result);
+  //       setAvatar(reader.result);
+  //     }
+  //   };
+  //   reader.readAsDataURL(e.target.files[0]);
+  // };
 
-  useEffect(() => {
-    if(user){
-      setName(user.name);
-      setEmail(user.email);
-      setAvatarPreview(user.avatar.url);
-      // setAvatar(user.avatar.url);
-    }
-    if (isUpdated) {
-      toast.success("Profile updated successfully !!!");
-      // dispatch(loadUser());
-      navigate("/user/profile");
-      dispatch(updateProfileReset());
-    }
-  }, [isUpdated, navigate,user,dispatch]);
+  // useEffect(() => {
+  //   if(user){
+  //     setName(user.name);
+  //     setEmail(user.email);
+  //     setAvatarPreview(user.avatar.url);
+  //     // setAvatar(user.avatar.url);
+  //   }
+  //   if (isUpdated) {
+  //     toast.success("Profile updated successfully !!!");
+  //     // dispatch(loadUser());
+  //     navigate("/user/profile");
+  //     dispatch(updateProfileReset());
+  //   }
+  // }, [isUpdated, navigate,user,dispatch]);
   return (
     <>
-      {loading ? (
+      {/* {loading ? (
         <Loader />
-      ) : (
+      ) 
+      : 
+      ( */}
         <div className="min-h-[90vh] px-6 py-12 lg:px-8">
           <div className="flex flex-col justify-center rounded-3xl shadow-xl mt-10 sm:mx-auto sm:w-full sm:max-w-sm border-2 p-4 bg-white">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -60,7 +62,7 @@ const UpdateProfile = () => {
             </div>
             <form
               className="space-y-6"
-              onSubmit={updateprofileSubmit}
+              // onSubmit={updateprofileSubmit}
               noValidate
               encType="multipart/form-data"
             >
@@ -76,8 +78,8 @@ const UpdateProfile = () => {
                     id="name"
                     name="name"
                     type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    // value={name}
+                    // onChange={(e) => setName(e.target.value)}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:outline-none px-2 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -94,15 +96,15 @@ const UpdateProfile = () => {
                     id="email"
                     name="email"
                     type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    // value={email}
+                    // onChange={(e) => setEmail(e.target.value)}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:outline-none px-2 sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>
               <div className="flex items-center gap-3">
                 <img
-                  src={avatarPreview}
+                  // src={avatarPreview}
                   alt="avatarPreview"
                   className="w-[60px] h-[55px] rounded-[50%]"
                 />
@@ -112,7 +114,7 @@ const UpdateProfile = () => {
                   type="file"
                   accept="image/*"
                   className="block w-full py-1.5 sm:leading-6 file:w-full file:bg-gradient-to-b file:from-blue-500 file:to-blue-600 file:border-none file:p-3 file:rounded-full file:text-white file:cursor-pointer"
-                  onChange={updateprofileDataChange}
+                  // onChange={updateprofileDataChange}
                 />
               </div>
 
@@ -127,7 +129,7 @@ const UpdateProfile = () => {
             </form>
           </div>
         </div>
-      )}
+      {/* )} */}
       {/* <div className="min-h-[90vh] px-6 py-12 lg:px-8">
         <div className="flex flex-col justify-center rounded-3xl shadow-xl mt-10 sm:mx-auto sm:w-full sm:max-w-sm border-2 p-4 bg-white">
           <div className="sm:mx-auto sm:w-full sm:max-w-sm">

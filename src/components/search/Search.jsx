@@ -4,34 +4,35 @@ import { useNavigate } from "react-router-dom";
 
 const Search = () => {
   const [key, setKey] = useState("");
-  const navigate = useNavigate();
+  //   const navigate = useNavigate();
 
   const submitHandler = (e) => {
     e.preventDefault();
     if (key.trim()) {
-      navigate(`/products/${key}`);
+      //   navigate(`/products/${key}`);
       setKey("");
     }
   };
   return (
-    <div className=" flex-[.5] border border-gray-500 relative">
-      <form onSubmit={submitHandler} className="w-full h-12">
-        <input
-          type="text"
-          value={key}
-          className="w-full h-full outline-none border-none placeholder:text-[#333232] pl-3 pr-12"
-          onChange={(e) => setKey(e.target.value)}
-          placeholder="Search products..."
-        />
+    <form
+      onSubmit={submitHandler}
+      className="w-[200px] md:w-[350px] hidden sm:flex border-[1px] border-solid border-[rgb(239,239,239)] h-[44px]"
+    >
+      <input
+        type="text"
+        value={key}
+        className="w-full h-full outline-none border-none placeholder:text-[#333232] px-3"
+        onChange={(e) => setKey(e.target.value)}
+        placeholder="Search products..."
+      />
 
-        <button
-          type="submit"
-          className="absolute top-[10px] right-[5px] cursor-pointer"
-        >
-          <SearchIcon />
-        </button>
-      </form>
-    </div>
+      <button
+        type="submit"
+        className="bg-[rgb(255,187,56)] w-[50px] md:w-[100px]"
+      >
+        <SearchIcon />
+      </button>
+    </form>
   );
 };
 

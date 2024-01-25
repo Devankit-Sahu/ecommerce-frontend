@@ -4,16 +4,16 @@ import { useNavigate } from "react-router-dom";
 import {Loader} from "../components";
 
 const Profile = () => {
-  const { user, loading } = useSelector((state) => state.auth);
+  // const { user, loading } = useSelector((state) => state.auth);
 
-  const navigate = useNavigate();
-  const handleClick = () => {
-    navigate("/profile/update");
-  };
+  // const navigate = useNavigate();
+  // const handleClick = () => {
+  //   navigate("/profile/update");
+  // };
 
   return (
     <>
-      {loading ? (
+      {/* {loading ? (
         <div className="h-[901vh] flex justify-center items-center">
           <Loader content={"Fetching user please wait for while"} />
         </div>
@@ -61,7 +61,7 @@ const Profile = () => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
      
     </>
   );

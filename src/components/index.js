@@ -22,6 +22,7 @@ import AdminUserDetails from "./admin/AdminUserDetails";
 import MyTable from "./table/Table";
 import ProductFilter from "./product/ProductFilter";
 import PaginationComp from "./pagination/PaginationComp";
+import Categories from "./Categories";
 export {
   AllProducts,
   Login,
@@ -47,4 +48,5 @@ export {
   AdminUserDetails,
   ProductFilter,
   PaginationComp,
+  Categories,
 };
