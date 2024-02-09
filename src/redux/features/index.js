@@ -1,33 +1,39 @@
-import allProductsReducer from "./product/allProductsSlice";
+import {
+  allProductsWithQueryReducer,
+  allProductsReducer,
+  allCategoriesReducer,
+  productDetailReducer
+} from "./product/productsSlice";
 import authReducer from "./auth/authSlice";
-import productDetailReducer from "./product/productDetailSlice";
 import allProductsAdminReducer from "./admin/allProductsAdminSlice";
-import createProductReducer from "./admin/createProductSlice";
-import updateProductAdminReducer from "./admin/updateProductSlice";
 import allUsersReducer from "./admin/allUsersSlice";
-import cartReducer from "./cart/cartSlice";
-import favouritesReducer from "./favourites/favouritesSlice";
-import deleteProductReducer from "./admin/deleteProductSlice";
-import updateProfileReducer from "./profile/updateProfileSlice";
-import addCategoryReducer from "./admin/addCategorySlice";
-import allCategoriesReducer from "./admin/allCategoriesSlice";
-import userDetailsReducer from "./admin/userDetailsSlice";
-import deleteCategoryReducer from "./admin/deleteCategorySlice";
+import allCategoriesAdminReducer from "./admin/allCategoriesSlice";
+// import createProductReducer from "./admin/createProductSlice";
+// import updateProductAdminReducer from "./admin/updateProductSlice";
+// import cartReducer from "./cart/cartSlice";
+// import favouritesReducer from "./favourites/favouritesSlice";
+// import deleteProductReducer from "./admin/deleteProductSlice";
+// import updateProfileReducer from "./profile/updateProfileSlice";
+// import addCategoryReducer from "./admin/addCategorySlice";
+// import userDetailsReducer from "./admin/userDetailsSlice";
+// import deleteCategoryReducer from "./admin/deleteCategorySlice";
 
 export {
   allProductsReducer,
+  allProductsWithQueryReducer,
   allCategoriesReducer,
   authReducer,
-  productDetailReducer,
   allProductsAdminReducer,
-  createProductReducer,
-  updateProductAdminReducer,
-  updateProfileReducer,
   allUsersReducer,
-  cartReducer,
-  favouritesReducer,
-  deleteCategoryReducer,
-  deleteProductReducer,
-  addCategoryReducer,
-  userDetailsReducer,
+  allCategoriesAdminReducer,
+  productDetailReducer,
+  // createProductReducer,
+  // updateProductAdminReducer,
+  // updateProfileReducer,
+  // cartReducer,
+  // favouritesReducer,
+  // deleteCategoryReducer,
+  // deleteProductReducer,
+  // addCategoryReducer,
+  // userDetailsReducer,
 };
