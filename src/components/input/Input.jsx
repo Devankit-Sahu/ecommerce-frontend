@@ -1,11 +1,13 @@
 import React from "react";
 
 const Input = ({
+  id,
   name,
   label,
+  labelClassName,
   type = "text",
-  value,
-  onChange,
+  value = "",
+  onChange = () => {},
   placeholder,
   className = "",
   ...rest
@@ -13,22 +15,19 @@ const Input = ({
   return (
     <div>
       {label && (
-        <label
-          htmlFor={name}
-          className="block text-sm font-medium leading-6 text-gray-900 font-serif"
-        >
+        <label htmlFor={id} className={labelClassName}>
           {label}
         </label>
       )}
       <input
-        id={name}
+        id={id}
         name={name}
         type={type}
         placeholder={placeholder}
+        className={className}
         value={value}
-        {...rest}
         onChange={onChange}
-        className={`placeholder:text-gray-600 block w-full rounded-md text-gray-900 outline-none ${className}`}
+        {...rest}
       />
     </div>
   );

@@ -4,12 +4,11 @@ import { useNavigate } from "react-router-dom";
 
 const Search = () => {
   const [key, setKey] = useState("");
-  //   const navigate = useNavigate();
-
+  const navigate = useNavigate();
   const submitHandler = (e) => {
     e.preventDefault();
     if (key.trim()) {
-      //   navigate(`/products/${key}`);
+      navigate(`/products/${key}`);
       setKey("");
     }
   };

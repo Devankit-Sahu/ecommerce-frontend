@@ -5,14 +5,14 @@ const PaginationComp = ({
   filteredProductsCount,
   productPerPage,
   setPage,
-  totalPage,
+  totalPages,
 }) => {
   return (
-    <div className="mt-10 flex justify-start">
+    <div className="mt-10">
       {productPerPage < filteredProductsCount && (
         <Pagination
           page={page}
-          count={totalPage}
+          count={totalPages}
           shape="rounded"
           defaultPage={1}
           color="secondary"

@@ -6,8 +6,7 @@ import { addItems } from "../../redux/features/cart/cartSlice";
 import Loader from "../Loader";
 import ProductReviews from "./ProductReviews";
 import { Button, Rating } from "@mui/material";
-
-const reviews = { href: "#", average: 4, totalCount: 117 };
+import { toast } from "react-hot-toast";
 
 const ProductDetail = () => {
   const { product, loading } = useSelector((state) => state.productDetail);
@@ -27,22 +26,23 @@ const ProductDetail = () => {
           cartItemId: product._id,
           name: product.name,
           category: product.category,
-          description: product.description,
           price: product.price,
           image: product.images[0].url,
           stock: product.stock,
-          seller: product.seller,
           quantity: 1,
+          totalPrice: product.price,
         })
       );
+      toast.success("Item added to cart", { position: "bottom-center" });
     }
   };
 
   useEffect(() => {
     dispatch(SingleProductDetailAction(id));
   }, [dispatch]);
+
   useEffect(() => {
-    if (cartItems.length > 0) {
+    if (cartItems) {
       localStorage.setItem("cartItem", JSON.stringify(cartItems));
     }
   }, [cartItems]);
@@ -62,13 +62,16 @@ const ProductDetail = () => {
             <h1 className="text-5xl font-semibold font-serif capitalize mb-5">
               {product?.name}
             </h1>
-            <div className="flex gap-10 mb-5">
+            <div className="flex justify-between gap-10 mb-5">
               <span>
                 <Rating />
               </span>
               <h3>15 reviews</h3>
             </div>
             <h2 className="text-2xl text-red-500 mb-5">₹ {product?.price}</h2>
+            <h2 className="text-2xl mb-5 capitalize">
+              Stock : <span>{product.stock}</span>
+            </h2>
             <Button
               onClick={addToCartHandler}
               sx={{
@@ -80,13 +83,18 @@ const ProductDetail = () => {
               add to cart
             </Button>
             <div className="flex flex-wrap gap-5 mt-10">
-              {product?.images?.map((item) => (
-                <img
-                  key={item._id}
-                  src={item?.url}
-                  alt="product-preview"
-                  className="w-20 cursor-pointer"
-                />
+              {product?.images?.map((item, index) => (
+                <div
+                  className="border border-solid border-gray-400 p-2 rounded-md"
+                  key={index}
+                >
+                  <img
+                    key={item._id}
+                    src={item?.url}
+                    alt="product-preview"
+                    className="w-20 cursor-pointer object-cover h-full"
+                  />
+                </div>
               ))}
             </div>
           </div>

@@ -1,40 +1,41 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Fragment } from "react";
-import { Loader, Input, MyButton } from "../../components";
-import { createUser } from "../../redux/features/auth/authAction";
-import { clearAllErrors } from "../../redux/features/auth/authSlice";
-import { motion } from "framer-motion";
+import { Input, MyButton } from "..";
 import { Avatar } from "@mui/material";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { useForm } from "react-hook-form";
+import { createUser } from "../../redux/api/auth-api";
+import { Alert } from "@mui/material";
 
 const SignUp = () => {
-  //   const isAuthenticated = JSON.parse(localStorage.getItem("isAuth"));
-  //   const { loading, error, user } = useSelector((state) => state.auth);
+  const { loading, error, isAuthenticated } = useSelector(
+    (state) => state.auth
+  );
 
-  const [userDetails, setUserDetails] = useState({
-    name: "",
-    email: "",
-    password: "",
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+    },
   });
 
   const [avatar, setAvatar] = useState("");
   const [avatarPreview, setavatarPreview] = useState("");
 
-  //   const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const registerSubmit = async (e) => {
-    e.preventDefault();
-    const { name, email, password } = userDetails;
-    if (name && email && password && avatar) {
-      //   dispatch(createUser({ name, email, password, avatar }));
+  const registerSubmit = (data) => {
+    const { name, email, password } = data;
+    if (avatar) {
+      dispatch(createUser({ name, email, password, avatar }));
+    } else {
+      dispatch(createUser({ name, email, password }));
     }
-  };
-
-  const registerDataChange = (e) => {
-    const { name, value } = e.target;
-    setUserDetails({ ...userDetails, [name]: value });
   };
 
   const registerImageChange = (e) => {
@@ -50,117 +51,141 @@ const SignUp = () => {
     }
   };
 
-  //   useEffect(() => {
-  //     if (isAuthenticated && user?.role === "user") {
-  //       localStorage.setItem("user", JSON.stringify(user));
-  //       navigate("/");
-  //     } else if (isAuthenticated && user?.role === "admin") {
-  //       localStorage.setItem("user", JSON.stringify(user));
-  //       navigate("/admin/dashboard");
-  //     }
-  //     if (error) {
-  //       dispatch(clearAllErrors());
-  //     }
-  //   }, [dispatch, isAuthenticated, navigate, error]);
+  useEffect(() => {
+    if (isAuthenticated) {
+      localStorage.setItem("isAuth", JSON.stringify(isAuthenticated));
+      navigate("/");
+    }
+  }, [isAuthenticated]);
 
   return (
-    <Fragment>
-      <div className="h-screen flex justify-center items-center bg-slate-200">
-        <div className="flex flex-col justify-center rounded-[10px] bg-[#ffffff70] p-5 shadow-xl w-[400px] relative">
-          <div className="cursor-pointer absolute top-3 left-3 hover:bg-[#d7d3d3c3] p-2 rounded-[50px]">
-            <Link to="/">
-              <ArrowBackIcon />
-            </Link>
-          </div>
-          <h2 className="my-5 text-center text-2xl font-bold leading-9 tracking-tight text-gray-600 capitalize">
-            Create your account
-          </h2>
-          <form
-            className="space-y-6"
-            onSubmit={registerSubmit}
-            noValidate
-            encType="multipart/form-data"
-          >
-            <div className="mt-2">
-              <Input
-                label="Name"
+    <div className="h-screen flex bg-slate-200">
+      <div className="w-1/2 relative">
+        <div className="absolute top-6 left-0 w-60 h-60 bg-cyan-500 rounded-full blur-[180px]"></div>
+      </div>
+      <div className="w-1/2 p-10">
+        <div className="bg-[white] rounded-2xl h-full px-10 flex items-center">
+          <div className="w-full">
+            <h2 className="my-3 text-center text-2xl font-bold leading-9 tracking-tight text-gray-600 capitalize">
+              Create your account
+            </h2>
+            {error && (
+              <Alert severity="error" className="mb-2">
+                ={error}
+              </Alert>
+            )}
+            <form
+              className="space-y-6"
+              method="POST"
+              onSubmit={handleSubmit(registerSubmit)}
+              noValidate
+              encType="multipart/form-data"
+            >
+              <div className="flex flex-col items-center gap-3">
+                <Avatar
+                  sx={{
+                    width: "60px",
+                    height: "60px",
+                  }}
+                  src={avatarPreview}
+                />
+                <Input
+                  id="avatar"
+                  label="Choose Avatar"
+                  labelClassName="bg-sky-500 text-white p-2 rounded-lg cursor-pointer"
+                  name="avatar"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={registerImageChange}
+                />
+              </div>
+              <input
+                id="name"
                 name="name"
                 type="text"
-                value={userDetails.name}
-                placeholder="Enter your Name"
-                className="border-0 py-1.5 shadow-md px-2 sm:text-sm sm:leading-6"
-                onChange={registerDataChange}
+                className={`w-full outline-none border-[1px] border-solid border-green-400 placeholder-green-500 focus:border-[1px] focus:border-solid focus:border-blue-400 focus:placeholder-cyan-500 rounded-2xl p-2 mt-1 ${
+                  errors?.name && "border-red-500"
+                }`}
+                placeholder="Enter your name"
+                {...register("name", {
+                  required: "Name is required",
+                  minLength: {
+                    value: 5,
+                    message: "Must be of atleast 5 characters",
+                  },
+                  maxLength: {
+                    value: 30,
+                    message: "Must not exceed 30 characters",
+                  },
+                })}
               />
-            </div>
-            <div className="mt-2">
-              <Input
-                label="Email"
+              {errors?.name && (
+                <p className="text-red-500 text-sm" style={{ marginTop: 0 }}>
+                  {errors?.name?.message}
+                </p>
+              )}
+              <input
+                id="email"
                 name="email"
                 type="email"
-                value={userDetails.email}
-                placeholder="Enter your Email"
-                className="border-0 py-1.5 shadow-md px-2 sm:text-sm sm:leading-6"
-                onChange={registerDataChange}
+                placeholder="example@gmail.com"
+                className={`w-full outline-none border-[1px] border-solid border-green-400 placeholder-green-500 focus:border-[1px] focus:border-solid focus:border-blue-400 focus:placeholder-cyan-500 rounded-2xl p-2 mt-1 ${
+                  errors?.name && "border-red-500"
+                }`}
+                {...register("email", {
+                  required: "Email is required",
+                })}
               />
-            </div>
+              {errors?.email && (
+                <p className="text-red-500 text-sm" style={{ marginTop: 0 }}>
+                  {errors?.email?.message}
+                </p>
+              )}
 
-            <div className="mt-2">
-              <Input
-                label="Password"
+              <input
+                id="password"
                 name="password"
                 type="password"
-                value={userDetails.password}
                 autoComplete="off"
                 placeholder="Enter your password"
-                className="border-b py-1.5 shadow-md px-2 sm:text-sm sm:leading-6"
-                onChange={registerDataChange}
+                className={`w-full outline-none border-[1px] border-solid border-green-400 placeholder-green-500 focus:border-[1px] focus:border-solid focus:border-blue-400 focus:placeholder-cyan-500 rounded-2xl p-2 mt-1 ${
+                  errors?.name && "border-red-500"
+                }`}
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: {
+                    value: 8,
+                    message: "Must be of atleast 8 characters",
+                  },
+                })}
               />
-            </div>
-            <div className="flex items-center gap-3">
-              <Avatar
-                sx={{
-                  width: "50px",
-                  height: "50px",
-                }}
-                src={avatarPreview}
+              {errors?.password && (
+                <p className="text-red-500 text-sm" style={{ marginTop: 0 }}>
+                  {errors?.password?.message}
+                </p>
+              )}
+              <MyButton
+                type="submit"
+                content={loading ? "Loading" : "Sign Up"}
+                disabled={isSubmitting ? true : false}
+                className="w-fit rounded-md bg-cyan-500 px-5 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-cyan-600"
               />
-              <label
-                htmlFor="avatar"
-                className="bg-sky-500 rounded-lg py-2 px-10 w-full text-center text-white cursor-pointer"
+            </form>
+            <p className="mt-5 text-sm text-gray-500">
+              Already a member?{" "}
+              <Link
+                to="/login"
+                className="font-semibold leading-6 text-cyan-600 hover:text-cyan-500 underline"
               >
-                Choose Avatar
-              </label>
-              <input
-                id="avatar"
-                name="avatar"
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={registerImageChange}
-              />
-            </div>
-
-            <MyButton
-              type="submit"
-              content="Sign Up"
-              className="p-2 bg-indigo-700 text-white hover:bg-indigo-600  active:scale-[0.9] rounded-md w-full"
-            />
-          </form>
-
-          <p className="mt-10 text-center text-sm text-gray-500">
-            Already a member?{" "}
-            <Link
-              to="/login"
-              className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
-            >
-              Sign In
-            </Link>
-          </p>
+                Sign In
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
-    </Fragment>
+    </div>
   );
 };
 
 export default SignUp;
-

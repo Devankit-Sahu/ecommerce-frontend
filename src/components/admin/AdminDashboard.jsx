@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useMemo} from "react";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -8,7 +8,7 @@ import Doughtnut from "../chart/Doughtnut";
 import MyTable from "../table/Table";
 
 const AdminDashboard = () => {
-  const columns = React.useMemo(
+  const columns = useMemo(
     () => [
       {
         Header: "Order Id",
@@ -37,7 +37,7 @@ const AdminDashboard = () => {
     ],
     []
   );
-  const data = React.useMemo(
+  const data = useMemo(
     () => [
       {
         order_id: 1,
@@ -76,7 +76,7 @@ const AdminDashboard = () => {
   );
   return (
     <div className="w-full px-10">
-      <h2 className="text-2xl pt-6 pb-1 mb-10 font-bold text-[#8f9297] border-b border-b-[#ced0d5]">
+      <h2 className="text-2xl pt-6 pb-1 mb-10 font-bold text-[#8f9297] border-b border-b-[#ced0d5] capitalize">
         DashBoard
       </h2>
       <div className="flex justify-center gap-x-10 gap-y-10 flex-wrap">

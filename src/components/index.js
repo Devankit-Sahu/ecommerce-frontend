@@ -3,7 +3,6 @@ import Header from "./header/Header";
 import Footer from "./footer/Footer";
 import Login from "./login/Login";
 import SignUp from "./signup/SignUp";
-import ProductGrid from "./product/ProductGrid";
 import ProductList from "./product/ProductList";
 import Loader from "./Loader";
 import NoResultFound from "./NoResultFound";
@@ -22,14 +21,12 @@ import AdminUserDetails from "./admin/AdminUserDetails";
 import MyTable from "./table/Table";
 import ProductFilter from "./product/ProductFilter";
 import PaginationComp from "./pagination/PaginationComp";
-import Categories from "./Categories";
 export {
   AllProducts,
   Login,
   Header,
   Footer,
   SignUp,
-  ProductGrid,
   ProductList,
   Loader,
   NoResultFound,
@@ -48,5 +45,4 @@ export {
   AdminUserDetails,
   ProductFilter,
   PaginationComp,
-  Categories,
 };

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createProductAdminAction } from "../../redux/features/admin/productAdminActions";
+import { createProductAdminAction } from "../../redux/api/admin-api";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { productCreatedReset } from "../../redux/features/admin/createProductSlice";
 import Loader from "../Loader";
-import { Input, MyButton } from "../";
+import { Input, MyButton } from "..";
 
 const AdminAddProduct = () => {
   const { isCreated, loading, message } = useSelector(

@@ -1,37 +1,45 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import { MyButton } from "../index.js";
 import { useDispatch, useSelector } from "react-redux";
-import { Avatar, Badge, Container, Typography } from "@mui/material";
+import { Avatar, Badge } from "@mui/material";
 import {
   ShoppingCartOutlined,
   KeyboardArrowDown,
   KeyboardArrowUp,
 } from "@mui/icons-material";
-import toast from "react-hot-toast";
-import { logoutUser } from "../../redux/features/auth/authAction";
-import { isLoggedOut } from "../../redux/features/auth/authSlice.js";
 import Search from "../search/Search.jsx";
+import { logoutUser } from "../../redux/api/auth-api.js";
 const navigation = [
   { name: "Home", to: "/" },
   { name: "Shop", to: "/products" },
 ];
-
+const allCategories = [
+  {
+    categoryName: "Laptop",
+  },
+  {
+    categoryName: "Mobile",
+  },
+  {
+    categoryName: "Accessories",
+  },
+  {
+    categoryName: "Kitchen",
+  },
+];
 const Header = () => {
-  // const isAuthenticated = JSON.parse(localStorage.getItem("isAuth"));
+  const isAuth = JSON.parse(localStorage.getItem("isAuth")) || false;
+  const cartItems = useSelector((state) => state.cart.cartItems);
+  // const { allCategories } = useSelector((state) => state.allcat);
   // const { user } = useSelector((state) => state.auth);
-  // const cartItems = useSelector((state) => state.cart.cartItems);
   // const [key, setKey] = useState("");
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   function handlelogout() {
-    // if (isAuthenticated) {
-    // dispatch(logoutUser());
-    // dispatch(isLoggedOut());
-    // localStorage.removeItem("user");
-    // toast.success("Logout successfully !!!!");
-    // navigate("/login");
-    // }
+    if (isAuth) {
+      dispatch(logoutUser());
+    }
   }
   // const submitHandler = (e) => {
   //   e.preventDefault();
@@ -57,7 +65,7 @@ const Header = () => {
         <Search />
         <div className="flex gap-5 items-center">
           <Badge
-            badgeContent={2}
+            badgeContent={cartItems.length > 0 ? cartItems.length : 0}
             color="warning"
             onClick={() => navigate("/cart")}
           >
@@ -67,17 +75,21 @@ const Header = () => {
             />
           </Badge>
           <Avatar />
-          {/* <Link to="/login">
+          {!isAuth && (
+            <Link to="/login" className="hidden sm:block">
+              <MyButton
+                content="LogIn"
+                className="bg-[#42cd42] px-3 py-2 rounded-[10px] text-white hover:scale-[0.9]"
+              />
+            </Link>
+          )}
+          {isAuth && (
             <MyButton
-              content="LogIn"
-              className="bg-[#42cd42] px-3 py-2 rounded-[10px] text-white hover:scale-[0.9]"
+              content="LogOut"
+              className="border-[1.5px] border-solid border-red-600 px-3 py-2 rounded-[10px] text-red-500 hover:scale-[0.9]"
+              onClick={handlelogout}
             />
-          </Link> */}
-          {/* <MyButton
-            content="LogOut"
-            className="border-[1.5px] border-solid border-red-600 px-3 py-2 rounded-[10px] text-red-500 hover:scale-[0.9]"
-            onClick={handlelogout}
-          /> */}
+          )}
         </div>
       </div>
       <div className="bg-[rgb(255,187,56)] h-[60px]">
@@ -95,18 +107,14 @@ const Header = () => {
                 isDropdownOpen ? "scale-y-[1]" : "scale-y-0"
               }`}
             >
-              <li className="border-t-[1px] border-solid border-t-[#f8f8f8] py-2 px-3 hover:bg-[rgb(255,187,56)] transition-all duration-300 ease-in-out">
-                Mens
-              </li>
-              <li className="border-t-[1px] border-solid border-t-[#f8f8f8] py-2 px-3 hover:bg-[rgb(255,187,56)] transition-all duration-300 ease-in-out">
-                Womens
-              </li>
-              <li className="border-t-[1px] border-solid border-t-[#f8f8f8] py-2 px-3 hover:bg-[rgb(255,187,56)] transition-all duration-300 ease-in-out">
-                Kids
-              </li>
-              <li className="border-t-[1px] border-solid border-t-[#f8f8f8] py-2 px-3 hover:bg-[rgb(255,187,56)] transition-all duration-300 ease-in-out">
-                Watches
-              </li>
+              {allCategories?.map((cat, index) => (
+                <li
+                  key={index}
+                  className="border-t-[1px] border-solid border-t-[#f8f8f8] py-2 px-3 hover:bg-[rgb(255,187,56)] transition-all duration-300 ease-in-out"
+                >
+                  {cat?.categoryName}
+                </li>
+              ))}
             </ul>
           </div>
           <ul className="flex gap-5 items-center">
