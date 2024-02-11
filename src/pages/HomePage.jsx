@@ -1,21 +1,20 @@
 import React, { useEffect } from "react";
-import { AllProducts, Categories } from "../components";
-import { Link, useNavigate } from "react-router-dom";
+import { AllProducts } from "../components";
 import { useDispatch, useSelector } from "react-redux";
-import { allCategoriesAction } from "../redux/features/admin/categoryActions";
 import Banner from "../components/Banner";
+import { getAllProductsAction } from "../redux/api/product-api";
 
 const HomePage = () => {
-  // const { categories } = useSelector((state) => state.allcat);
-  // const dispatch = useDispatch();
-  // useEffect(() => {
-  //   dispatch(allCategoriesAction());
-  // }, [dispatch]);
+  const { products } = useSelector((state) => state.products);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getAllProductsAction());
+  }, [dispatch]);
 
   return (
     <>
-      <Banner />
-      <AllProducts />
+      {/* <Banner /> */}
+      <AllProducts products={products} />
     </>
   );
 };
