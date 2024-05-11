@@ -1,27 +1,19 @@
-import React from "react";
-// import { TailSpin } from "react-loader-spinner";
-const Loader = ({
-  content = "",
-  height = 150,
-  width = 150,
-  color = "rgb(0 0 0)",
-}) => {
+import { RotatingLines } from "react-loader-spinner";
+
+const Loader = () => {
   return (
-    <div className="flex flex-col items-center justify-center">
-      {/* <TailSpin
-        height={height}
-        width={width}
-        color={color}
-        ariaLabel="tail-spin-loading"
+    <div className="h-screen w-screen flex items-center justify-center">
+      <RotatingLines
         visible={true}
-      /> */}
-      <p
-        className={`mt-6 text-2xl font-semibold ${
-          content ? "visible" : "hidden"
-        }`}
-      >
-        {content}
-      </p>
+        height="96"
+        width="96"
+        color="grey"
+        strokeWidth="5"
+        animationDuration="0.75"
+        ariaLabel="rotating-lines-loading"
+        wrapperStyle={{}}
+        wrapperClass=""
+      />
     </div>
   );
 };

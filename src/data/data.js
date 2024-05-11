@@ -27,11 +27,11 @@ export const productColumns = [
 
 export const orderColumns = [
   {
-    Header: "Product Id",
-    accessor: "product_id",
+    Header: "Order Id",
+    accessor: "order_id",
   },
   {
-    Header: "Product Image",
+    Header: "Image",
     accessor: "photo",
   },
   {
@@ -39,12 +39,12 @@ export const orderColumns = [
     accessor: "name",
   },
   {
-    Header: "Price",
-    accessor: "price",
+    Header: "Total Price",
+    accessor: "totalPrice",
   },
   {
-    Header: "Quantity",
-    accessor: "quantity",
+    Header: "Status",
+    accessor: "status",
   },
   {
     Header: "Action",

@@ -13,7 +13,7 @@ const Input = ({
   ...rest
 }) => {
   return (
-    <div>
+    <>
       {label && (
         <label htmlFor={id} className={`capitalize ${labelClassName}`}>
           {label}
@@ -29,7 +29,7 @@ const Input = ({
         onChange={onChange}
         {...rest}
       />
-    </div>
+    </>
   );
 };
 

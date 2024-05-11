@@ -1,18 +1,14 @@
-import React from "react";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 const ProtectedRoute = ({
   children,
   user,
-  role = "user",
+  isAuthenticated,
+  isAdmin = false,
   redirect = "/login",
 }) => {
-  const location = useLocation();
-
-  if (!user) return <Navigate to={redirect} />;
-  
-  else if (role === "admin" && user.role !== "admin")
-    return <Navigate to={location.pathname.split("/")[1]} />;
+  if (!isAuthenticated) return <Navigate to={redirect} />;
+  else if (isAdmin && user.role !== "admin") return <Navigate to="/404" />;
 
   return children;
 };

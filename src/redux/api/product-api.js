@@ -1,79 +1,83 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import AXIOS from "../../client/src/config/config";
-import {
-  ALLCATEGORIES_API,
-  ALLPRODUCTS_API,
-  PRODUCTDETAILS_API,
-} from "./apiconstants";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { SERVER } from "../../config/config";
 
-export const getAllProductsWithQueryAction = createAsyncThunk(
-  "product/getAllProductsWithQuery",
-  async (
-    { key = "", price = [0, 300000], page = 1, categories = [] },
-    { rejectWithValue }
-  ) => {
-    let link = `${ALLPRODUCTS_API}?key=${key}&price[gte]=${price[0]}&price[lte]=${price[1]}&page=${page}`;
+const productApi = createApi({
+  reducerPath: "product-api",
+  baseQuery: fetchBaseQuery({ baseUrl: `${SERVER}/api/v1/product/` }),
+  tagTypes: ["Product"],
+  endpoints: (builder) => ({
+    getProducts: builder.query({
+      query: ({ key = "", category, price = [], page = 1 }) => {
+        let url = "";
+        if (key)
+          url = `all?key=${key}&price[gte]=${price[0]}&price[lte]=${price[1]}&page=${page}`;
+        else if (category)
+          url = `all?category=${category}&price[gte]=${price[0]}&price[lte]=${price[1]}&page=${page}`;
+        else url = "all";
+        return {
+          url,
+          credentials: "include",
+        };
+      },
+      invalidatesTags: ["Products"],
+    }),
+    productDetails: builder.query({
+      query: ({ productId }) => ({
+        url: `/${productId}`,
+        credentials: "include",
+      }),
+      invalidatesTags: ["Products"],
+    }),
+    createProduct: builder.mutation({
+      query: (data) => ({
+        url: "/admin/new",
+        credentials: "include",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Products"],
+    }),
+    getProductsByAdmin: builder.query({
+      query: () => ({
+        url: "/admin/all",
+        credentials: "include",
+      }),
+      providesTags: ["Products"],
+    }),
+    productDetailsByAdmin: builder.query({
+      query: (productId) => ({
+        url: `/admin/${productId}`,
+        credentials: "include",
+      }),
+      invalidatesTags: ["Products"],
+    }),
+    editProductByAdmin: builder.mutation({
+      query: ({ productId, formData }) => ({
+        url: `/admin/${productId}`,
+        credentials: "include",
+        method: "PUT",
+        body: formData,
+      }),
+      invalidatesTags: ["Products"],
+    }),
+    deleteProductByAdmin: builder.mutation({
+      query: (productId) => ({
+        url: `/admin/${productId}`,
+        credentials: "include",
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Products"],
+    }),
+  }),
+});
 
-    if (categories.length > 0) {
-      link = `${ALLPRODUCTS_API}?key=${key}&price[gte]=${price[0]}&price[lte]=${price[1]}&page=${page}&category=${categories}`;
-    }
-    try {
-      const { data } = await AXIOS.get(link);
-      return data;
-    } catch (error) {
-      if (error.response && error.response.data.message) {
-        return rejectWithValue(error.response.data.message);
-      } else {
-        return rejectWithValue(error.message);
-      }
-    }
-  }
-);
-
-export const getAllProductsAction = createAsyncThunk(
-  "product/getAllProducts",
-  async (args, { rejectWithValue }) => {
-    try {
-      const { data } = await AXIOS.get(ALLPRODUCTS_API);
-      return data.products;
-    } catch (error) {
-      if (error.response && error.response.data.message) {
-        return rejectWithValue(error.response.data.message);
-      } else {
-        return rejectWithValue(error.message);
-      }
-    }
-  }
-);
-
-export const SingleProductDetailAction = createAsyncThunk(
-  "product/SingleProductDetail",
-  async (id, { rejectWithValue }) => {
-    try {
-      const { data } = await AXIOS.get(PRODUCTDETAILS_API + id);
-      return data.product;
-    } catch (error) {
-      if (error.response && error.response.data.message) {
-        return rejectWithValue(error.response.data.message);
-      } else {
-        return rejectWithValue(error.message);
-      }
-    }
-  }
-);
-
-export const getAllCategoriesAction = createAsyncThunk(
-  "product/getAllCategories",
-  async (args, { rejectWithValue }) => {
-    try {
-      const { data } = await AXIOS.get(ALLCATEGORIES_API);
-      return data.allCategories;
-    } catch (error) {
-      if (error.response && error.response.data.message) {
-        return rejectWithValue(error.response.data.message);
-      } else {
-        return rejectWithValue(error.message);
-      }
-    }
-  }
-);
+export default productApi;
+export const {
+  useGetProductsQuery,
+  useProductDetailsQuery,
+  useCreateProductMutation,
+  useGetProductsByAdminQuery,
+  useProductDetailsByAdminQuery,
+  useEditProductByAdminMutation,
+  useDeleteProductByAdminMutation,
+} = productApi;

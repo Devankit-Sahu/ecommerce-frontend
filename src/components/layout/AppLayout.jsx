@@ -6,10 +6,10 @@ import { Box } from "@mui/material";
 
 const AppLayout = () => {
   return (
-    <Box height={"100vh"} width={"100%"}>
+    <Box minHeight={"100vh"} width={"100%"}>
       <Header />
       <Outlet />
-      {/* <Footer /> */}
+      <Footer />
     </Box>
   );
 };

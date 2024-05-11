@@ -2,14 +2,14 @@ import Pagination from "@mui/material/Pagination";
 
 const PaginationComp = ({
   page,
-  filteredProductsCount,
-  productPerPage,
   setPage,
+  productsCount,
+  productPerPage,
   totalPages,
 }) => {
   return (
     <div className="mt-10">
-      {productPerPage < filteredProductsCount && (
+      {productPerPage < productsCount && (
         <Pagination
           page={page}
           count={totalPages}

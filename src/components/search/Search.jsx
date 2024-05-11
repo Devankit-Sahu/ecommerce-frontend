@@ -8,7 +8,7 @@ const Search = () => {
   const submitHandler = (e) => {
     e.preventDefault();
     if (key.trim()) {
-      navigate(`/${key}`);
+      navigate(`/search/${key}`);
       setKey("");
     }
   };

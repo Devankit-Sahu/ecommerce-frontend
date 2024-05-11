@@ -1,24 +1,34 @@
 import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
-  cartItems: localStorage.getItem("cartItem")
-    ? JSON.parse(localStorage.getItem("cartItem"))
+  cartItems: localStorage.getItem("cartItems")
+    ? JSON.parse(localStorage.getItem("cartItems"))
     : [],
+  shippingInfo: localStorage.getItem("shippingInfo")
+    ? JSON.parse(localStorage.getItem("shippingInfo"))
+    : {
+        address1: "",
+        address2: "",
+        country: "",
+        state: "",
+        city: "",
+        pincode: "",
+      },
 };
 
 const cartSlice = createSlice({
   name: "cart",
   initialState: initialState,
   reducers: {
-    addItems(state, action) {
+    addItemsToCart(state, action) {
       const item = action.payload;
       const isItemExist = state.cartItems.find(
-        (i) => i.cartItemId === item.cartItemId
+        (i) => i.productId === item.productId
       );
       if (isItemExist) {
         return {
           ...state,
           cartItems: state.cartItems.map((i) =>
-            i.cartItemId === isItemExist.cartItemId ? item : i
+            i.productId === isItemExist.productId ? item : i
           ),
         };
       } else {
@@ -28,11 +38,11 @@ const cartSlice = createSlice({
         };
       }
     },
-    removeItems(state, action) {
+    removeItemsFromCart(state, action) {
       return {
         ...state,
         cartItems: state.cartItems.filter(
-          (i) => i.cartItemId !== action.payload
+          (i) => i.productId !== action.payload
         ),
       };
     },
@@ -40,7 +50,7 @@ const cartSlice = createSlice({
       return {
         ...state,
         cartItems: state.cartItems.map((item) => {
-          if (item.cartItemId === action.payload.cartItemId) {
+          if (item.productId === action.payload.productId) {
             return {
               ...item,
               quantity: action.payload.newQuantity,
@@ -55,7 +65,7 @@ const cartSlice = createSlice({
       return {
         ...state,
         cartItems: state.cartItems.map((item) => {
-          if (item.cartItemId === action.payload.cartItemId) {
+          if (item.productId === action.payload.productId) {
             return {
               ...item,
               quantity: action.payload.newQuantity,
@@ -66,13 +76,30 @@ const cartSlice = createSlice({
         }),
       };
     },
+    addShippingInfo(state, action) {
+      state.shippingInfo = action.payload;
+    },
+    resetCart(state) {
+      state.cartItems = [];
+      state.shippingInfo = {
+        address1: "",
+        address2: "",
+        country: "",
+        state: "",
+        city: "",
+        pincode: "",
+      };
+    },
   },
 });
 
 export const {
-  addItems,
-  removeItems,
+  addItemsToCart,
+  removeItemsFromCart,
   increaseItemQuantity,
   decreaseItemQuantity,
+  addShippingInfo,
+  resetCart,
 } = cartSlice.actions;
-export default cartSlice.reducer;
+
+export default cartSlice;

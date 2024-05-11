@@ -2,74 +2,60 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import { Box } from "@mui/material";
-// import { useDispatch, useSelector } from "react-redux";
-// import {
-//   decreaseItemQuantity,
-//   increaseItemQuantity,
-//   removeItems,
-// } from "../redux/features/cart/cartSlice";
-// import { toast } from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  decreaseItemQuantity,
+  increaseItemQuantity,
+  removeItemsFromCart,
+} from "../redux/features/cart/cartSlice";
+import { toast } from "react-hot-toast";
 
 const CartPage = () => {
-  // const { cartItems } = useSelector((state) => state.cart);
+  const { cartItems } = useSelector((state) => state.cart);
   const [subTotal, setSubTotal] = useState(0);
   const navigate = useNavigate();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-  const removeItemsFromCartHandler = (id) => {
-    // dispatch(removeItems(id));
-    // toast.success("Item removed from cart", { position: "top-center" });
+  const increaseQuantity = function (item) {
+    const newQuantity = item.quantity + 1;
+    if (newQuantity <= item.stock) {
+      dispatch(
+        increaseItemQuantity({ productId: item.productId, newQuantity })
+      );
+    }
   };
 
   const decreaseQuantity = function (item) {
-    // const newQuantity = item.quantity - 1;
-    // if (newQuantity > 0) {
-    //   dispatch(
-    //     decreaseItemQuantity({ cartItemId: item.cartItemId, newQuantity })
-    //   );
-    // }
+    const newQuantity = item.quantity - 1;
+    if (newQuantity > 0) {
+      dispatch(
+        decreaseItemQuantity({ productId: item.productId, newQuantity })
+      );
+    }
   };
 
-  const increaseQuantity = function (item) {
-    // const newQuantity = item.quantity + 1;
-    // if (newQuantity <= item.stock) {
-    //   dispatch(
-    //     increaseItemQuantity({ cartItemId: item.cartItemId, newQuantity })
-    //   );
-    // }
+  const removeItemsFromCartHandler = (id) => {
+    dispatch(removeItemsFromCart(id));
+    toast.success("Item removed from cart");
   };
 
-  // useEffect(() => {
-  //   if (cartItems) {
-  //     localStorage.setItem("cartItem", JSON.stringify(cartItems));
-  //   }
-  // }, [cartItems]);
+  useEffect(() => {
+    if (cartItems) {
+      localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    }
+  }, [cartItems]);
 
-  // useEffect(() => {
-  //   if (cartItems.length > 0) {
-  //     const total = cartItems.reduce((acc, item) => {
-  //       return acc + item.totalPrice;
-  //     }, 0);
-  //     setSubTotal(total);
-  //   } else {
-  //     setSubTotal(0);
-  //   }
-  // }, [cartItems]);
-
-  const cartItems = [
-    {
-      cartItemId: 1,
-      image:
-        "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=1936&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      name: "Fold Over Collar Plain Blazers",
-      price: 1200,
-      quantity: 2,
-      totalPrice: 1200,
-    },
-  ];
+  useEffect(() => {
+    if (cartItems.length > 0) {
+      const total = cartItems.reduce((acc, item) => {
+        return acc + item.totalPrice;
+      }, 0);
+      setSubTotal(total);
+    }
+  }, [cartItems.length]);
 
   return (
-    <section className="min-h-screen w-full container mx-auto px-10 2xl:px">
+    <section className="min-h-[calc(100%-120px)] w-full container mx-auto px-10 2xl:px">
       {cartItems.length > 0 ? (
         <>
           <h2 className="text-2xl pt-6 pb-1 mb-10 font-bold text-[#3d3e3f] border-b border-solid border-b-[#ced0d5] capitalize">
@@ -88,7 +74,7 @@ const CartPage = () => {
                 </thead>
                 <tbody>
                   {cartItems?.map((item) => (
-                    <tr key={item.cartItemId}>
+                    <tr key={item.productId}>
                       <td className="p-2 flex gap-3">
                         <img
                           src={item.image}
@@ -101,7 +87,7 @@ const CartPage = () => {
                           </h1>
                           <button
                             onClick={() =>
-                              removeItemsFromCartHandler(item.cartItemId)
+                              removeItemsFromCartHandler(item.productId)
                             }
                             className="text-zinc-500 capitalize font-semibold"
                           >
@@ -146,25 +132,25 @@ const CartPage = () => {
                   <h1 className="text-black font-semibold">items</h1>
                   <h2>{cartItems.length}</h2>
                 </div>
-                <div className="flex justify-between items-center my-2 capitalize">
+                {/* <div className="flex justify-between items-center my-2 capitalize">
                   <h1 className="text-black font-semibold">subtotal</h1>
                   <h2>₹ {subTotal}</h2>
-                </div>
-                <div className="flex justify-between items-center my-2 capitalize">
+                </div> */}
+                {/* <div className="flex justify-between items-center my-2 capitalize">
                   <h1 className="text-black font-semibold">discount</h1>
                   <h2>10%</h2>
-                </div>
-                <div className="flex justify-between items-center my-2 capitalize">
+                </div> */}
+                {/* <div className="flex justify-between items-center my-2 capitalize">
                   <h1 className="text-black font-semibold">shipping</h1>
                   <h2>free</h2>
-                </div>
+                </div> */}
                 <div className="flex justify-between items-center my- py-3 capitalize border-t border-solid border-[#ced0d5]">
-                  <h1 className="text-black font-semibold">total amount</h1>
-                  <h2>₹ 1000</h2>
+                  <h1 className="text-black font-semibold capitalize">subtotal</h1>
+                  <h2>₹ {subTotal}</h2>
                 </div>
                 <button
                   onClick={() => {
-                    navigate("/");
+                    navigate("/shipping");
                   }}
                   className="bg-emerald-600 text-white w-full py-3 capitalize"
                 >

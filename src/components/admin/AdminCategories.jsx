@@ -1,40 +1,49 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button, Stack, Tooltip } from "@mui/material";
 import Input from "../input/Input";
 import DeleteIcon from "@mui/icons-material/Delete";
+import {
+  useAddCategoryMutation,
+  useDeleteCategoryMutation,
+  useGetCategoriesByAdminQuery,
+} from "../../redux/api/category-api";
+import toast from "react-hot-toast";
 
 const AdminCategories = () => {
   const [categoryName, setCategoryName] = useState("");
-  const [categoryImage, setCategoryImage] = useState("");
-  //   const dispatch = useDispatch();
-  // const navigate = useNavigate();
+  const { data, refetch } = useGetCategoriesByAdminQuery();
+  const [addCategoryMutation, { error, isError }] = useAddCategoryMutation();
+  const [deleteCategoryMutation, { error: cerror, isError: isCError }] =
+    useDeleteCategoryMutation();
 
-  const categoryImageChange = (e) => {
-    if (e.target.name === "categoryImage") {
-      const reader = new FileReader();
-      reader.readAsDataURL(e.target.files[0]);
-      reader.onload = () => {
-        if (reader.readyState === 2) {
-          setCategoryImage(reader.result);
-        }
-      };
-    }
+  const deleteCatHandler = async (categoryId) => {
+    const { data } = await deleteCategoryMutation(categoryId);
+    toast.success(data?.message);
+    refetch();
   };
-
-  const deleteCatHandler = (id) => {};
 
   async function handlesubmit(e) {
     e.preventDefault();
+    if (!categoryName) return;
+    const { data } = await addCategoryMutation({ categoryName });
+    toast.success(data?.message);
+    setCategoryName("");
+    refetch();
   }
-  const categories = [{ _id: 1, categoryName: "Mobile" }];
+
+  useEffect(() => {
+    if (isError) toast.error(error?.data?.message || "Internal Server Error");
+    if (isCError) toast.error(cerror?.data?.message || "Internal Server Error");
+  }, [isError, cerror]);
+
   return (
     <Box className="bg-white p-5">
       <h2 className="text-2xl mb-6 font-bold text-[#8f9297] capitalize">
         category
       </h2>
       <Box marginBottom={5}>
-        {categories.length > 0 &&
-          categories.map((cat, index) => (
+        {data?.allCategories?.length > 0 &&
+          data?.allCategories?.map((cat, index) => (
             <Stack
               direction={"row"}
               key={index}
@@ -52,24 +61,28 @@ const AdminCategories = () => {
             </Stack>
           ))}
       </Box>
-      <form onSubmit={handlesubmit} noValidate encType="multipart/form-data">
+      <form
+        className="flex flex-col w-80"
+        onSubmit={handlesubmit}
+        noValidate
+        encType="multipart/form-data"
+      >
+        <h1 className="block text-xl font-medium leading-6 text-gray-900 mb-5 capitalize">
+          add category
+        </h1>
         <Input
-          label={"add category"}
-          labelClassName={
-            "block text-xl font-medium leading-6 text-gray-900 mb-5"
-          }
           type={"text"}
           id={"catname"}
           name={"catname"}
           className={
-            "border-[1.5px] border-[#bebebe] mb-5 rounded-md px-2 py-1"
+            "border-[1.5px] border-[#bebebe] mb-5 rounded-md px-2 py-1 w-full"
           }
           value={categoryName}
           onChange={(e) => {
             setCategoryName(e.target.value);
           }}
         />
-        <Button type="submit" variant="contained">
+        <Button className="w-full" type="submit" variant="contained">
           Add
         </Button>
       </form>
