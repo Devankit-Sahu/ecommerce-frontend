@@ -49,7 +49,7 @@ const ProductDetail = () => {
   };
 
   return (
-    <Box className="bg-slate-100 min-h-full px-20 lg:px-40">
+    <section className="bg-slate-100 min-h-full px-10 lg:px-20">
       {isLoading ? (
         <Box className="flex flex-col md:flex-row">
           <Box className="w-full md:w-1/2">
@@ -121,7 +121,7 @@ const ProductDetail = () => {
               >
                 add to cart
               </button>
-              <Stack direction={"row"} gap={2}>
+              <Stack direction={"row"} gap={2} flexWrap={"wrap"}>
                 {data?.product?.images?.map((image, index) => (
                   <Box className="w-16" key={index}>
                     <img
@@ -134,7 +134,7 @@ const ProductDetail = () => {
               </Stack>
             </Box>
           </Box>
-          <Stack gap={3} direction={"row"} marginTop={6} marginBottom={4}>
+          <Stack gap={3} direction={"row"} marginY={4}>
             <Button
               variant={tab === "description" ? "contained" : "outlined"}
               onClick={() => changeTabHandler("description")}
@@ -148,7 +148,7 @@ const ProductDetail = () => {
               Reviews
             </Button>
           </Stack>
-          <Box>
+          <Box marginY={3}>
             {tab === "description" ? (
               <>
                 <Box> {data?.product?.description}</Box>
@@ -159,7 +159,7 @@ const ProductDetail = () => {
           </Box>
         </>
       )}
-    </Box>
+    </section>
   );
 };
 

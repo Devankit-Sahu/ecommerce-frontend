@@ -7,7 +7,7 @@ const MyOrdersPage = () => {
   const { data } = useGetMyOrdersQuery();
 
   return (
-    <section className="min-h-[calc(100%-120px)] w-full container mx-auto px-10 2xl:px">
+    <section className="min-h-[calc(100%-120px)] w-full px-10 2xl:px-20">
       {data?.orders?.length > 0 ? (
         <>
           <Box className="hidden sm:block">
@@ -18,13 +18,12 @@ const MyOrdersPage = () => {
               <table className="w-full mb-10">
                 <thead>
                   <tr className="text-left">
-                    <th className="p-2 text-zinc-500 capitalize">Order Id</th>
-                    <th className="p-2 text-zinc-500 capitalize">Items</th>
-                    <th className="p-2 text-zinc-500 capitalize">Image</th>
-                    <th className="p-2 text-zinc-500 capitalize">Order Name</th>
-                    <th className="p-2 text-zinc-500 capitalize">Status</th>
-                    <th className="p-2 text-zinc-500 capitalize">Total</th>
-                    <th className="p-2 text-zinc-500 capitalize">Action</th>
+                    <th className="p-2 text-zinc-500 capitalize text-xs md:text-base">Order Id</th>
+                    <th className="p-2 text-zinc-500 capitalize text-xs md:text-base">Image</th>
+                    <th className="p-2 text-zinc-500 capitalize text-xs md:text-base">Name</th>
+                    <th className="p-2 text-zinc-500 capitalize text-xs md:text-base">Status</th>
+                    <th className="p-2 text-zinc-500 capitalize text-xs md:text-base">Total</th>
+                    <th className="p-2 text-zinc-500 capitalize text-xs md:text-base">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -33,8 +32,11 @@ const MyOrdersPage = () => {
                       key={order._id}
                       className="cursor-pointer hover:bg-slate-100"
                     >
-                      <td className="p-2">{order._id}</td>
-                      <td className="p-2">{order.orderItems.length}</td>
+                      <td className="p-2">
+                        <h2 className="w-[100px] md:w-[160px] lg:w-[220px] text-ellipsis overflow-hidden whitespace-nowrap">
+                          {order._id}
+                        </h2>
+                      </td>
                       <td className="p-2">
                         <img
                           src={order?.orderItems[0].image}
@@ -42,11 +44,17 @@ const MyOrdersPage = () => {
                           className="w-10 h-10"
                         />
                       </td>
-                      <td className="p-2">{order?.orderItems[0].name}</td>
-                      <td className="p-2">{order.orderStatus}</td>
-                      <td className="p-2">₹ {order.totalPrice}</td>
                       <td className="p-2">
-                        <Link to={`/my-order/${order._id}`}>view order</Link>
+                        <h2 className="w-10 md:w-[160px] lg:w-[220px] text-ellipsis overflow-hidden whitespace-nowrap">
+                          {order?.orderItems[0].name}
+                        </h2>
+                      </td>
+                      <td className="p-2 text-xs md:text-base">{order.orderStatus}</td>
+                      <td className="p-2 text-xs md:text-base">₹ {order.totalPrice}</td>
+                      <td className="p-2">
+                        <Link className="text-xs md:text-base" to={`/my-order/${order._id}`}>
+                          view order
+                        </Link>
                       </td>
                     </tr>
                   ))}

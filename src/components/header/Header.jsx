@@ -47,26 +47,32 @@ const Header = () => {
         direction={"row"}
         justifyContent={"space-between"}
         alignItems={"center"}
-        paddingX={5}
+        className="px-5 md:px-10"
       >
         <Link to={"/"}>
           <Stack direction={"row"} alignItems={"end"}>
-            <img src="/logo.png" alt="brand-logo" className="w-[50px]" />
-            <p className="font-bold text-xl sm:text-2xl">
-              <span className="text-[rgba(1,159,127,1)]">E</span>-Shop
-            </p>
+            <img
+              src="/logo.png"
+              alt="brand-logo"
+              className="w-[25px] sm:w-[50px]"
+            />
+            <p className="font-bold text-base sm:text-2xl">WonderMart</p>
           </Stack>
         </Link>
-        <Box className="hidden sm:block">
+        <Box className="hidden md:block">
           <Search />
         </Box>
-        <Stack direction={"row"} gap={3} alignItems={"center"}>
+        <Stack
+          direction={"row"}
+          alignItems={"center"}
+          className="gap-4 sm:gap-6"
+        >
           <Link to={"/shop"}>
-          <Tooltip title="Store" placement="bottom">
-            <StoreIcon />
-          </Tooltip>
+            <Tooltip title="Store" placement="bottom">
+              <StoreIcon />
+            </Tooltip>
           </Link>
-          <Link className="hidden sm:block" to={"/cart"}>
+          <Link className="hidden md:block" to={"/cart"}>
             <Tooltip title="Cart" placement="bottom">
               <StyledBadge
                 badgeContent={user && cartItems ? cartItems.length : 0}
@@ -77,7 +83,7 @@ const Header = () => {
           </Link>
           <button
             onClick={searchOpenHandler}
-            className="flex sm:hidden border-[1px] border-solid border-[rgb(216,215,215)] rounded-full items-center justify-center p-1"
+            className="flex md:hidden border-[1px] border-solid border-[rgb(216,215,215)] rounded-full items-center justify-center p-1"
           >
             <SearchIcon />
           </button>
@@ -101,7 +107,7 @@ const Header = () => {
 
       {/* for mobile screen */}
       <Dialog
-        className="block sm:hidden"
+        className="block md:hidden"
         open={isSearch}
         onClose={searchCloseHandler}
       >

@@ -55,7 +55,7 @@ const CartPage = () => {
   }, [cartItems.length]);
 
   return (
-    <section className="min-h-[calc(100%-120px)] w-full container mx-auto px-10 2xl:px">
+    <section className="min-h-[calc(100%-120px)] w-full px-10 2xl:px-20">
       {cartItems.length > 0 ? (
         <>
           <h2 className="text-2xl pt-6 pb-1 mb-10 font-bold text-[#3d3e3f] border-b border-solid border-b-[#ced0d5] capitalize">
@@ -79,17 +79,17 @@ const CartPage = () => {
                         <img
                           src={item.image}
                           alt="product-preview"
-                          className="w-16 h-16"
+                          className="w-6 h-6 sm:w-10 sm:h-10 md:w-16 md:h-16"
                         />
                         <div>
-                          <h1 className="font-semibold capitalize text-xs sm:text-sm md:text-xl mb-3">
+                          <h1 className="font-semibold capitalize text-xs sm:text-sm md:text-xl w-20 sm:w-[120px] md:w-[160px] lg:w-[220px] text-ellipsis overflow-hidden whitespace-nowrap">
                             {item.name}
                           </h1>
                           <button
                             onClick={() =>
                               removeItemsFromCartHandler(item.productId)
                             }
-                            className="text-zinc-500 capitalize font-semibold"
+                            className="text-zinc-500 capitalize font-semibold text-xs"
                           >
                             remove
                           </button>
@@ -97,7 +97,7 @@ const CartPage = () => {
                       </td>
                       <td>
                         <div className="ml-3">
-                          <div className="w-[100px] h-8 mt-2 flex border-[1px] border-solid border-zinc-400 rounded-md">
+                          <div className="w-20 md:w-[100px] h-8 mt-2 flex border-[1px] border-solid border-zinc-400 rounded-md">
                             <button
                               onClick={() => decreaseQuantity(item)}
                               className="w-[34%] border-r-[1px] border-solid border-zinc-400"
@@ -145,7 +145,9 @@ const CartPage = () => {
                   <h2>free</h2>
                 </div> */}
                 <div className="flex justify-between items-center my- py-3 capitalize border-t border-solid border-[#ced0d5]">
-                  <h1 className="text-black font-semibold capitalize">subtotal</h1>
+                  <h1 className="text-black font-semibold capitalize">
+                    subtotal
+                  </h1>
                   <h2>₹ {subTotal}</h2>
                 </div>
                 <button
@@ -165,7 +167,7 @@ const CartPage = () => {
           No items in cart
         </Box>
       )}
-      <Box className="flex justify-center mt-6">
+      <Box className="flex justify-center my-6">
         <Link to="/" className="text-blue-500">
           <KeyboardBackspaceIcon />
           Continue shopping

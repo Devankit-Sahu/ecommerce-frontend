@@ -63,9 +63,7 @@ const AdminHeader = () => {
       <Link to={"/"}>
         <Stack direction={"row"} alignItems={"end"}>
           <img src="/logo.png" alt="brand-logo" className="w-[50px]" />
-          <p className="font-bold text-2xl">
-            <span className="text-[rgba(1,159,127,1)]">E</span>-Shop
-          </p>
+          <p className="font-bold text-2xl">WonderMart</p>
         </Stack>
       </Link>
       <Box
