@@ -4,12 +4,8 @@ import Input from "../input/Input";
 import { useNavigate } from "react-router-dom";
 import { useCreateProductMutation } from "../../redux/api/product-api";
 import toast from "react-hot-toast";
+import { useGetCategoriesByAdminQuery } from "../../redux/api/category-api";
 
-const categories = [
-  { categoryName: "laptop" },
-  { categoryName: "watches" },
-  { categoryName: "keyboard" },
-];
 const AdminCreateProduct = () => {
   const [name, setProdName] = useState("");
   const [category, setProdcat] = useState("laptop");
@@ -19,7 +15,7 @@ const AdminCreateProduct = () => {
   const [seller, setProdSeller] = useState("");
   const [images, setImages] = useState([]);
   const [imagesPreview, setImagesPreview] = useState([]);
-
+  const { data } = useGetCategoriesByAdminQuery();
   const [createProductMutation, { isLoading, isError, error, isSuccess }] =
     useCreateProductMutation();
 
@@ -105,7 +101,7 @@ const AdminCreateProduct = () => {
                 className="bg-transparent rounded outline-none border border-[#d5d0d0] w-full px-2"
               >
                 <option value="">Choose Category</option>
-                {categories.map((cat) => (
+                {data?.allCategories?.map((cat) => (
                   <option value={cat.categoryName} key={cat.categoryName}>
                     {cat.categoryName}
                   </option>

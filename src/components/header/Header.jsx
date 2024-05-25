@@ -25,20 +25,13 @@ const Header = () => {
   const { user } = useSelector((state) => state.auth);
   const { cartItems } = useSelector((state) => state.cart);
   const [isSearch, setIsSearch] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
+  const [isOpen, setIsOpen] = useState(false);
 
   const searchOpenHandler = () => {
     setIsSearch(true);
   };
   const searchCloseHandler = () => {
     setIsSearch(false);
-  };
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
   };
 
   return (
@@ -66,6 +59,7 @@ const Header = () => {
           direction={"row"}
           alignItems={"center"}
           className="gap-4 sm:gap-6"
+          position={"relative"}
         >
           <Link to={"/shop"}>
             <Tooltip title="Store" placement="bottom">
@@ -89,19 +83,11 @@ const Header = () => {
           </button>
           <Box
             className="cursor-pointer"
-            id="basic-button"
-            aria-controls={open ? "basic-menu" : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}
-            onClick={handleClick}
+            onClick={() => setIsOpen((prev) => !prev)}
           >
             <Avatar />
           </Box>
-          <ProfileMenu
-            anchorEl={anchorEl}
-            open={open}
-            handleClose={handleClose}
-          />
+          <ProfileMenu open={isOpen} handleClose={setIsOpen} />
         </Stack>
       </Stack>
 

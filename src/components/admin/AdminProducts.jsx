@@ -17,7 +17,7 @@ const AdminProducts = () => {
     useDeleteProductByAdminMutation();
 
   const tableData = data?.products?.map((product) => ({
-    product_id: product._id,
+    product_id: String(product._id).slice(0,7),
     name: product.name,
     stock: product.stock,
     price: product.price,

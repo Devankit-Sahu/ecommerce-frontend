@@ -9,6 +9,7 @@ import {
   useProductDetailsByAdminQuery,
 } from "../../redux/api/product-api";
 import toast from "react-hot-toast";
+import { useGetCategoriesByAdminQuery } from "../../redux/api/category-api";
 
 const StyledBadge = styled(Badge)(() => ({
   "& .MuiBadge-badge": {
@@ -21,15 +22,11 @@ const StyledBadge = styled(Badge)(() => ({
     borderRadius: "15px",
   },
 }));
-const categories = [
-  { categoryName: "laptop" },
-  { categoryName: "watches" },
-  { categoryName: "keyboard" },
-];
 
 const AdminEditProduct = () => {
   const { productId } = useParams();
   const { data, isLoading } = useProductDetailsByAdminQuery(productId);
+  const { data: categories } = useGetCategoriesByAdminQuery();
   const [editProductMutate, { isError, error, isLoading: loading, isSuccess }] =
     useEditProductByAdminMutation();
   const [productData, setProductData] = useState({
@@ -135,7 +132,7 @@ const AdminEditProduct = () => {
               <option value={productData.category}>
                 {productData.category}
               </option>
-              {categories.map((cat) => (
+              {categories?.allCategories?.map((cat) => (
                 <option value={cat.categoryName} key={cat.categoryName}>
                   {cat.categoryName}
                 </option>

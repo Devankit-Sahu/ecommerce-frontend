@@ -11,7 +11,7 @@ const ProductDetail = () => {
   const [tab, setTab] = useState("description");
   const dispatch = useDispatch();
   const { productId } = useParams();
-  const { data, isLoading } = useProductDetailsQuery({ productId });
+  const { data, isLoading, refetch } = useProductDetailsQuery({ productId });
 
   const changeTabHandler = (value) => {
     if (value === "description") setTab("description");
@@ -154,7 +154,11 @@ const ProductDetail = () => {
                 <Box> {data?.product?.description}</Box>
               </>
             ) : (
-              <ProductReviews />
+              <ProductReviews
+                productId={productId}
+                reviews={data.reviews}
+                refetchProduct={refetch}
+              />
             )}
           </Box>
         </>

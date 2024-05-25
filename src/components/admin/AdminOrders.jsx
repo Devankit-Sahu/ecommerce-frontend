@@ -9,7 +9,7 @@ const AdminOrders = () => {
   const { data, isLoading } = useGetOrdersByAdminQuery();
 
   const tableData = data?.orders?.map((order) => ({
-    order_id: order._id,
+    order_id: String(order._id).slice(0, 7),
     name: order.orderItems[0].name,
     totalPrice: order.totalPrice,
     photo: order.orderItems[0].image,

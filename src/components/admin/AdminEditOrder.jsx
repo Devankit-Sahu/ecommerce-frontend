@@ -13,7 +13,7 @@ const AdminEditOrder = () => {
             <h1 className="font-bold text-base sm:text-xl my-2 capitalize">
               Order Id :
               <span className="text-red-700 font-semibold ml-1">
-                {data?.order?._id}
+                #{data?.order?._id}
               </span>
             </h1>
             <h4 className="font-bold text-base sm:text-xl my-2 capitalize">
@@ -25,10 +25,10 @@ const AdminEditOrder = () => {
           </div>
           <div className="flex items-center justify-between">
             <h4>
-              Date : {new Date(data?.order?.createdAt).toLocaleDateString()}
+              PlacedAt : {new Date(data?.order?.createdAt).toLocaleDateString()}
             </h4>
             <h4>
-              DeliveredAt :{" "}
+              DeliveredAt :
               {new Date(data?.order?.createdAt).toLocaleDateString()}
             </h4>
           </div>
@@ -61,6 +61,8 @@ const AdminEditOrder = () => {
               <span className="ml-1">₹ {data?.order?.totalPrice}</span>
             </h1>
           </div>
+
+          <button>update order status</button>
         </>
       )}
     </div>

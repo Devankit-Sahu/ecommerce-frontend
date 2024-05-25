@@ -30,9 +30,9 @@ const AllProducts = ({ products = [] }) => {
               marginTop={2}
             >
               <h4>₹ {product.price}</h4>
-              <button className="w-8 h-8 flex items-center justify-center border-[1px] border-solid border-[rgb(239,239,239)] rounded hover:bg-[rgba(1,159,127,1)] text-[rgba(1,159,127,1)] hover:text-white transition-colors">
+              {/* <button className="w-8 h-8 flex items-center justify-center border-[1px] border-solid border-[rgb(239,239,239)] rounded hover:bg-[rgba(1,159,127,1)] text-[rgba(1,159,127,1)] hover:text-white transition-colors">
                 <AddIcon fontSize="small" />
-              </button>
+              </button> */}
             </Stack>
           </Stack>
         </Box>

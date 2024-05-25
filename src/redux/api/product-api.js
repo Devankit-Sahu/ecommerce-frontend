@@ -4,7 +4,7 @@ import { SERVER } from "../../config/config";
 const productApi = createApi({
   reducerPath: "product-api",
   baseQuery: fetchBaseQuery({ baseUrl: `${SERVER}/api/v1/product/` }),
-  tagTypes: ["Product"],
+  tagTypes: ["Products"],
   endpoints: (builder) => ({
     getProducts: builder.query({
       query: ({ key = "", category, price = [], page = 1 }) => {
@@ -23,14 +23,14 @@ const productApi = createApi({
     }),
     productDetails: builder.query({
       query: ({ productId }) => ({
-        url: `/${productId}`,
+        url: `${productId}`,
         credentials: "include",
       }),
       invalidatesTags: ["Products"],
     }),
     createProduct: builder.mutation({
       query: (data) => ({
-        url: "/admin/new",
+        url: "admin/new",
         credentials: "include",
         method: "POST",
         body: data,
@@ -39,21 +39,21 @@ const productApi = createApi({
     }),
     getProductsByAdmin: builder.query({
       query: () => ({
-        url: "/admin/all",
+        url: "admin/all",
         credentials: "include",
       }),
       providesTags: ["Products"],
     }),
     productDetailsByAdmin: builder.query({
       query: (productId) => ({
-        url: `/admin/${productId}`,
+        url: `admin/${productId}`,
         credentials: "include",
       }),
       invalidatesTags: ["Products"],
     }),
     editProductByAdmin: builder.mutation({
       query: ({ productId, formData }) => ({
-        url: `/admin/${productId}`,
+        url: `admin/${productId}`,
         credentials: "include",
         method: "PUT",
         body: formData,
@@ -62,9 +62,18 @@ const productApi = createApi({
     }),
     deleteProductByAdmin: builder.mutation({
       query: (productId) => ({
-        url: `/admin/${productId}`,
+        url: `admin/${productId}`,
         credentials: "include",
         method: "DELETE",
+      }),
+      invalidatesTags: ["Products"],
+    }),
+    createReview: builder.mutation({
+      query: ({ productId, ratings, message }) => ({
+        url: "reviews/add",
+        credentials: "include",
+        method: "POST",
+        body: { productId, ratings, message },
       }),
       invalidatesTags: ["Products"],
     }),
@@ -80,4 +89,5 @@ export const {
   useProductDetailsByAdminQuery,
   useEditProductByAdminMutation,
   useDeleteProductByAdminMutation,
+  useCreateReviewMutation,
 } = productApi;
