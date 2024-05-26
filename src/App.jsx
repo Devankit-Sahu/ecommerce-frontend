@@ -54,8 +54,10 @@ const App = () => {
   };
 
   useEffect(() => {
-    getUser();
-  }, []);
+    if (!user) {
+      getUser();
+    }
+  }, [user]);
 
   return loading ? (
     <Loader />

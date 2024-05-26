@@ -85,7 +85,7 @@ const Header = () => {
             className="cursor-pointer"
             onClick={() => setIsOpen((prev) => !prev)}
           >
-            <Avatar />
+            <Avatar src={user?.avatar?.url} />
           </Box>
           <ProfileMenu open={isOpen} handleClose={setIsOpen} />
         </Stack>

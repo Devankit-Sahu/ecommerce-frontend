@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Avatar, Box, Stack } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -7,14 +7,14 @@ import {
   Login as LoginIcon,
   Logout as LogoutIcon,
 } from "@mui/icons-material";
-import axios from "axios";
-import { SERVER } from "../../config/config";
 import toast from "react-hot-toast";
 import { userNotExist } from "../../redux/features/auth/authSlice";
+import { useLazyLogoutQuery } from "../../redux/api/user-api";
 
 const AdminHeader = () => {
   const { user } = useSelector((state) => state.auth);
   const [isOpen, setIsOpen] = useState(false);
+  const [logout] = useLazyLogoutQuery();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -23,20 +23,18 @@ const AdminHeader = () => {
     navigate(to);
   };
 
-  const logoutHandler = async () => {
-    try {
-      if (user) {
-        const res = await axios.get(`${SERVER}/api/v1/user/logout`, {
-          withCredentials: true,
+  const logoutHandler = () => {
+    if (user) {
+      logout()
+        .unwrap()
+        .then((res) => {
+          toast.success(res?.message);
+          dispatch(userNotExist());
+          navigate("/login");
+        })
+        .catch((error) => {
+          toast.error(error?.data?.message);
         });
-        toast.success(res?.data?.message);
-        dispatch(userNotExist());
-        navigate("/login");
-      }
-    } catch (error) {
-      toast.error(error?.response?.data?.message);
-    } finally {
-      setIsOpen(false);
     }
   };
 

@@ -9,7 +9,6 @@ const Search = () => {
     e.preventDefault();
     if (key.trim()) {
       navigate(`/search/${key}`);
-      setKey("");
     }
   };
   return (

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Avatar, Rating } from "@mui/material";
 import { useCreateReviewMutation } from "../../redux/api/product-api";
 
-const ProductReviews = ({ productId, reviews, refetchProduct }) => {
+const ProductReviews = ({ productId, reviews = [], refetchProduct }) => {
   const [ratings, setRatings] = useState(0);
   const [message, setMessage] = useState("");
   const [createReview] = useCreateReviewMutation();

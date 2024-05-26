@@ -7,10 +7,9 @@ import {
   EmailOutlined as EmailOutlinedIcon,
   LockOutlined as LockOutlinedIcon,
 } from "@mui/icons-material";
-import axios from "axios";
 import toast from "react-hot-toast";
 import { userExist } from "../redux/features/auth/authSlice";
-import { SERVER } from "../config/config";
+import { useLoginMutation } from "../redux/api/user-api";
 
 const LoginPage = () => {
   const { user } = useSelector((state) => state.auth);
@@ -25,35 +24,31 @@ const LoginPage = () => {
       password: "",
     },
   });
+  const [loginMutation] = useLoginMutation();
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleLoginSubmit = async (data) => {
+  const handleLoginSubmit = (data) => {
     const { email, password } = data;
-    try {
-      const res = await axios.post(
-        `${SERVER}/api/v1/user/login`,
-        { email, password },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        }
-      );
-      dispatch(userExist(res.data.user));
-      navigate("/");
-      toast.success(res?.data?.message);
-    } catch (error) {
-      toast.error(error?.response?.data?.message);
-    } finally {
-      reset();
-    }
+    loginMutation({ email, password })
+      .unwrap()
+      .then((res) => {
+        toast.success(res?.message);
+        dispatch(userExist(res?.user));
+      })
+      .catch((error) => {
+        toast.error(error?.data?.message);
+      })
+      .finally(() => {
+        reset();
+      });
   };
 
   useEffect(() => {
-    if (user) {
+    if (user && user.role === "admin") {
+      navigate("/admin");
+    } else if (user) {
       navigate("/");
     }
   }, [user, navigate]);

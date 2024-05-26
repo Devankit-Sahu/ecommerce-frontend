@@ -8,10 +8,9 @@ import {
   LockOutlined as LockOutlinedIcon,
 } from "@mui/icons-material";
 import { useForm } from "react-hook-form";
-import axios from "axios";
 import toast from "react-hot-toast";
 import { userExist } from "../redux/features/auth/authSlice";
-import { SERVER } from "../config/config";
+import { useRegisterMutation } from "../redux/api/user-api";
 
 const SignupPage = () => {
   const { user } = useSelector((state) => state.auth);
@@ -27,6 +26,7 @@ const SignupPage = () => {
       password: "",
     },
   });
+  const [registerMutation] = useRegisterMutation();
 
   const [avatar, setAvatar] = useState("");
   const [avatarPreview, setavatarPreview] = useState("");
@@ -34,27 +34,25 @@ const SignupPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const registerSubmit = async (data) => {
+  const registerSubmit = (data) => {
     const formData = new FormData();
     formData.append("name", data.name);
     formData.append("email", data.email);
     formData.append("password", data.password);
     formData.append("avatar", avatar);
-    try {
-      const res = await axios.post(`${SERVER}/api/v1/user/register`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        withCredentials: true,
+    const toastId = toast.loading("Account is creating!!!");
+    registerMutation(formData)
+      .unwrap()
+      .then((res) => {
+        toast.success(res?.message, { id: toastId });
+        dispatch(userExist(res?.user));
+      })
+      .catch((error) => {
+        toast.error(error?.data?.message, { id: toastId });
+      })
+      .finally(() => {
+        reset();
       });
-      dispatch(userExist(res.data.user));
-      navigate("/");
-      toast.success(res?.data?.message);
-    } catch (error) {
-      toast.error(error?.response?.data?.message);
-    } finally {
-      reset();
-    }
   };
 
   const registerImageChange = (e) => {
@@ -72,7 +70,9 @@ const SignupPage = () => {
   };
 
   useEffect(() => {
-    if (user) {
+    if (user && user.role === "admin") {
+      navigate("/admin");
+    } else if (user) {
       navigate("/");
     }
   }, [user, navigate]);

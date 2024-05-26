@@ -60,7 +60,7 @@ const Shipping = () => {
       const res = await axios.post(
         `${SERVER}/api/v1/payment/new`,
         {
-          amount: 1,
+          amount: totalPrice,
         },
         {
           headers: {

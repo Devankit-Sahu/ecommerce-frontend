@@ -7,14 +7,13 @@ import {
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { SERVER } from "../../config/config";
 import { userNotExist } from "../../redux/features/auth/authSlice";
-
 import toast from "react-hot-toast";
+import { useLazyLogoutQuery } from "../../redux/api/user-api";
 
 const ProfileMenu = ({ open, handleClose }) => {
   const { user } = useSelector((state) => state.auth);
+  const [logout] = useLazyLogoutQuery();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -23,21 +22,18 @@ const ProfileMenu = ({ open, handleClose }) => {
     navigate(to);
   };
 
-  const logoutHandler = async () => {
-    try {
-      if (user) {
-        const res = await axios.get(`${SERVER}/api/v1/user/logout`, {
-          withCredentials: true,
+  const logoutHandler = () => {
+    if (user) {
+      logout()
+        .unwrap()
+        .then((res) => {
+          toast.success(res?.message);
+          dispatch(userNotExist());
+          navigate("/login");
+        })
+        .catch((error) => {
+          toast.error(error?.data?.message);
         });
-        toast.success(res?.data?.message);
-        dispatch(userNotExist());
-        navigate("/login");
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error(error?.response?.data?.message);
-    } finally {
-      handleClose(false);
     }
   };
 

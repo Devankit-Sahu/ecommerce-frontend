@@ -6,11 +6,31 @@ const userApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: `${SERVER}/api/v1/user/` }),
   endpoints: (builder) => ({
     login: builder.mutation({
-      query: (data) => ({
+      query: ({ email, password }) => ({
         url: "login",
         credentials: "include",
         method: "POST",
+        body: { email, password },
+      }),
+    }),
+    register: builder.mutation({
+      query: (data) => ({
+        url: "register",
+        credentials: "include",
+        method: "POST",
         body: data,
+      }),
+    }),
+    logout: builder.query({
+      query: () => ({
+        url: "logout",
+        credentials: "include",
+      }),
+    }),
+    getUsersByAdmin: builder.query({
+      query: () => ({
+        url: "admin/all",
+        credentials: "include",
       }),
     }),
   }),
@@ -18,4 +38,9 @@ const userApi = createApi({
 
 export default userApi;
 
-export const { useLoginMutation } = userApi;
+export const {
+  useLoginMutation,
+  useRegisterMutation,
+  useLazyLogoutQuery,
+  useGetUsersByAdminQuery,
+} = userApi;
