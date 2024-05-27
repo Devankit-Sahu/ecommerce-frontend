@@ -5,36 +5,13 @@ import {
   Login as LoginIcon,
   Logout as LogoutIcon,
 } from "@mui/icons-material";
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { userNotExist } from "../../redux/features/auth/authSlice";
-import toast from "react-hot-toast";
-import { useLazyLogoutQuery } from "../../redux/api/user-api";
 
-const ProfileMenu = ({ open, handleClose }) => {
-  const { user } = useSelector((state) => state.auth);
-  const [logout] = useLazyLogoutQuery();
-  const dispatch = useDispatch();
+const ProfileMenu = ({ user, open, handleClose, logoutHandler }) => {
   const navigate = useNavigate();
-
   const navigateHandler = (to) => {
     handleClose(false);
     navigate(to);
-  };
-
-  const logoutHandler = () => {
-    if (user) {
-      logout()
-        .unwrap()
-        .then((res) => {
-          toast.success(res?.message);
-          dispatch(userNotExist());
-          navigate("/login");
-        })
-        .catch((error) => {
-          toast.error(error?.data?.message);
-        });
-    }
   };
 
   return (

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { Box, Button } from "@mui/material";
 import Input from "../input/Input";
 import { useNavigate } from "react-router-dom";
@@ -16,12 +16,11 @@ const AdminCreateProduct = () => {
   const [images, setImages] = useState([]);
   const [imagesPreview, setImagesPreview] = useState([]);
   const { data } = useGetCategoriesByAdminQuery();
-  const [createProductMutation, { isLoading, isError, error, isSuccess }] =
-    useCreateProductMutation();
+  const [createProductMutation, { isLoading }] = useCreateProductMutation();
 
   const navigate = useNavigate();
 
-  const handlesubmit = async (e) => {
+  const handlesubmit = (e) => {
     e.preventDefault();
     const formData = new FormData();
 
@@ -35,7 +34,7 @@ const AdminCreateProduct = () => {
       !images.length
     )
       return;
-
+    const toastId = toast.loading("Product is creating!!!");
     formData.set("name", name);
     formData.set("category", category);
     formData.set("description", description);
@@ -46,8 +45,15 @@ const AdminCreateProduct = () => {
       formData.append("images", image);
     });
 
-    const { data } = await createProductMutation(formData);
-    toast.success(data?.message);
+    createProductMutation(formData)
+      .unwrap()
+      .then((res) => {
+        toast.success(res?.message, { id: toastId });
+        navigate("/admin/products");
+      })
+      .catch((error) =>
+        toast.error(error?.data?.message || "Internal Server Error")
+      );
   };
 
   const imageChangehandler = (e) => {
@@ -61,13 +67,6 @@ const AdminCreateProduct = () => {
       reader.readAsDataURL(file);
     });
   };
-
-  useEffect(() => {
-    if (isError) toast.error(error?.data?.message || "Internal Server Error");
-    if (isSuccess) {
-      navigate("/admin/products");
-    }
-  }, [isError, isSuccess]);
 
   return (
     <>
@@ -175,7 +174,7 @@ const AdminCreateProduct = () => {
               onChange={imageChangehandler}
             />
           </div>
-          <div className="flex gap-3 py-2">
+          <div className="flex gap-3 flex-wrap justify-center py-2">
             {imagesPreview.map((img, index) => (
               <div
                 className=" w-40 h-40 p-4 border-[2px] rounded-xl border-[#eee]"
@@ -193,6 +192,7 @@ const AdminCreateProduct = () => {
             type="submit"
             variant="contained"
             disabled={isLoading ? true : false}
+            className="w-full sm:w-fit"
           >
             {isLoading ? "loading" : "create Product"}
           </Button>

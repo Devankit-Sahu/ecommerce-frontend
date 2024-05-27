@@ -1,32 +1,30 @@
 import { Box } from "@mui/system";
 import MyTable from "../table/MyTable";
-import { userColumns } from "../../data/data";
-import { Link } from "react-router-dom";
+import { userColumns } from "../../constants/constants";
 import { useGetUsersByAdminQuery } from "../../redux/api/user-api";
 
 const AdminUsersList = () => {
   const { data, isLoading } = useGetUsersByAdminQuery();
   const usersData = data?.users?.map((user) => ({
     photo: user.avatar.url,
-    user_id: user._id,
+    user_id: String(user._id).slice(0, 7),
     name: user.name,
     email: user.email,
-    action: <Link to={`/admin/user/${user._id}`}>See</Link>,
   }));
 
   return (
-    <section className="bg-white p-5">
+    <div className="bg-white p-2 sm:p-5">
       {isLoading ? (
         <div></div>
       ) : (
-        <Box className="bg-white p-5">
+        <Box className="bg-white p-3 sm:p-5">
           <h2 className="text-2xl mb-6 font-bold text-[#8f9297] capitalize">
             customers
           </h2>
           <MyTable columns={userColumns} data={usersData} />
         </Box>
       )}
-    </section>
+    </div>
   );
 };
 

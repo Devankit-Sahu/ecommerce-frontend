@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import { useState } from "react";
 import { Box, Button, Stack, Tooltip, Skeleton } from "@mui/material";
 import MyTable from "../table/MyTable";
-import { productColumns } from "../../data/data";
+import { productColumns } from "../../constants/constants";
 import { Delete, EditOutlined } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -9,18 +9,27 @@ import {
   useGetProductsByAdminQuery,
 } from "../../redux/api/product-api";
 import toast from "react-hot-toast";
+import ProductDeleteDialog from "../dialog/ProductDeleteDialog";
 
 const AdminProducts = () => {
   const navigate = useNavigate();
   const { data, isLoading } = useGetProductsByAdminQuery();
-  const [deleteProductMutation, { isSuccess, isError, error }] =
-    useDeleteProductByAdminMutation();
+  const [deleteProductMutation] = useDeleteProductByAdminMutation();
+  const [open, setOpen] = useState(false);
+  const [selectedProductId, setSelectedProductId] = useState(null);
+  const handleClickOpen = (productId) => {
+    setSelectedProductId(productId);
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const tableData = data?.products?.map((product) => ({
-    product_id: String(product._id).slice(0,7),
+    product_id: String(product._id).slice(0, 7),
     name: product.name,
     stock: product.stock,
-    price: product.price,
+    price: "₹" + product.price,
     photo: product.images[0].url,
     action: (
       <Stack direction={"row"} alignItems={"center"}>
@@ -29,7 +38,7 @@ const AdminProducts = () => {
             <EditOutlined />
           </Tooltip>
         </Link>
-        <Button onClick={() => deleteProductHandler(product._id)}>
+        <Button onClick={() => handleClickOpen(product._id)}>
           <Tooltip title="Delete" placement="right">
             <Delete />
           </Tooltip>
@@ -37,20 +46,19 @@ const AdminProducts = () => {
       </Stack>
     ),
   }));
-  let toastId;
 
-  const deleteProductHandler = async (productId) => {
+  const deleteProductHandler = (productId) => {
     if (!productId) return;
-    toastId = toast.loading("product is deleting..");
-    await deleteProductMutation(productId);
+    const toastId = toast.loading("product is deleting!!!");
+    deleteProductMutation(productId)
+      .unwrap()
+      .then((res) => toast.success(res.message, { id: toastId }))
+      .catch((error) =>
+        toast.success(error?.data?.message || "Internal Server Error", {
+          id: toastId,
+        })
+      );
   };
-
-  useEffect(() => {
-    if (isError) toast.error(error?.data?.message || "Internal Server Error");
-    if (isSuccess) {
-      toast.success("product deleted", { id: toastId });
-    }
-  }, [isError, isSuccess]);
 
   return isLoading ? (
     <Box>
@@ -74,6 +82,7 @@ const AdminProducts = () => {
             <Button
               variant="contained"
               onClick={() => navigate("/admin/product/create")}
+              sx={{ fontSize: "10px" }}
             >
               create new product
             </Button>
@@ -83,6 +92,11 @@ const AdminProducts = () => {
           </Box>
         </Box>
       )}
+      <ProductDeleteDialog
+        open={open}
+        handleClose={handleClose}
+        deleteProductHandler={() => deleteProductHandler(selectedProductId)}
+      />
     </>
   );
 };

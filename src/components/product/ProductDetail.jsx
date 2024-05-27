@@ -6,6 +6,7 @@ import { addItemsToCart } from "../../redux/features/cart/cartSlice";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import { useProductDetailsQuery } from "../../redux/api/product-api";
+import StarIcon from "@mui/icons-material/Star";
 
 const ProductDetail = () => {
   const [tab, setTab] = useState("description");
@@ -49,7 +50,7 @@ const ProductDetail = () => {
   };
 
   return (
-    <section className="bg-slate-100 min-h-full px-10 lg:px-20">
+    <section className="bg-slate-100 min-h-full pb-5 px-10 lg:px-20">
       {isLoading ? (
         <Box className="flex flex-col md:flex-row">
           <Box className="w-full md:w-1/2">
@@ -83,7 +84,13 @@ const ProductDetail = () => {
               <h1 className="text-2xl sm:text-3xl lg:text-4xl font-semibold ml-1">
                 {data?.product?.name}
               </h1>
-              <h1 className="my-3">ratings</h1>
+              <div className="my-3 flex items-center gap-2">
+                <div className="bg-green-700 text-white px-2 rounded-md flex items-center gap-1 text-[15px]">
+                  {data?.totalRatingsDecimal}
+                  <StarIcon style={{ fontSize: "15px" }} />
+                </div>
+                <span>{data?.totalRatings} ratings</span>
+              </div>
               <h1 className="my-3 capitalize font-bold">
                 category :
                 <span className=" font-normal ml-1">

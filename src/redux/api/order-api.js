@@ -17,28 +17,38 @@ const orderApi = createApi({
     }),
     getMyOrders: builder.query({
       query: () => ({ url: "my", credentials: "include" }),
-      invalidatesTags: ["Order"],
+      providesTags: ["Order"],
     }),
     getOrderDetails: builder.query({
       query: (id) => ({ url: `${id}`, credentials: "include" }),
-      invalidatesTags: ["Order"],
+      providesTags: (result, error, id) => [{ type: "Order", id }],
+    }),
+    deleteSingleOrder: builder.mutation({
+      query: (id) => ({
+        url: `${id}`,
+        credentials: "include",
+        method: "DELETE",
+      }),
+      providesTags: (result, error, id) => [{ type: "Order", id }],
     }),
     getOrdersByAdmin: builder.query({
       query: () => ({ url: "admin/all", credentials: "include" }),
-      invalidatesTags: ["Order"],
+      providesTags: ["Order"],
     }),
     getOrderDetailsByAdmin: builder.query({
       query: (id) => ({ url: `admin/${id}`, credentials: "include" }),
-      invalidatesTags: ["Order"],
+      providesTags: (result, error, id) => [{ type: "Order", id }],
     }),
     updateOrderByAdmin: builder.mutation({
-      query: (id, data) => ({
-        url: `admin/${id}`,
+      query: ({ orderId, orderStatus, deliveredAt }) => ({
+        url: `admin/${orderId}`,
         credentials: "include",
         method: "PUT",
-        body: data,
+        body: { orderId, orderStatus, deliveredAt },
       }),
-      invalidatesTags: ["Order"],
+      invalidatesTags: (result, error, { orderId }) => [
+        { type: "Order", id: orderId },
+      ],
     }),
   }),
 });
@@ -48,6 +58,7 @@ export const {
   useCreateOrderMutation,
   useGetMyOrdersQuery,
   useGetOrderDetailsQuery,
+  useDeleteSingleOrderMutation,
   useGetOrdersByAdminQuery,
   useGetOrderDetailsByAdminQuery,
   useUpdateOrderByAdminMutation,

@@ -1,12 +1,28 @@
-import { useParams } from "react-router-dom";
-import { useGetOrderDetailsQuery } from "../redux/api/order-api";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  useDeleteSingleOrderMutation,
+  useGetOrderDetailsQuery,
+} from "../redux/api/order-api";
 import { Stack, Step, StepLabel, Stepper } from "@mui/material";
-
-const steps = ["order confirmed", "shipping", "to deliver"];
+import { orderStatus } from "../constants/constants";
+import toast from "react-hot-toast";
 
 const OrderDetails = () => {
   const { id } = useParams();
   const { data } = useGetOrderDetailsQuery(id);
+  const navigate = useNavigate();
+  const [deleteOrderMutation] = useDeleteSingleOrderMutation();
+
+  const orderDeleteHandler = () => {
+    const toastId = toast.loading("Order is deleting!!!");
+    deleteOrderMutation(id)
+      .unwrap()
+      .then((res) => {
+        toast.success(res?.message, { id: toastId });
+        navigate("/my-orders");
+      })
+      .catch((error) => toast.error(error?.data?.message, { id: toastId }));
+  };
 
   return (
     <section className="w-full">
@@ -19,12 +35,30 @@ const OrderDetails = () => {
                 {data?.order?._id}
               </span>
             </h1>
-            <h4 className="my-2">
-              Date : {new Date(data?.order?.createdAt).toLocaleDateString()}
-            </h4>
+            <div className="flex md:items-center flex-col md:flex-row justify-between">
+              <h4 className="capitalize">
+                PlacedAt :
+                <span className="ml-1">
+                  {new Date(data?.order?.createdAt).toLocaleDateString()}
+                </span>
+              </h4>
+              <h4 className="capitalize">
+                Expected delivery :
+                <span className="ml-1">
+                  {new Date(data?.order?.deliveredAt).toLocaleDateString()}
+                </span>
+              </h4>
+            </div>
             <div className="w-full my-10">
-              <Stepper activeStep={0} alternativeLabel>
-                {steps.map((label) => (
+              <Stepper
+                activeStep={
+                  orderStatus.findIndex(
+                    (step) => step === data?.order?.orderStatus
+                  ) + 1
+                }
+                alternativeLabel
+              >
+                {orderStatus.map((label) => (
                   <Step key={label}>
                     <StepLabel
                       sx={{
@@ -34,9 +68,6 @@ const OrderDetails = () => {
                       }}
                     >
                       {label}
-                      <p className="text-xs sm:text-sm">
-                        {new Date(data?.order?.createdAt).toLocaleString()}
-                      </p>
                     </StepLabel>
                   </Step>
                 ))}
@@ -69,6 +100,12 @@ const OrderDetails = () => {
                 total price :
                 <span className="ml-1">₹ {data?.order?.totalPrice}</span>
               </h1>
+            </div>
+            <div
+              onClick={orderDeleteHandler}
+              className="bg-fuchsia-600 text-white py-3 rounded-lg text-center cursor-pointer hover:bg-fuchsia-700 uppercase transition-colors duration-300 w-full sm:inline px-5"
+            >
+              delete order
             </div>
           </>
         )}

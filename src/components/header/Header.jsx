@@ -1,15 +1,28 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Search from "../search/Search";
-import { Avatar, Badge, Box, Dialog, Tooltip, Stack } from "@mui/material";
+import {
+  Avatar,
+  Badge,
+  Box,
+  Dialog,
+  Tooltip,
+  Stack,
+  Drawer,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 import {
   Search as SearchIcon,
   Store as StoreIcon,
   ShoppingCart as ShoppingCartIcon,
+  Menu as MenuIcon,
 } from "@mui/icons-material";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import ProfileMenu from "./ProfileMenu";
+import MobileNav from "./MobileNav";
+import { useLazyLogoutQuery } from "../../redux/api/user-api";
+import toast from "react-hot-toast";
+import { userNotExist } from "../../redux/features/auth/authSlice";
 
 const StyledBadge = styled(Badge)(() => ({
   "& .MuiBadge-badge": {
@@ -26,12 +39,28 @@ const Header = () => {
   const { cartItems } = useSelector((state) => state.cart);
   const [isSearch, setIsSearch] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [logout] = useLazyLogoutQuery();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const searchOpenHandler = () => setIsSearch(true);
+  const searchCloseHandler = () => setIsSearch(false);
+  const openDrawerHandler = () => setIsDrawerOpen(true);
+  const closeDrawerHandler = () => setIsDrawerOpen(false);
 
-  const searchOpenHandler = () => {
-    setIsSearch(true);
-  };
-  const searchCloseHandler = () => {
-    setIsSearch(false);
+  const logoutHandler = () => {
+    if (user) {
+      logout()
+        .unwrap()
+        .then((res) => {
+          toast.success(res?.message);
+          dispatch(userNotExist());
+          navigate("/login");
+        })
+        .catch((error) => {
+          toast.error(error?.data?.message);
+        });
+    }
   };
 
   return (
@@ -55,12 +84,7 @@ const Header = () => {
         <Box className="hidden md:block">
           <Search />
         </Box>
-        <Stack
-          direction={"row"}
-          alignItems={"center"}
-          className="gap-4 sm:gap-6"
-          position={"relative"}
-        >
+        <Box className="relative hidden sm:flex items-center gap-4 sm:gap-6">
           <Link to={"/shop"}>
             <Tooltip title="Store" placement="bottom">
               <StoreIcon />
@@ -87,18 +111,47 @@ const Header = () => {
           >
             <Avatar src={user?.avatar?.url} />
           </Box>
-          <ProfileMenu open={isOpen} handleClose={setIsOpen} />
-        </Stack>
+          <ProfileMenu
+            user={user}
+            open={isOpen}
+            handleClose={setIsOpen}
+            logoutHandler={logoutHandler}
+          />
+        </Box>
+        <Box
+          onClick={openDrawerHandler}
+          className="block sm:hidden cursor-pointer"
+        >
+          <MenuIcon />
+        </Box>
       </Stack>
 
-      {/* for mobile screen */}
+      {/* mobile search */}
       <Dialog
         className="block md:hidden"
         open={isSearch}
         onClose={searchCloseHandler}
       >
-        <Search />
+        <Search searchCloseHandler={searchCloseHandler} />
       </Dialog>
+      {/* mobile nav */}
+      <Drawer
+        className="block sm:hidden"
+        open={isDrawerOpen}
+        onClose={closeDrawerHandler}
+        PaperProps={{
+          sx: {
+            width: "100%",
+          },
+        }}
+      >
+        <MobileNav
+          user={user}
+          logoutHandler={logoutHandler}
+          closeDrawerHandler={closeDrawerHandler}
+          searchOpenHandler={searchOpenHandler}
+        />
+      </Drawer>
     </header>
   );
 };

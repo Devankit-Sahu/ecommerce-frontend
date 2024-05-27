@@ -2,6 +2,7 @@ import { Box } from "@mui/material";
 import { Link } from "react-router-dom";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import { useGetMyOrdersQuery } from "../redux/api/order-api";
+import { getStatusClass } from "../utils/utils";
 
 const MyOrdersPage = () => {
   const { data } = useGetMyOrdersQuery();
@@ -18,12 +19,24 @@ const MyOrdersPage = () => {
               <table className="w-full mb-10">
                 <thead>
                   <tr className="text-left">
-                    <th className="p-2 text-zinc-500 capitalize text-xs md:text-base">Order Id</th>
-                    <th className="p-2 text-zinc-500 capitalize text-xs md:text-base">Image</th>
-                    <th className="p-2 text-zinc-500 capitalize text-xs md:text-base">Name</th>
-                    <th className="p-2 text-zinc-500 capitalize text-xs md:text-base">Status</th>
-                    <th className="p-2 text-zinc-500 capitalize text-xs md:text-base">Total</th>
-                    <th className="p-2 text-zinc-500 capitalize text-xs md:text-base">Action</th>
+                    <th className="p-2 text-zinc-500 capitalize text-xs md:text-base">
+                      Order Id
+                    </th>
+                    <th className="p-2 text-zinc-500 capitalize text-xs md:text-base">
+                      Image
+                    </th>
+                    <th className="p-2 text-zinc-500 capitalize text-xs md:text-base">
+                      Name
+                    </th>
+                    <th className="p-2 text-zinc-500 capitalize text-xs md:text-base">
+                      Status
+                    </th>
+                    <th className="p-2 text-zinc-500 capitalize text-xs md:text-base">
+                      Total
+                    </th>
+                    <th className="p-2 text-zinc-500 capitalize text-xs md:text-base">
+                      Action
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -49,11 +62,22 @@ const MyOrdersPage = () => {
                           {order?.orderItems[0].name}
                         </h2>
                       </td>
-                      <td className="p-2 text-xs md:text-base">{order.orderStatus}</td>
-                      <td className="p-2 text-xs md:text-base">₹ {order.totalPrice}</td>
+                      <td
+                        className={`p-2 text-xs md:text-base ${getStatusClass(
+                          order.orderStatus
+                        )}`}
+                      >
+                        {order.orderStatus}
+                      </td>
+                      <td className="p-2 text-xs md:text-base">
+                        ₹ {order.totalPrice}
+                      </td>
                       <td className="p-2">
-                        <Link className="text-xs md:text-base" to={`/my-order/${order._id}`}>
-                          view order
+                        <Link
+                          className="text-xs md:text-base"
+                          to={`/my-order/${order._id}`}
+                        >
+                          view
                         </Link>
                       </td>
                     </tr>

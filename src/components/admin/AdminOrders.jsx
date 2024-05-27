@@ -1,9 +1,10 @@
-import React from "react";
 import MyTable from "../table/MyTable";
-import { orderColumns } from "../../data/data";
+import { orderColumns } from "../../constants/constants";
 import { Link } from "react-router-dom";
 import { EditOutlined } from "@mui/icons-material";
 import { useGetOrdersByAdminQuery } from "../../redux/api/order-api";
+import { Tooltip } from "@mui/material";
+import { getStatusClass } from "../../utils/utils";
 
 const AdminOrders = () => {
   const { data, isLoading } = useGetOrdersByAdminQuery();
@@ -11,17 +12,27 @@ const AdminOrders = () => {
   const tableData = data?.orders?.map((order) => ({
     order_id: String(order._id).slice(0, 7),
     name: order.orderItems[0].name,
-    totalPrice: order.totalPrice,
+    totalPrice: "₹" + order.totalPrice,
     photo: order.orderItems[0].image,
-    status: order.orderStatus,
+    status: (
+      <span
+        className={`${getStatusClass(
+          order.orderStatus
+        )} capitalize font-medium`}
+      >
+        {order.orderStatus}
+      </span>
+    ),
     action: (
       <Link to={`/admin/order/${order._id}`}>
-        <EditOutlined />
+        <Tooltip title="Edit" placement="right">
+          <EditOutlined />
+        </Tooltip>
       </Link>
     ),
   }));
   return (
-    <section className="bg-white p-5">
+    <div className="bg-white p-5">
       {isLoading ? (
         <div></div>
       ) : (
@@ -32,7 +43,7 @@ const AdminOrders = () => {
           <MyTable columns={orderColumns} data={tableData} />
         </>
       )}
-    </section>
+    </div>
   );
 };
 

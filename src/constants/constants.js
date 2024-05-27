@@ -1,3 +1,11 @@
+import {
+  GridView,
+  BusinessCenterOutlined,
+  FormatListBulletedOutlined,
+  PeopleOutlineOutlined,
+  ExploreOutlined,
+} from "@mui/icons-material";
+
 export const productColumns = [
   {
     Header: "Product Id",
@@ -69,8 +77,34 @@ export const userColumns = [
     Header: "Email",
     accessor: "email",
   },
+];
+
+export const sidebarListItems = [
   {
-    Header: "Action",
-    accessor: "action",
+    icon: GridView,
+    name: "DashBoard",
+    href: "/admin/dashboard",
+  },
+  {
+    icon: BusinessCenterOutlined,
+    name: "Products",
+    href: "/admin/products",
+  },
+  {
+    icon: PeopleOutlineOutlined,
+    name: "Customers",
+    href: "/admin/users",
+  },
+  {
+    icon: ExploreOutlined,
+    name: "Orders",
+    href: "/admin/orders",
+  },
+  {
+    icon: FormatListBulletedOutlined,
+    name: "Category",
+    href: "/admin/category",
   },
 ];
+
+export const orderStatus = ["processing", "shipped", "delivered"];

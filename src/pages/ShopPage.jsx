@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Box, Stack, Skeleton, Tooltip, Drawer, Button } from "@mui/material";
+import {
+  Box,
+  Stack,
+  Skeleton,
+  Tooltip,
+  Drawer,
+  Button,
+  useMediaQuery,
+} from "@mui/material";
 import { ChevronRight as ChevronRightIcon } from "@mui/icons-material";
 import ProductFilter from "../components/product/ProductFilter";
 import AllProducts from "../components/product/AllProducts";
@@ -22,7 +30,7 @@ const ShopPage = () => {
     page,
     category: categories,
   });
-
+  const isSmallScreen = useMediaQuery("(max-width: 425px)");
   const { data: categoriesData } = useGetCategoriesQuery();
 
   const openDrawerHandler = () => {
@@ -38,8 +46,8 @@ const ShopPage = () => {
   }, [isError]);
 
   return (
-    <section className="flex relative min-h-[100%]">
-      <Box className="hidden lg:block w-[350px] bg-white p-3">
+    <section className="flex relative min-h-[calc(100vh-75px)]">
+      <Box className="hidden md:block w-[350px] bg-white p-3">
         <ProductFilter
           price={price}
           setPrice={setPrice}
@@ -50,7 +58,7 @@ const ShopPage = () => {
       </Box>
       <button
         onClick={openDrawerHandler}
-        className="fixed top-1/2 bg-white px-1 py-2 cursor-pointer lg:hidden"
+        className="fixed top-1/2 bg-white px-1 py-2 cursor-pointer md:hidden"
       >
         <Tooltip title="Toggle Filter">
           <ChevronRightIcon />
@@ -58,17 +66,23 @@ const ShopPage = () => {
       </button>
       {/* for mobile screen */}
       <Drawer
-        className="block lg:hidden"
+        className="block md:hidden"
         open={isOpenDrawer}
         onClose={closeDrawerHandler}
+        PaperProps={{
+          sx: {
+            width: isSmallScreen ? "100%" : "350px",
+          },
+        }}
       >
-        <Box className="w-[350px] bg-white p-3">
+        <Box className=" bg-white h-full p-3">
           <ProductFilter
             price={price}
             setPrice={setPrice}
             categories={categories}
             setCategories={setCategories}
             allCategories={categoriesData?.allCategories}
+            closeHandler={closeDrawerHandler}
           />
         </Box>
       </Drawer>

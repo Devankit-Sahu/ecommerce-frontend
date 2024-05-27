@@ -23,7 +23,9 @@ const AdminEditProduct = lazy(() =>
 );
 const AdminUsersList = lazy(() => import("./components/admin/AdminUsersList"));
 const AdminOrders = lazy(() => import("./components/admin/AdminOrders"));
-const AdminEditOrder = lazy(() => import("./components/admin/AdminEditOrder"));
+const AdminOrderDetails = lazy(() =>
+  import("./components/admin/AdminOrderDetails")
+);
 const AdminCategories = lazy(() =>
   import("./components/admin/AdminCategories")
 );
@@ -162,7 +164,7 @@ const App = () => {
               </ProtectedRoute>
             }
           >
-            <Route index element={<AdminDashboard />} />
+            <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="products" element={<AdminProducts />} />
             <Route path="product/create" element={<AdminCreateProduct />} />
             <Route
@@ -171,8 +173,9 @@ const App = () => {
             />
             <Route path="users" element={<AdminUsersList />} />
             <Route path="orders" element={<AdminOrders />} />
-            <Route path="order/:orderId" element={<AdminEditOrder />} />
+            <Route path="order/:orderId" element={<AdminOrderDetails />} />
             <Route path="category" element={<AdminCategories />} />
+            <Route path="profile" element={<Profile />} />
           </Route>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<SignupPage />} />

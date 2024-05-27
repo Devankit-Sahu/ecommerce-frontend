@@ -71,7 +71,7 @@ const SignupPage = () => {
 
   useEffect(() => {
     if (user && user.role === "admin") {
-      navigate("/admin");
+      navigate("/admin/dashboard");
     } else if (user) {
       navigate("/");
     }

@@ -27,7 +27,7 @@ const AdminEditProduct = () => {
   const { productId } = useParams();
   const { data, isLoading } = useProductDetailsByAdminQuery(productId);
   const { data: categories } = useGetCategoriesByAdminQuery();
-  const [editProductMutate, { isError, error, isLoading: loading, isSuccess }] =
+  const [editProductMutate, { isLoading: loading }] =
     useEditProductByAdminMutation();
   const [productData, setProductData] = useState({
     name: "",
@@ -58,7 +58,7 @@ const AdminEditProduct = () => {
     });
   };
 
-  const handlesubmit = async (e) => {
+  const handlesubmit = (e) => {
     e.preventDefault();
     const { name, category, description, price, stock, seller } = productData;
 
@@ -73,9 +73,18 @@ const AdminEditProduct = () => {
     images.forEach((image) => {
       formData.append("images", image);
     });
-
-    const { data } = await editProductMutate({ productId, formData });
-    toast.success(data?.message);
+    const toastId = toast.loading("Product is updating!!!");
+    editProductMutate({ productId, formData })
+      .unwrap()
+      .then((res) => {
+        toast.success(res?.message, { id: toastId });
+        navigate("/admin/products");
+      })
+      .catch((error) =>
+        toast.error(error?.data?.message || "Internal Server Error", {
+          id: toastId,
+        })
+      );
   };
 
   useEffect(() => {
@@ -92,12 +101,6 @@ const AdminEditProduct = () => {
       setOldImages(product.images.map((image) => image.url) || []);
     }
   }, [isLoading, data]);
-
-  useEffect(() => {
-    if (isError) toast.error(error?.data?.message || "Internal Server Error");
-
-    if (isSuccess) navigate("/admin/products");
-  }, [isError, isSuccess]);
 
   return (
     <Box className="bg-white p-5">
@@ -195,13 +198,13 @@ const AdminEditProduct = () => {
             />
           </div>
         </div>
-        <div className="flex gap-3 py-3">
+        <div className="flex gap-3 py-3 flex-wrap justify-center">
           {oldImages.map((img, index) => (
             <StyledBadge
               badgeContent={<CloseIcon sx={{ fontSize: "15px" }} />}
               key={index}
             >
-              <div className=" w-40 h-40 p-4 border-[2px] rounded-xl border-[#eee]">
+              <div className="w-20 h-20 md:w-40 md:h-40 p-4 border-[2px] rounded-xl border-[#eee]">
                 <img
                   src={img}
                   className="w-full h-full"
@@ -221,10 +224,10 @@ const AdminEditProduct = () => {
             onChange={imageChangehandler}
           />
         </div>
-        <div className="flex gap-3 py-3">
+        <div className="flex gap-3 py-3 flex-wrap justify-center">
           {imagesPreview?.map((img, index) => (
             <div
-              className=" w-40 h-40 p-4 border-[2px] rounded-xl border-[#eee]"
+              className=" w-20 h-20 md:w-40 md:h-40 p-4 border-[2px] rounded-xl border-[#eee]"
               key={index}
             >
               <img src={img} className="w-full h-full" alt="product-preview" />
@@ -235,6 +238,7 @@ const AdminEditProduct = () => {
           variant="contained"
           type="submit"
           disabled={isLoading ? true : false}
+          className="w-full sm:w-fit"
         >
           {loading ? "Loading" : "update Product"}
         </Button>
