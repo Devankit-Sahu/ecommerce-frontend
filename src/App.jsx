@@ -41,7 +41,7 @@ import toast from "react-hot-toast";
 import { userExist, userNotExist } from "./redux/features/auth/authSlice";
 
 const App = () => {
-  const { user, loading } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const getUser = async () => {
     try {
@@ -61,9 +61,7 @@ const App = () => {
     }
   }, [user]);
 
-  return loading ? (
-    <Loader />
-  ) : (
+  return (
     <BrowserRouter>
       <Suspense fallback={<Loader />}>
         <Routes>
