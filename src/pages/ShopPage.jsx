@@ -100,7 +100,6 @@ const ShopPage = () => {
         </Box>
       ) : (
         <Box
-          height={"100%"}
           className="overflow-y-auto bg-slate-100"
           width={"100%"}
           padding={5}

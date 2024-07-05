@@ -9,7 +9,7 @@ import {
   useGetProductsByAdminQuery,
 } from "../../redux/api/product-api";
 import toast from "react-hot-toast";
-import ProductDeleteDialog from "../dialog/ProductDeleteDialog";
+import CustomDialog from "../dialog/CustomDialog";
 
 const AdminProducts = () => {
   const navigate = useNavigate();
@@ -92,9 +92,10 @@ const AdminProducts = () => {
           </Box>
         </Box>
       )}
-      <ProductDeleteDialog
+      <CustomDialog
         open={open}
         handleClose={handleClose}
+        dialogTitle={"Are you sure do want to delete this product?"}
         deleteProductHandler={() => deleteProductHandler(selectedProductId)}
       />
     </>

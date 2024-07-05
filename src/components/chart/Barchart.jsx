@@ -19,33 +19,67 @@ ChartJS.register(
   Legend
 );
 
-// const options = {
-//   responsive: true,
-//   plugins: {
-//     legend: {
-//       position: "top",
-//     },
-//     title: {
-//       display: true,
-//       text: "Chart.js Bar Chart",
-//     },
-//   },
-// };
+const months = ["January", "February", "March", "April", "May", "June", "July"];
 
-const labels = ["January", "February", "March", "April", "May", "June", "July"];
-
-const data = {
-  labels,
-  datasets: [
-    {
-      data: [23, 45, 33, 55, 35, 64, 54],
-      backgroundColor: "rgba(255, 99, 132, 0.5)",
-      barThickness:10
+const Barchart = ({
+  data_1 = [],
+  data_2 = [],
+  title_1,
+  title_2,
+  bgColor_1,
+  bgColor_2,
+  horizontal = false,
+  labels = months,
+}) => {
+  const options = {
+    responsive: true,
+    indexAxis: horizontal ? "y" : "x",
+    plugins: {
+      legend: {
+        display: false,
+      },
+      title: {
+        display: false,
+      },
     },
-  ],
-};
-const Barchart = () => {
-  return <Bar  data={data} />;
+
+    scales: {
+      y: {
+        beginAtZero: true,
+        grid: {
+          display: false,
+        },
+      },
+      x: {
+        grid: {
+          display: false,
+        },
+      },
+    },
+  };
+
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: title_1,
+        data: data_1,
+        backgroundColor: bgColor_1,
+        barThickness: "flex",
+        barPercentage: 1,
+        categoryPercentage: 0.4,
+      },
+      {
+        label: title_2,
+        data: data_2,
+        backgroundColor: bgColor_2,
+        barThickness: "flex",
+        barPercentage: 1,
+        categoryPercentage: 0.4,
+      },
+    ],
+  };
+  return <Bar options={options} data={data} />;
 };
 
 export default Barchart;

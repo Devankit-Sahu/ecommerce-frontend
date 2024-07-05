@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Stack } from "@mui/material";
 import Input from "../input/Input";
 import {
@@ -13,46 +13,34 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { SERVER } from "../../config/config";
 import { addShippingInfo } from "../../redux/features/cart/cartSlice";
+import { useForm } from "react-hook-form";
 
 const Shipping = () => {
-  const { cartItems, shippingInfo: info } = useSelector((state) => state.cart);
-  const [shippingInfo, setShippingInfo] = useState({
-    address1: "",
-    address2: "",
-    country: "",
-    state: "",
-    city: "",
-    pincode: "",
+  const { cartItems } = useSelector((state) => state.cart);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    defaultValues: {
+      address1: "",
+      address2: "",
+      country: "",
+      state: "",
+      city: "",
+      pincode: "",
+    },
   });
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const inputChangeHandler = (e) => {
-    setShippingInfo((prevInfo) => ({
-      ...prevInfo,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
   useEffect(() => {
     if (cartItems.length === 0) return navigate("/cart");
-    if (shippingInfo) {
-      setShippingInfo(info);
-    }
   }, [cartItems.length]);
 
-  const submitHandler = async (e) => {
-    e.preventDefault();
-    const { address1, address2, country, state, city, pincode } = shippingInfo;
-
-    if ((!address1 && !address2) || !country || !state || !city || !pincode) {
-      toast.error("shipping details required");
-      return;
-    }
-
-    dispatch(addShippingInfo(shippingInfo));
-    localStorage.setItem("shippingInfo", JSON.stringify(shippingInfo));
-
+  const submitHandler = async (data) => {
+    dispatch(addShippingInfo(data));
+    localStorage.setItem("shippingInfo", JSON.stringify(data));
     try {
       const totalPrice = cartItems.reduce((acc, item) => {
         return acc + item.price;
@@ -84,119 +72,125 @@ const Shipping = () => {
         <h1 className="text-center mb-5 text-2xl font-semibold capitalize">
           shipping details
         </h1>
-        <form onSubmit={submitHandler}>
-          <Stack
-            direction={"row"}
-            gap={1}
-            alignItems={"center"}
-            marginBottom={2}
-          >
+        <form onSubmit={handleSubmit(submitHandler)} noValidate>
+          <div className="mb-2">
             <Input
-              label={<HomeIcon />}
-              labelClassName="text-gray-500"
-              type="text"
               id="address1"
-              name="address1"
-              placeholder="address1"
-              className="bg-transparent rounded outline-none border border-[#d5d0d0] w-full px-2 py-1 placeholder:text-black/65"
-              value={shippingInfo.address1}
-              onChange={inputChangeHandler}
-            />
-          </Stack>
-          <Stack
-            direction={"row"}
-            gap={1}
-            alignItems={"center"}
-            marginBottom={2}
-          >
-            <Input
+              type="text"
               label={<HomeIcon />}
               labelClassName="text-gray-500"
-              type="text"
+              placeholder="address1"
+              className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full px-2 py-1 placeholder:text-black/65 ${
+                errors?.address1 && "border border-solid border-red-600"
+              }`}
+              register={register}
+              errorMessage={{ required: "This field is required" }}
+            />
+            {errors?.address1 && (
+              <p className="text-red-500 text-sm" style={{ marginTop: 0 }}>
+                {errors?.address1?.message}
+              </p>
+            )}
+          </div>
+          <div className="mb-2">
+            <Input
               id="address2"
-              name="address2"
+              type="text"
+              label={<HomeIcon />}
+              labelClassName="text-gray-500"
               placeholder="address2"
-              className="bg-transparent rounded outline-none border border-[#d5d0d0] w-full px-2 py-1 placeholder:text-black/65"
-              value={shippingInfo.address2}
-              onChange={inputChangeHandler}
+              className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full px-2 py-1 placeholder:text-black/65 ${
+                errors?.address2 && "border border-solid border-red-600"
+              }`}
+              register={register}
+              errorMessage={{ required: "This field is required" }}
             />
-          </Stack>
-          <Stack
-            direction={"row"}
-            gap={1}
-            alignItems={"center"}
-            marginBottom={2}
-          >
+            {errors?.address2 && (
+              <p className="text-red-500 text-sm" style={{ marginTop: 0 }}>
+                {errors?.address2?.message}
+              </p>
+            )}
+          </div>
+          <div className="mb-2">
             <Input
-              label={<BungalowIcon />}
-              labelClassName="text-gray-500"
-              type="text"
               id="country"
-              name="country"
-              placeholder="country"
-              className="bg-transparent rounded outline-none border border-[#d5d0d0] w-full px-2 py-1 placeholder:text-black/65"
-              value={shippingInfo.country}
-              onChange={inputChangeHandler}
-            />
-          </Stack>
-          <Stack
-            direction={"row"}
-            gap={1}
-            alignItems={"center"}
-            marginBottom={2}
-          >
-            <Input
+              type="text"
               label={<BungalowIcon />}
               labelClassName="text-gray-500"
-              type="text"
-              id="state"
-              name="state"
-              placeholder="state"
-              className="bg-transparent rounded outline-none border border-[#d5d0d0] w-full px-2 py-1 placeholder:text-black/65"
-              value={shippingInfo.state}
-              onChange={inputChangeHandler}
+              placeholder="country"
+              className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full px-2 py-1 placeholder:text-black/65 ${
+                errors?.address2 && "border border-solid border-red-600"
+              }`}
+              register={register}
+              errorMessage={{ required: "This field is required" }}
             />
-          </Stack>
-          <Stack
-            direction={"row"}
-            gap={1}
-            alignItems={"center"}
-            marginBottom={2}
-          >
+            {errors?.country && (
+              <p className="text-red-500 text-sm" style={{ marginTop: 0 }}>
+                {errors?.country?.message}
+              </p>
+            )}
+          </div>
+          <div className="mb-2">
             <Input
+              id="state"
+              type="text"
+              label={<BungalowIcon />}
+              labelClassName="text-gray-500"
+              placeholder="state"
+              className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full px-2 py-1 placeholder:text-black/65 ${
+                errors?.state && "border border-solid border-red-600"
+              }`}
+              register={register}
+              errorMessage={{ required: "This field is required" }}
+            />
+            {errors?.state && (
+              <p className="text-red-500 text-sm" style={{ marginTop: 0 }}>
+                {errors?.state?.message}
+              </p>
+            )}
+          </div>
+          <div className="mb-2">
+            <Input
+              id="city"
+              type="text"
               label={<LocationCityIcon />}
               labelClassName="text-gray-500"
-              type="text"
-              id="city"
-              name="city"
               placeholder="city"
-              className="bg-transparent rounded outline-none border border-[#d5d0d0] w-full px-2 py-1 placeholder:text-black/65"
-              value={shippingInfo.city}
-              onChange={inputChangeHandler}
+              className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full px-2 py-1 placeholder:text-black/65 ${
+                errors?.city && "border border-solid border-red-600"
+              }`}
+              register={register}
+              errorMessage={{ required: "This field is required" }}
             />
-          </Stack>
-          <Stack
-            direction={"row"}
-            gap={1}
-            alignItems={"center"}
-            marginBottom={2}
-          >
+            {errors?.city && (
+              <p className="text-red-500 text-sm" style={{ marginTop: 0 }}>
+                {errors?.city?.message}
+              </p>
+            )}
+          </div>
+          <div>
             <Input
+              id="pincode"
+              type="text"
               label={<PinDropIcon />}
               labelClassName="text-gray-500"
-              type="text"
-              id="pincode"
-              name="pincode"
               placeholder="pincode"
-              className="bg-transparent rounded outline-none border border-[#d5d0d0] w-full px-2 py-1 placeholder:text-black/65"
-              value={shippingInfo.pincode}
-              onChange={inputChangeHandler}
+              className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full px-2 py-1 placeholder:text-black/65 ${
+                errors?.pincode && "border border-solid border-red-600"
+              }`}
+              register={register}
+              errorMessage={{ required: "This field is required" }}
             />
-          </Stack>
+            {errors?.pincode && (
+              <p className="text-red-500 text-sm" style={{ marginTop: 0 }}>
+                {errors?.pincode?.message}
+              </p>
+            )}
+          </div>
           <button
-            onClick={submitHandler}
             type="submit"
-            className="px-2 py-3 rounded w-full bg-[rgba(1,159,127,1)] capitalize text-white"
+            className="px-2 py-3 rounded w-full bg-[rgba(1,159,127,1)] capitalize text-white mt-5"
+            disabled={isSubmitting}
           >
             ready to pay
           </button>

@@ -7,6 +7,7 @@ import {
   Login as LoginIcon,
   Logout as LogoutIcon,
   Search as SearchIcon,
+  Close as CloseIcon,
 } from "@mui/icons-material";
 
 const MobileNav = ({
@@ -21,75 +22,81 @@ const MobileNav = ({
     closeDrawerHandler();
   };
   return (
-    <div className="h-screen">
+    <div className="h-screen relative">
+      <div
+        onClick={closeDrawerHandler}
+        className="absolute right-4 top-3 rounded"
+      >
+        <CloseIcon />
+      </div>
       <div className="flex flex-col items-center justify-center h-full gap-3">
         <div
-          className="text-xl cursor-pointer hover:bg-slate-300 w-full  py-2 uppercase flex items-center justify-center gap-2"
+          className="cursor-pointer hover:bg-slate-300 w-full  py-2 uppercase flex items-center justify-center gap-2"
           onClick={() => navigateHandler("/shop")}
         >
           <span>
-            <StoreIcon fontSize="small" />
+            <StoreIcon />
           </span>
-          <span>Shop</span>
+          <span className="text-base font-semibold">Shop</span>
         </div>
         <div
-          className="text-xl cursor-pointer hover:bg-slate-300 w-full  py-2 uppercase flex items-center justify-center gap-2"
+          className="cursor-pointer hover:bg-slate-300 w-full  py-2 uppercase flex items-center justify-center gap-2"
           onClick={() => navigateHandler("/cart")}
         >
           <span>
-            <ShoppingCartIcon fontSize="small" />
+            <ShoppingCartIcon />
           </span>
-          <span>Cart</span>
+          <span className="text-base font-semibold">Cart</span>
         </div>
         <div
-          className="text-xl cursor-pointer hover:bg-slate-300 w-full  py-2 uppercase flex items-center justify-center gap-2"
+          className="cursor-pointer hover:bg-slate-300 w-full  py-2 uppercase flex items-center justify-center gap-2"
           onClick={() => navigateHandler("/my-orders")}
         >
           <span>
             <CategoryIcon fontSize="small" />
           </span>
-          <span>Orders</span>
+          <span className="text-base font-semibold">Orders</span>
         </div>
         <div
-          className="text-xl cursor-pointer hover:bg-slate-300 w-full  py-2 uppercase flex items-center justify-center gap-2"
+          className="cursor-pointer hover:bg-slate-300 w-full  py-2 uppercase flex items-center justify-center gap-2"
           onClick={() => navigateHandler("/profile")}
         >
           <span>
             <AccountCircleIcon fontSize="small" />
           </span>
-          <span>Profile</span>
+          <span className="text-base font-semibold">Profile</span>
         </div>
         {!user && (
           <div
-            className="text-xl cursor-pointer hover:bg-slate-300 w-full  py-2 uppercase flex items-center justify-center gap-2"
+            className="cursor-pointer hover:bg-slate-300 w-full  py-2 uppercase flex items-center justify-center gap-2"
             onClick={() => navigateHandler("/login")}
           >
             <span>
               <LoginIcon fontSize="small" />
             </span>
-            <span>Login</span>
+            <span className="text-base font-semibold">Login</span>
           </div>
         )}
         {user && (
           <div
-            className="text-xl cursor-pointer hover:bg-slate-300 w-full  py-2 uppercase flex items-center justify-center gap-2"
+            className="cursor-pointer hover:bg-slate-300 w-full  py-2 uppercase flex items-center justify-center gap-2"
             onClick={logoutHandler}
           >
             <span>
               <LogoutIcon fontSize="small" />
             </span>
-            <span>Logout</span>
+            <span className="text-base font-semibold">Logout</span>
           </div>
         )}
         <div
-          className="text-xl cursor-pointer hover:bg-slate-300 w-full uppercase flex items-center justify-center gap-2"
+          className="cursor-pointer hover:bg-slate-300 w-full uppercase flex items-center justify-center gap-2"
           onClick={() => {
             searchOpenHandler();
             closeDrawerHandler();
           }}
         >
           <SearchIcon />
-          <span>search</span>
+          <span className="text-base font-semibold">search</span>
         </div>
       </div>
     </div>

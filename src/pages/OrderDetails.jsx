@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   useDeleteSingleOrderMutation,
@@ -6,12 +7,21 @@ import {
 import { Stack, Step, StepLabel, Stepper } from "@mui/material";
 import { orderStatus } from "../constants/constants";
 import toast from "react-hot-toast";
+import CustomDialog from "../components/dialog/CustomDialog";
 
 const OrderDetails = () => {
   const { id } = useParams();
   const { data } = useGetOrderDetailsQuery(id);
+  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const [deleteOrderMutation] = useDeleteSingleOrderMutation();
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const orderDeleteHandler = () => {
     const toastId = toast.loading("Order is deleting!!!");
@@ -102,7 +112,7 @@ const OrderDetails = () => {
               </h1>
             </div>
             <div
-              onClick={orderDeleteHandler}
+              onClick={handleClickOpen}
               className="bg-fuchsia-600 text-white py-3 rounded-lg text-center cursor-pointer hover:bg-fuchsia-700 uppercase transition-colors duration-300 w-full sm:inline px-5"
             >
               delete order
@@ -110,6 +120,14 @@ const OrderDetails = () => {
           </>
         )}
       </div>
+      <CustomDialog
+        open={open}
+        handleClose={handleClose}
+        dialogTitle={
+          "Are you sure do want to delete this order? If you do so you can't track your order."
+        }
+        deleteProductHandler={orderDeleteHandler}
+      />
     </section>
   );
 };

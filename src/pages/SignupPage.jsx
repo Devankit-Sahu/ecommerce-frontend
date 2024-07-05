@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Input from "../components/input/Input";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Box, Stack, Avatar } from "@mui/material";
@@ -110,31 +111,29 @@ const SignupPage = () => {
             />
           </div>
           <div>
-            <Stack direction={"row"} gap={1} alignItems={"center"}>
-              <label className="text-gray-500" htmlFor="name">
-                <PersonIcon />
-              </label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full py-2 px-1 ${
-                  errors?.name && "border border-solid border-red-600"
-                }`}
-                placeholder="Enter your name"
-                {...register("name", {
-                  required: "Name is required",
-                  minLength: {
-                    value: 5,
-                    message: "Must be of atleast 5 characters",
-                  },
-                  maxLength: {
-                    value: 30,
-                    message: "Must not exceed 30 characters",
-                  },
-                })}
-              />
-            </Stack>
+            <Input
+              id="name"
+              name="name"
+              type="text"
+              label={<PersonIcon />}
+              labelClassName="text-gray-500"
+              placeholder="Enter your name"
+              className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full py-2 px-1 ${
+                errors?.name && "border border-solid border-red-600"
+              }`}
+              register={register}
+              errorMessage={{
+                required: "Name is required",
+                minLength: {
+                  value: 5,
+                  message: "Must be of atleast 5 characters",
+                },
+                maxLength: {
+                  value: 30,
+                  message: "Must not exceed 30 characters",
+                },
+              }}
+            />
             {errors?.name && (
               <p className="text-red-500 text-sm" style={{ marginTop: 0 }}>
                 {errors?.name?.message}
@@ -142,21 +141,21 @@ const SignupPage = () => {
             )}
           </div>
           <div>
-            <Stack direction={"row"} gap={1} alignItems={"center"}>
-              <label className="text-gray-500" htmlFor="email">
-                <EmailOutlinedIcon />
-              </label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full py-2 px-1 ${
-                  errors?.email && "border border-solid border-red-600"
-                }`}
-                placeholder="Enter your email"
-                {...register("email", { required: "This field is required" })}
-              />
-            </Stack>
+            <Input
+              type="email"
+              name="email"
+              id="email"
+              label={<EmailOutlinedIcon />}
+              labelClassName="text-gray-500"
+              placeholder="Enter your email"
+              className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full py-2 px-1 ${
+                errors?.email && "border border-solid border-red-600"
+              }`}
+              register={register}
+              errorMessage={{
+                required: "This field is required",
+              }}
+            />
             {errors?.email && (
               <p className="text-red-500 text-sm" style={{ marginTop: 0 }}>
                 {errors?.email?.message}
@@ -164,24 +163,21 @@ const SignupPage = () => {
             )}
           </div>
           <div>
-            <Stack direction={"row"} gap={1} alignItems={"center"}>
-              <label className="text-gray-500" htmlFor="password">
-                <LockOutlinedIcon />
-              </label>
-              <input
-                type="password"
-                name="password"
-                id="password"
-                autoComplete="off"
-                className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full py-2 px-1 ${
-                  errors?.password && "border border-solid border-red-600"
-                }`}
-                placeholder="Enter your password"
-                {...register("password", {
-                  required: "This field is required",
-                })}
-              />
-            </Stack>
+            <Input
+              type="password"
+              name="password"
+              id="password"
+              label={<LockOutlinedIcon />}
+              labelClassName="text-gray-500"
+              placeholder="Enter your password"
+              className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full py-2 px-1 ${
+                errors?.password && "border border-solid border-red-600"
+              }`}
+              register={register}
+              errorMessage={{
+                required: "This field is required",
+              }}
+            />
             {errors?.password && (
               <p className="text-red-500 text-sm" style={{ marginTop: 0 }}>
                 {errors?.password?.message}

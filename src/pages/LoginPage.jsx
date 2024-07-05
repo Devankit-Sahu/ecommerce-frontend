@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
+import Input from "../components/input/Input";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
-import { Box, Stack } from "@mui/material";
+import { Box } from "@mui/material";
 import {
   EmailOutlined as EmailOutlinedIcon,
   LockOutlined as LockOutlinedIcon,
@@ -66,21 +67,19 @@ const LoginPage = () => {
           noValidate
         >
           <div>
-            <Stack direction={"row"} gap={1} alignItems={"center"}>
-              <label className="text-gray-500" htmlFor="email">
-                <EmailOutlinedIcon />
-              </label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full py-2 px-1 ${
-                  errors?.email && "border border-solid border-red-600"
-                }`}
-                placeholder="Enter your email"
-                {...register("email", { required: "This field is required" })}
-              />
-            </Stack>
+            <Input
+              type="email"
+              name="email"
+              id="email"
+              label={<EmailOutlinedIcon />}
+              labelClassName="text-gray-500"
+              placeholder="Enter your email"
+              className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full py-2 px-1 ${
+                errors?.email && "border border-solid border-red-600"
+              }`}
+              register={register}
+              errorMessage={{ required: "This field is required" }}
+            />
             {errors?.email && (
               <p className="text-red-500 text-sm" style={{ marginTop: 0 }}>
                 {errors?.email?.message}
@@ -88,24 +87,19 @@ const LoginPage = () => {
             )}
           </div>
           <div>
-            <Stack direction={"row"} gap={1} alignItems={"center"}>
-              <label className="text-gray-500" htmlFor="password">
-                <LockOutlinedIcon />
-              </label>
-              <input
-                type="password"
-                name="password"
-                id="password"
-                autoComplete="off"
-                className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full py-2 px-1 ${
-                  errors?.password && "border border-solid border-red-600"
-                }`}
-                placeholder="Enter your password"
-                {...register("password", {
-                  required: "This field is required",
-                })}
-              />
-            </Stack>
+            <Input
+              type="password"
+              name="password"
+              id="password"
+              label={<LockOutlinedIcon />}
+              labelClassName="text-gray-500"
+              placeholder="Enter your password"
+              className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full py-2 px-1 ${
+                errors?.password && "border border-solid border-red-600"
+              }`}
+              register={register}
+              errorMessage={{ required: "This field is required" }}
+            />
             {errors?.password && (
               <p className="text-red-500 text-sm" style={{ marginTop: 0 }}>
                 {errors?.password?.message}
@@ -115,7 +109,7 @@ const LoginPage = () => {
           <button
             className="w-full rounded-md bg-cyan-500 px-5 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-cyan-600"
             type="submit"
-            disabled={isSubmitting ? true : false}
+            disabled={isSubmitting}
           >
             login
           </button>

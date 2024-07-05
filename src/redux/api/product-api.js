@@ -77,6 +77,12 @@ const productApi = createApi({
       }),
       invalidatesTags: ["Products"],
     }),
+    getDashboardData: builder.query({
+      query: () => ({
+        url: "admin/dashboard/data",
+        credentials: "include",
+      }),
+    }),
   }),
 });
 
@@ -90,4 +96,5 @@ export const {
   useEditProductByAdminMutation,
   useDeleteProductByAdminMutation,
   useCreateReviewMutation,
+  useGetDashboardDataQuery,
 } = productApi;

@@ -26,3 +26,20 @@ export const getStatusClass = (status) => {
       return "text-gray-400";
   }
 };
+
+export const getLastMonths = () => {
+  const currentDate = new Date();
+  const last6Months = [];
+
+  currentDate.setDate(1);
+
+  for (let i = 0; i < 6; i++) {
+    const monthDate = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth() - i,
+      1
+    );
+    const monthName = monthDate.toLocaleString("default", { month: "long" });
+    last6Months.unshift(monthName);
+  }
+};

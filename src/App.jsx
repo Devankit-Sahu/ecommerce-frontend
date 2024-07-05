@@ -37,7 +37,6 @@ const OrderDetails = lazy(() => import("./pages/OrderDetails"));
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { SERVER } from "./config/config";
-import toast from "react-hot-toast";
 import { userExist, userNotExist } from "./redux/features/auth/authSlice";
 
 const App = () => {
@@ -51,7 +50,6 @@ const App = () => {
       dispatch(userExist(res.data.user));
     } catch (error) {
       dispatch(userNotExist());
-      toast.error(error?.response?.data?.message);
     }
   };
 
@@ -74,10 +72,7 @@ const App = () => {
             <Route
               path="/profile"
               element={
-                <ProtectedRoute
-                  user={user}
-                  isAuthenticated={user ? true : false}
-                >
+                <ProtectedRoute user={user}>
                   <Profile />
                 </ProtectedRoute>
               }
@@ -85,10 +80,7 @@ const App = () => {
             <Route
               path="/cart"
               element={
-                <ProtectedRoute
-                  user={user}
-                  isAuthenticated={user ? true : false}
-                >
+                <ProtectedRoute user={user}>
                   <CartPage />
                 </ProtectedRoute>
               }
@@ -96,10 +88,7 @@ const App = () => {
             <Route
               path="/my-orders"
               element={
-                <ProtectedRoute
-                  user={user}
-                  isAuthenticated={user ? true : false}
-                >
+                <ProtectedRoute user={user}>
                   <MyOrdersPage />
                 </ProtectedRoute>
               }
@@ -107,10 +96,7 @@ const App = () => {
             <Route
               path="/my-order/:id"
               element={
-                <ProtectedRoute
-                  user={user}
-                  isAuthenticated={user ? true : false}
-                >
+                <ProtectedRoute user={user}>
                   <OrderDetails />
                 </ProtectedRoute>
               }
@@ -118,10 +104,7 @@ const App = () => {
             <Route
               path="/shipping"
               element={
-                <ProtectedRoute
-                  user={user}
-                  isAuthenticated={user ? true : false}
-                >
+                <ProtectedRoute user={user}>
                   <Shipping />
                 </ProtectedRoute>
               }
@@ -129,10 +112,7 @@ const App = () => {
             <Route
               path="/payment"
               element={
-                <ProtectedRoute
-                  user={user}
-                  isAuthenticated={user ? true : false}
-                >
+                <ProtectedRoute user={user}>
                   <Payment />
                 </ProtectedRoute>
               }
@@ -140,10 +120,7 @@ const App = () => {
             <Route
               path="/payment-success"
               element={
-                <ProtectedRoute
-                  user={user}
-                  isAuthenticated={user ? true : false}
-                >
+                <ProtectedRoute user={user}>
                   <Orderplaced />
                 </ProtectedRoute>
               }
@@ -153,11 +130,7 @@ const App = () => {
           <Route
             path="/admin"
             element={
-              <ProtectedRoute
-                user={user}
-                isAuthenticated={user ? true : false}
-                isAdmin={true}
-              >
+              <ProtectedRoute user={user} isAdmin={true}>
                 <AdminLayout />
               </ProtectedRoute>
             }

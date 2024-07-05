@@ -17,11 +17,12 @@ import {
   Elements,
 } from "@stripe/react-stripe-js";
 import { useStripe, useElements } from "@stripe/react-stripe-js";
-import { resetCart } from "../../redux/features/cart/cartSlice";
 import { useCreateOrderMutation } from "../../redux/api/order-api";
 import { setIsPaymentCompleted } from "../../redux/features/utilSlice";
+import { SERVER } from "../../config/config";
 
 const Payment = () => {
+  const { user } = useSelector((state) => state.auth);
   const { cartItems, shippingInfo } = useSelector((state) => state.cart);
   const location = useLocation();
   const clientSecret = location.state?.clientSecret;
@@ -30,7 +31,7 @@ const Payment = () => {
 
   const getStripeKey = async () => {
     try {
-      const res = await axios.get("http://localhost:4000/api/v1/payment/key");
+      const res = await axios.get(`${SERVER}/api/v1/payment/key`);
       const publishableKey = await loadStripe(res.data.publishable_key);
       setStripeKey(publishableKey);
     } catch (error) {
@@ -63,6 +64,7 @@ const Payment = () => {
           cartItems={cartItems}
           shippingInfo={shippingInfo}
           clientSecret={clientSecret}
+          user={user}
         />
       </Elements>
     </section>
@@ -71,7 +73,7 @@ const Payment = () => {
 
 export default Payment;
 
-const CheckOutForm = ({ clientSecret, cartItems, shippingInfo }) => {
+const CheckOutForm = ({ clientSecret, cartItems, shippingInfo, user }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [isLoading, setIsLoading] = useState(false);
@@ -92,46 +94,55 @@ const CheckOutForm = ({ clientSecret, cartItems, shippingInfo }) => {
     }
 
     setIsLoading(true);
+    const toastId = toast.loading(
+      "Your payment is being processed. Please do not hit the back button!!!"
+    );
 
-    // const { paymentIntent, error } = await stripe.confirmCardPayment(
-    //   clientSecret,
-    //   {
-    //     payment_method: {
-    //       card: elements.getElement(CardNumberElement),
-    //       billing_details: {
-    //         name: "fdfds",
-    //         address: {
-    //           line1: "fdfs",
-    //           city: "fdf",
-    //           state: "fdfs",
-    //           country: "US",
-    //         },
-    //       },
-    //     },
-    //   }
-    // );
+    try {
+      const { paymentIntent, error } = await stripe.confirmCardPayment(
+        clientSecret,
+        {
+          payment_method: {
+            card: elements.getElement(CardNumberElement),
+            billing_details: {
+              name: user.name,
+              address: {
+                line1: shippingInfo.address1,
+                city: shippingInfo.city,
+                state: shippingInfo.state,
+                country: "IN",
+              },
+            },
+          },
+        }
+      );
 
-    // if (error) {
-    //   console.log(error);
-    //   toast.error(error.message);
-    //   setIsLoading(false);
-    //   return;
-    // }
+      if (error) {
+        toast.error(error.message, { id: toastId });
+        return;
+      }
 
-    // if (paymentIntent.status === "succeeded") {
-    //   await createOrderMutation({
-    //     orderItems: cartItems,
-    //     shippingInfo,
-    //     totalPrice,
-    //   });
-    // localStorage.removeItem("cartItems");
-    // dispatch(resetCart());
-    dispatch(setIsPaymentCompleted(true));
-    navigate("/payment-success");
-    toast.success("your Payment is successfull!");
-    // }
-
-    setIsLoading(false);
+      if (paymentIntent.status === "succeeded") {
+        await createOrderMutation({
+          orderItems: cartItems,
+          shippingInfo,
+          totalPrice,
+        });
+        toast.success("Your payment is successful!", { id: toastId });
+        dispatch(setIsPaymentCompleted(true));
+        navigate("/payment-success", { replace: true });
+      } else {
+        toast.error("Payment failed. Please try again.", { id: toastId });
+      }
+    } catch (err) {
+      console.error("Payment error:", err);
+      toast.error("An unexpected error occurred. Please try again.", {
+        id: toastId,
+      });
+    } finally {
+      setIsLoading(false);
+      toast.dismiss(toastId);
+    }
   };
 
   return (

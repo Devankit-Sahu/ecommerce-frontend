@@ -7,7 +7,12 @@ import {
   DialogTitle,
 } from "@mui/material";
 
-const ProductDeleteDialog = ({ open, handleClose, deleteProductHandler }) => {
+const CustomDialog = ({
+  open,
+  handleClose,
+  dialogTitle,
+  deleteProductHandler,
+}) => {
   return (
     <Dialog
       open={open}
@@ -15,9 +20,7 @@ const ProductDeleteDialog = ({ open, handleClose, deleteProductHandler }) => {
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">
-        Are you sure do want to delete this product?
-      </DialogTitle>
+      <DialogTitle id="alert-dialog-title">{dialogTitle}</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
           This action can't be undone.
@@ -33,4 +36,4 @@ const ProductDeleteDialog = ({ open, handleClose, deleteProductHandler }) => {
   );
 };
 
-export default ProductDeleteDialog;
+export default CustomDialog;

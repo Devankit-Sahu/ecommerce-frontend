@@ -132,18 +132,6 @@ const CartPage = () => {
                   <h1 className="text-black font-semibold">items</h1>
                   <h2>{cartItems.length}</h2>
                 </div>
-                {/* <div className="flex justify-between items-center my-2 capitalize">
-                  <h1 className="text-black font-semibold">subtotal</h1>
-                  <h2>₹ {subTotal}</h2>
-                </div> */}
-                {/* <div className="flex justify-between items-center my-2 capitalize">
-                  <h1 className="text-black font-semibold">discount</h1>
-                  <h2>10%</h2>
-                </div> */}
-                {/* <div className="flex justify-between items-center my-2 capitalize">
-                  <h1 className="text-black font-semibold">shipping</h1>
-                  <h2>free</h2>
-                </div> */}
                 <div className="flex justify-between items-center my- py-3 capitalize border-t border-solid border-[#ced0d5]">
                   <h1 className="text-black font-semibold capitalize">
                     subtotal

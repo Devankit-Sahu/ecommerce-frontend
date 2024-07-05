@@ -64,7 +64,7 @@ const ProductFilter = ({
             value={price}
             color="secondary"
             min={0}
-            max={30000}
+            max={300000}
           />
         </div>
       </div>

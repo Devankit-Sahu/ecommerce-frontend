@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Box, Button, Stack, Skeleton } from "@mui/material";
 import ProductReviews from "./ProductReviews";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addItemsToCart } from "../../redux/features/cart/cartSlice";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
@@ -9,6 +9,7 @@ import { useProductDetailsQuery } from "../../redux/api/product-api";
 import StarIcon from "@mui/icons-material/Star";
 
 const ProductDetail = () => {
+  const { user } = useSelector((state) => state.auth);
   const [tab, setTab] = useState("description");
   const dispatch = useDispatch();
   const { productId } = useParams();
@@ -20,33 +21,37 @@ const ProductDetail = () => {
   };
 
   const addToCartHandler = () => {
-    dispatch(
-      addItemsToCart({
-        productId: data?.product?._id,
-        name: data?.product?.name,
-        image: data?.product?.images[0].url,
-        quantity: 1,
-        price: data?.product?.price,
-        stock: data?.product?.stock,
-        totalPrice: data?.product?.price,
-      })
-    );
-    localStorage.setItem(
-      "cartItems",
-      JSON.stringify([
-        {
+    if (user) {
+      dispatch(
+        addItemsToCart({
           productId: data?.product?._id,
           name: data?.product?.name,
           image: data?.product?.images[0].url,
           quantity: 1,
           price: data?.product?.price,
           stock: data?.product?.stock,
-          ...data?.product,
           totalPrice: data?.product?.price,
-        },
-      ])
-    );
-    toast.success("Items added to cart");
+        })
+      );
+      localStorage.setItem(
+        "cartItems",
+        JSON.stringify([
+          {
+            productId: data?.product?._id,
+            name: data?.product?.name,
+            image: data?.product?.images[0].url,
+            quantity: 1,
+            price: data?.product?.price,
+            stock: data?.product?.stock,
+            ...data?.product,
+            totalPrice: data?.product?.price,
+          },
+        ])
+      );
+      toast.success("Items added to cart");
+    } else {
+      toast.success("Please login to add items to cart.");
+    }
   };
 
   return (
