@@ -19,9 +19,7 @@ ChartJS.register(
   Legend
 );
 
-const months = ["January", "February", "March", "April", "May", "June", "July"];
-
-const Barchart = ({
+const SixMonthsSalesBarChart = ({
   data_1 = [],
   data_2 = [],
   title_1,
@@ -29,14 +27,14 @@ const Barchart = ({
   bgColor_1,
   bgColor_2,
   horizontal = false,
-  labels = months,
+  labels,
 }) => {
   const options = {
     responsive: true,
     indexAxis: horizontal ? "y" : "x",
     plugins: {
       legend: {
-        display: false,
+        position: "top",
       },
       title: {
         display: false,
@@ -82,4 +80,4 @@ const Barchart = ({
   return <Bar options={options} data={data} />;
 };
 
-export default Barchart;
+export default SixMonthsSalesBarChart;

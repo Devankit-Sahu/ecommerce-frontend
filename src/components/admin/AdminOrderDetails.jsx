@@ -66,6 +66,18 @@ const AdminOrderDetails = () => {
             </span>
           </h4>
           <h4 className="font-semibold text-base my-2 capitalize">
+            created by :
+            <span className="text-gray-700 font-semibold ml-1">
+              {data?.order?.userId?.name}
+            </span>
+          </h4>
+          <h4 className="font-semibold text-base my-2 capitalize">
+            email :
+            <span className="text-gray-700 font-semibold ml-1">
+              {data?.order?.userId?.email}
+            </span>
+          </h4>
+          <h4 className="font-semibold text-base my-2 capitalize">
             status :
             <span className="text-green-700 font-semibold ml-1">
               {data?.order?.orderStatus}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Stack } from "@mui/material";
 import axios from "axios";
@@ -24,8 +24,6 @@ import { SERVER } from "../../config/config";
 const Payment = () => {
   const { user } = useSelector((state) => state.auth);
   const { cartItems, shippingInfo } = useSelector((state) => state.cart);
-  const location = useLocation();
-  const clientSecret = location.state?.clientSecret;
   const [stripeKey, setStripeKey] = useState(null);
   const navigate = useNavigate();
 
@@ -47,23 +45,17 @@ const Payment = () => {
   }, []);
 
   useEffect(() => {
-    if (!clientSecret || cartItems.length === 0 || !shippingInfo) {
+    if (cartItems.length === 0 || !shippingInfo) {
       navigate("/cart");
     }
-  }, [clientSecret, cartItems.length, navigate]);
+  }, [cartItems.length, navigate, shippingInfo]);
 
   return (
     <section className="w-full h-[calc(100vh-80px)] bg-slate-100 flex items-center justify-center">
-      <Elements
-        stripe={stripeKey}
-        options={{
-          clientSecret,
-        }}
-      >
+      <Elements stripe={stripeKey}>
         <CheckOutForm
           cartItems={cartItems}
           shippingInfo={shippingInfo}
-          clientSecret={clientSecret}
           user={user}
         />
       </Elements>
@@ -73,18 +65,29 @@ const Payment = () => {
 
 export default Payment;
 
-const CheckOutForm = ({ clientSecret, cartItems, shippingInfo, user }) => {
+const CheckOutForm = ({ cartItems, shippingInfo, user }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [isLoading, setIsLoading] = useState(false);
   const [createOrderMutation] = useCreateOrderMutation();
+  const [total, setTotal] = useState(0);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  let totalPrice = 0;
 
-  totalPrice = cartItems.reduce((acc, item) => {
-    return acc + item.price;
-  }, 0);
+  const createPayment = async (amount) => {
+    const res = await axios.post(
+      `${SERVER}/api/v1/payment/new`,
+      {
+        amount: amount,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return res?.data?.clientSecret;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -92,6 +95,8 @@ const CheckOutForm = ({ clientSecret, cartItems, shippingInfo, user }) => {
     if (!stripe || !elements) {
       return;
     }
+
+    const clientSecret = await createPayment(total);
 
     setIsLoading(true);
     const toastId = toast.loading(
@@ -123,12 +128,13 @@ const CheckOutForm = ({ clientSecret, cartItems, shippingInfo, user }) => {
       }
 
       if (paymentIntent.status === "succeeded") {
+        toast.success("Your payment is successful!", { id: toastId });
         await createOrderMutation({
           orderItems: cartItems,
           shippingInfo,
-          totalPrice,
+          totalPrice: total,
         });
-        toast.success("Your payment is successful!", { id: toastId });
+        toast.success("Your order is created!", { id: toastId });
         dispatch(setIsPaymentCompleted(true));
         navigate("/payment-success", { replace: true });
       } else {
@@ -144,6 +150,15 @@ const CheckOutForm = ({ clientSecret, cartItems, shippingInfo, user }) => {
       toast.dismiss(toastId);
     }
   };
+
+  useEffect(() => {
+    if (cartItems.length > 0) {
+      const tot = cartItems.reduce((acc, item) => {
+        return acc + item.totalPrice;
+      }, 0);
+      setTotal(tot);
+    }
+  }, [cartItems]);
 
   return (
     <form className="bg-white px-10 py-10" onSubmit={handleSubmit}>
@@ -167,7 +182,7 @@ const CheckOutForm = ({ clientSecret, cartItems, shippingInfo, user }) => {
         disabled={isLoading || !stripe || !elements}
         type="submit"
       >
-        {isLoading ? "processing" : `pay ₹${totalPrice.toFixed(2)}`}
+        {isLoading ? "processing" : `pay ₹${total.toFixed(2)}`}
       </button>
     </form>
   );

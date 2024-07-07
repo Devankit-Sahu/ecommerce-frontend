@@ -42,4 +42,5 @@ export const getLastMonths = () => {
     const monthName = monthDate.toLocaleString("default", { month: "long" });
     last6Months.unshift(monthName);
   }
+  return last6Months;
 };

@@ -67,19 +67,22 @@ const LoginPage = () => {
           noValidate
         >
           <div>
-            <Input
-              type="email"
-              name="email"
-              id="email"
-              label={<EmailOutlinedIcon />}
-              labelClassName="text-gray-500"
-              placeholder="Enter your email"
-              className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full py-2 px-1 ${
-                errors?.email && "border border-solid border-red-600"
-              }`}
-              register={register}
-              errorMessage={{ required: "This field is required" }}
-            />
+            {" "}
+            <div className="flex gap-1 items-center">
+              <Input
+                type="email"
+                name="email"
+                id="email"
+                label={<EmailOutlinedIcon />}
+                labelClassName="text-gray-500"
+                placeholder="Enter your email"
+                className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full py-2 px-1 ${
+                  errors?.email && "border border-solid border-red-600"
+                }`}
+                register={register}
+                errorMessage={{ required: "This field is required" }}
+              />
+            </div>
             {errors?.email && (
               <p className="text-red-500 text-sm" style={{ marginTop: 0 }}>
                 {errors?.email?.message}
@@ -87,19 +90,21 @@ const LoginPage = () => {
             )}
           </div>
           <div>
-            <Input
-              type="password"
-              name="password"
-              id="password"
-              label={<LockOutlinedIcon />}
-              labelClassName="text-gray-500"
-              placeholder="Enter your password"
-              className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full py-2 px-1 ${
-                errors?.password && "border border-solid border-red-600"
-              }`}
-              register={register}
-              errorMessage={{ required: "This field is required" }}
-            />
+            <div className="flex gap-1 items-center">
+              <Input
+                type="password"
+                name="password"
+                id="password"
+                label={<LockOutlinedIcon />}
+                labelClassName="text-gray-500"
+                placeholder="Enter your password"
+                className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full py-2 px-1 ${
+                  errors?.password && "border border-solid border-red-600"
+                }`}
+                register={register}
+                errorMessage={{ required: "This field is required" }}
+              />
+            </div>
             {errors?.password && (
               <p className="text-red-500 text-sm" style={{ marginTop: 0 }}>
                 {errors?.password?.message}

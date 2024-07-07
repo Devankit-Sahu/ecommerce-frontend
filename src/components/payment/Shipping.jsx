@@ -9,9 +9,6 @@ import {
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
-import toast from "react-hot-toast";
-import { SERVER } from "../../config/config";
 import { addShippingInfo } from "../../redux/features/cart/cartSlice";
 import { useForm } from "react-hook-form";
 
@@ -41,29 +38,7 @@ const Shipping = () => {
   const submitHandler = async (data) => {
     dispatch(addShippingInfo(data));
     localStorage.setItem("shippingInfo", JSON.stringify(data));
-    try {
-      const totalPrice = cartItems.reduce((acc, item) => {
-        return acc + item.price;
-      }, 0);
-      const res = await axios.post(
-        `${SERVER}/api/v1/payment/new`,
-        {
-          amount: totalPrice,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      navigate("/payment", {
-        state: {
-          clientSecret: res.data.clientSecret,
-        },
-      });
-    } catch (error) {
-      toast.error(error.response.data.message);
-    }
+    navigate("/payment");
   };
 
   return (
@@ -73,95 +48,105 @@ const Shipping = () => {
           shipping details
         </h1>
         <form onSubmit={handleSubmit(submitHandler)} noValidate>
-          <div className="mb-2">
-            <Input
-              id="address1"
-              type="text"
-              label={<HomeIcon />}
-              labelClassName="text-gray-500"
-              placeholder="address1"
-              className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full px-2 py-1 placeholder:text-black/65 ${
-                errors?.address1 && "border border-solid border-red-600"
-              }`}
-              register={register}
-              errorMessage={{ required: "This field is required" }}
-            />
+          <div>
+            <div className="mb-2 flex items-center gap-1">
+              <Input
+                id="address1"
+                type="text"
+                label={<HomeIcon />}
+                labelClassName="text-gray-500"
+                placeholder="address1"
+                className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full px-2 py-1 placeholder:text-black/65 ${
+                  errors?.address1 && "border border-solid border-red-600"
+                }`}
+                register={register}
+                errorMessage={{ required: "This field is required" }}
+              />
+            </div>
             {errors?.address1 && (
               <p className="text-red-500 text-sm" style={{ marginTop: 0 }}>
                 {errors?.address1?.message}
               </p>
             )}
           </div>
-          <div className="mb-2">
-            <Input
-              id="address2"
-              type="text"
-              label={<HomeIcon />}
-              labelClassName="text-gray-500"
-              placeholder="address2"
-              className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full px-2 py-1 placeholder:text-black/65 ${
-                errors?.address2 && "border border-solid border-red-600"
-              }`}
-              register={register}
-              errorMessage={{ required: "This field is required" }}
-            />
+          <div>
+            <div className="mb-2 flex items-center gap-1">
+              <Input
+                id="address2"
+                type="text"
+                label={<HomeIcon />}
+                labelClassName="text-gray-500"
+                placeholder="address2"
+                className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full px-2 py-1 placeholder:text-black/65 ${
+                  errors?.address2 && "border border-solid border-red-600"
+                }`}
+                register={register}
+                errorMessage={{ required: "This field is required" }}
+              />
+            </div>
             {errors?.address2 && (
               <p className="text-red-500 text-sm" style={{ marginTop: 0 }}>
                 {errors?.address2?.message}
               </p>
             )}
           </div>
-          <div className="mb-2">
-            <Input
-              id="country"
-              type="text"
-              label={<BungalowIcon />}
-              labelClassName="text-gray-500"
-              placeholder="country"
-              className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full px-2 py-1 placeholder:text-black/65 ${
-                errors?.address2 && "border border-solid border-red-600"
-              }`}
-              register={register}
-              errorMessage={{ required: "This field is required" }}
-            />
+          <div>
+            <div className="mb-2 flex items-center gap-1">
+              <Input
+                id="country"
+                type="text"
+                label={<BungalowIcon />}
+                labelClassName="text-gray-500"
+                placeholder="country"
+                className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full px-2 py-1 placeholder:text-black/65 ${
+                  errors?.address2 && "border border-solid border-red-600"
+                }`}
+                register={register}
+                errorMessage={{ required: "This field is required" }}
+              />
+            </div>
             {errors?.country && (
               <p className="text-red-500 text-sm" style={{ marginTop: 0 }}>
                 {errors?.country?.message}
               </p>
             )}
           </div>
-          <div className="mb-2">
-            <Input
-              id="state"
-              type="text"
-              label={<BungalowIcon />}
-              labelClassName="text-gray-500"
-              placeholder="state"
-              className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full px-2 py-1 placeholder:text-black/65 ${
-                errors?.state && "border border-solid border-red-600"
-              }`}
-              register={register}
-              errorMessage={{ required: "This field is required" }}
-            />
+          <div>
+            <div className="mb-2 flex items-center gap-1">
+              <Input
+                id="state"
+                type="text"
+                label={<BungalowIcon />}
+                labelClassName="text-gray-500"
+                placeholder="state"
+                className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full px-2 py-1 placeholder:text-black/65 ${
+                  errors?.state && "border border-solid border-red-600"
+                }`}
+                register={register}
+                errorMessage={{ required: "This field is required" }}
+              />
+            </div>
             {errors?.state && (
               <p className="text-red-500 text-sm" style={{ marginTop: 0 }}>
                 {errors?.state?.message}
               </p>
             )}
           </div>
-          <div className="mb-2">
-            <Input
-              id="city"
-              type="text"
-              label={<LocationCityIcon />}
-              labelClassName="text-gray-500"
-              placeholder="city"
-              className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full px-2 py-1 placeholder:text-black/65 ${
-                errors?.city && "border border-solid border-red-600"
-              }`}
-              register={register}
-              errorMessage={{ required: "This field is required" }}
-            />
+          <div>
+            <div className="mb-2 flex items-center gap-1">
+              <Input
+                id="city"
+                type="text"
+                label={<LocationCityIcon />}
+                labelClassName="text-gray-500"
+                placeholder="city"
+                className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full px-2 py-1 placeholder:text-black/65 ${
+                  errors?.city && "border border-solid border-red-600"
+                }`}
+                register={register}
+                errorMessage={{ required: "This field is required" }}
+              />
+            </div>
             {errors?.city && (
               <p className="text-red-500 text-sm" style={{ marginTop: 0 }}>
                 {errors?.city?.message}
@@ -169,18 +154,20 @@ const Shipping = () => {
             )}
           </div>
           <div>
-            <Input
-              id="pincode"
-              type="text"
-              label={<PinDropIcon />}
-              labelClassName="text-gray-500"
-              placeholder="pincode"
-              className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full px-2 py-1 placeholder:text-black/65 ${
-                errors?.pincode && "border border-solid border-red-600"
-              }`}
-              register={register}
-              errorMessage={{ required: "This field is required" }}
-            />
+            <div className="mb-2 flex items-center gap-1">
+              <Input
+                id="pincode"
+                type="text"
+                label={<PinDropIcon />}
+                labelClassName="text-gray-500"
+                placeholder="pincode"
+                className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full px-2 py-1 placeholder:text-black/65 ${
+                  errors?.pincode && "border border-solid border-red-600"
+                }`}
+                register={register}
+                errorMessage={{ required: "This field is required" }}
+              />
+            </div>
             {errors?.pincode && (
               <p className="text-red-500 text-sm" style={{ marginTop: 0 }}>
                 {errors?.pincode?.message}

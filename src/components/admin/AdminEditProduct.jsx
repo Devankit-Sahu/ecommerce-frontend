@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Input from "../input/Input";
-import { Box, Button, Badge } from "@mui/material";
-import { styled } from "@mui/material/styles";
-import { Close as CloseIcon } from "@mui/icons-material";
+import { Box, Button } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   useEditProductByAdminMutation,
@@ -10,18 +8,6 @@ import {
 } from "../../redux/api/product-api";
 import toast from "react-hot-toast";
 import { useGetCategoriesByAdminQuery } from "../../redux/api/category-api";
-
-const StyledBadge = styled(Badge)(() => ({
-  "& .MuiBadge-badge": {
-    right: 2,
-    top: 1,
-    backgroundColor: "red",
-    color: "white",
-    height: "25px",
-    width: "25px",
-    borderRadius: "15px",
-  },
-}));
 
 const AdminEditProduct = () => {
   const { productId } = useParams();
@@ -109,7 +95,7 @@ const AdminEditProduct = () => {
       </h2>
       <form onSubmit={handlesubmit} noValidate encType="multipart/form-data">
         <div className="grid md:grid-cols-2 gap-x-5 py-3">
-          <div>
+          <div className="">
             <Input
               label="Product Name"
               labelClassName="block text-sm font-medium leading-6 text-gray-900"
@@ -200,18 +186,12 @@ const AdminEditProduct = () => {
         </div>
         <div className="flex gap-3 py-3 flex-wrap justify-center">
           {oldImages.map((img, index) => (
-            <StyledBadge
-              badgeContent={<CloseIcon sx={{ fontSize: "15px" }} />}
+            <div
               key={index}
+              className="w-20 h-20 md:w-40 md:h-40 p-4 border-[2px] rounded-xl border-[#eee]"
             >
-              <div className="w-20 h-20 md:w-40 md:h-40 p-4 border-[2px] rounded-xl border-[#eee]">
-                <img
-                  src={img}
-                  className="w-full h-full"
-                  alt="product-preview"
-                />
-              </div>
-            </StyledBadge>
+              <img src={img} className="w-full h-full" alt="product-preview" />
+            </div>
           ))}
         </div>
         <div className="py-3">

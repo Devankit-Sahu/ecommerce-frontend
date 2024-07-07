@@ -111,29 +111,31 @@ const SignupPage = () => {
             />
           </div>
           <div>
-            <Input
-              id="name"
-              name="name"
-              type="text"
-              label={<PersonIcon />}
-              labelClassName="text-gray-500"
-              placeholder="Enter your name"
-              className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full py-2 px-1 ${
-                errors?.name && "border border-solid border-red-600"
-              }`}
-              register={register}
-              errorMessage={{
-                required: "Name is required",
-                minLength: {
-                  value: 5,
-                  message: "Must be of atleast 5 characters",
-                },
-                maxLength: {
-                  value: 30,
-                  message: "Must not exceed 30 characters",
-                },
-              }}
-            />
+            <div className="flex gap-1 items-center">
+              <Input
+                id="name"
+                name="name"
+                type="text"
+                label={<PersonIcon />}
+                labelClassName="text-gray-500"
+                placeholder="Enter your name"
+                className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full py-2 px-1 ${
+                  errors?.name && "border border-solid border-red-600"
+                }`}
+                register={register}
+                errorMessage={{
+                  required: "Name is required",
+                  minLength: {
+                    value: 5,
+                    message: "Must be of atleast 5 characters",
+                  },
+                  maxLength: {
+                    value: 30,
+                    message: "Must not exceed 30 characters",
+                  },
+                }}
+              />
+            </div>
             {errors?.name && (
               <p className="text-red-500 text-sm" style={{ marginTop: 0 }}>
                 {errors?.name?.message}
@@ -141,21 +143,23 @@ const SignupPage = () => {
             )}
           </div>
           <div>
-            <Input
-              type="email"
-              name="email"
-              id="email"
-              label={<EmailOutlinedIcon />}
-              labelClassName="text-gray-500"
-              placeholder="Enter your email"
-              className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full py-2 px-1 ${
-                errors?.email && "border border-solid border-red-600"
-              }`}
-              register={register}
-              errorMessage={{
-                required: "This field is required",
-              }}
-            />
+            <div className="flex gap-1 items-center">
+              <Input
+                type="email"
+                name="email"
+                id="email"
+                label={<EmailOutlinedIcon />}
+                labelClassName="text-gray-500"
+                placeholder="Enter your email"
+                className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full py-2 px-1 ${
+                  errors?.email && "border border-solid border-red-600"
+                }`}
+                register={register}
+                errorMessage={{
+                  required: "This field is required",
+                }}
+              />
+            </div>
             {errors?.email && (
               <p className="text-red-500 text-sm" style={{ marginTop: 0 }}>
                 {errors?.email?.message}
@@ -163,21 +167,23 @@ const SignupPage = () => {
             )}
           </div>
           <div>
-            <Input
-              type="password"
-              name="password"
-              id="password"
-              label={<LockOutlinedIcon />}
-              labelClassName="text-gray-500"
-              placeholder="Enter your password"
-              className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full py-2 px-1 ${
-                errors?.password && "border border-solid border-red-600"
-              }`}
-              register={register}
-              errorMessage={{
-                required: "This field is required",
-              }}
-            />
+            <div className="flex gap-1 items-center">
+              <Input
+                type="password"
+                name="password"
+                id="password"
+                label={<LockOutlinedIcon />}
+                labelClassName="text-gray-500"
+                placeholder="Enter your password"
+                className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full py-2 px-1 ${
+                  errors?.password && "border border-solid border-red-600"
+                }`}
+                register={register}
+                errorMessage={{
+                  required: "This field is required",
+                }}
+              />
+            </div>
             {errors?.password && (
               <p className="text-red-500 text-sm" style={{ marginTop: 0 }}>
                 {errors?.password?.message}

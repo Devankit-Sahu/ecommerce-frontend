@@ -6,6 +6,7 @@ import userApi from "./api/user-api";
 import categoryApi from "./api/category-api";
 import orderApi from "./api/order-api";
 import utilsSlice from "./features/utilSlice";
+import statsApi from "./api/stats-api";
 
 const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
     [categoryApi.reducerPath]: categoryApi.reducer,
     [orderApi.reducerPath]: orderApi.reducer,
     [utilsSlice.name]: utilsSlice.reducer,
+    [statsApi.reducerPath]: statsApi.reducer,
   },
   middleware: (defaultMiddleWare) => [
     ...defaultMiddleWare(),
@@ -23,6 +25,7 @@ const store = configureStore({
     userApi.middleware,
     categoryApi.middleware,
     orderApi.middleware,
+    statsApi.middleware,
   ],
 });
 

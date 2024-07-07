@@ -1,5 +1,3 @@
-import { Stack } from "@mui/material";
-
 const Input = ({
   id,
   type = "text",
@@ -15,7 +13,7 @@ const Input = ({
   ...rest
 }) => {
   return (
-    <Stack direction={"row"} gap={1} alignItems={"center"}>
+    <>
       {label && (
         <label htmlFor={id} className={`${labelClassName}`}>
           {label}
@@ -24,6 +22,7 @@ const Input = ({
       <input
         type={type}
         id={id}
+        name={name}
         value={value}
         onChange={onChange}
         autoComplete="off"
@@ -32,7 +31,7 @@ const Input = ({
         {...register(id, errorMessage)}
         {...rest}
       />
-    </Stack>
+    </>
   );
 };
 

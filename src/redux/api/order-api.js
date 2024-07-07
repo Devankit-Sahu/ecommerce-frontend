@@ -33,7 +33,7 @@ const orderApi = createApi({
     }),
     getOrdersByAdmin: builder.query({
       query: () => ({ url: "admin/all", credentials: "include" }),
-      providesTags: ["Order"],
+      invalidatesTags: ["Order"],
     }),
     getOrderDetailsByAdmin: builder.query({
       query: (id) => ({ url: `admin/${id}`, credentials: "include" }),
@@ -46,9 +46,6 @@ const orderApi = createApi({
         method: "PUT",
         body: { orderId, orderStatus, deliveredAt },
       }),
-      invalidatesTags: (result, error, { orderId }) => [
-        { type: "Order", id: orderId },
-      ],
     }),
   }),
 });

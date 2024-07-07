@@ -52,7 +52,7 @@ const CartPage = () => {
       }, 0);
       setSubTotal(total);
     }
-  }, [cartItems.length]);
+  }, [cartItems]);
 
   return (
     <section className="min-h-[calc(100%-120px)] w-full px-10 2xl:px-20">

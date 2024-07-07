@@ -108,3 +108,30 @@ export const sidebarListItems = [
 ];
 
 export const orderStatus = ["processing", "shipped", "delivered"];
+
+export const latestOdersColumns = [
+  {
+    Header: "Order Id",
+    accessor: "order_id",
+  },
+  {
+    Header: "Name",
+    accessor: "name",
+  },
+  {
+    Header: "Email",
+    accessor: "email",
+  },
+  {
+    Header: "Price",
+    accessor: "price",
+  },
+  {
+    Header: "Status",
+    accessor: "status",
+  },
+  {
+    Header: "Date",
+    accessor: "date",
+  },
+];

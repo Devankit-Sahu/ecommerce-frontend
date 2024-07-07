@@ -1,5 +1,4 @@
-import React, { useMemo } from "react";
-import { Box, Skeleton, Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import MyTable from "../table/MyTable";
 import {
   CurrencyRupee as CurrencyRupeeIcon,
@@ -7,51 +6,33 @@ import {
   ShoppingCart as ShoppingCartIcon,
   People as PeopleIcon,
 } from "@mui/icons-material";
-import Barchart from "../chart/Barchart";
-// import Doughtnut from "../chart/Doughtnut";
-import { useGetDashboardDataQuery } from "../../redux/api/product-api";
-import { getLastMonths } from "../../utils/utils";
+import SixMonthsSalesBarChart from "../chart/SixMonthsSalesBarChart";
+import Doughtnut from "../chart/Doughtnut";
+import { useGetDashboardDataQuery } from "../../redux/api/stats-api";
+import { getLastMonths, getStatusClass } from "../../utils/utils";
+import TopProductsBarChart from "../chart/TopProductsBarChart";
+import AdminDashboardLoader from "./AdminDashboardLoader";
+import { latestOdersColumns } from "../../constants/constants";
 
 const months = getLastMonths();
 
 const AdminDashboard = () => {
   const { data: dashboardData, isLoading } = useGetDashboardDataQuery();
-  const columns = useMemo(
-    () => [
-      {
-        Header: "Order Id",
-        accessor: "order_id",
-      },
-      {
-        Header: "Name",
-        accessor: "name",
-      },
-      {
-        Header: "Email",
-        accessor: "email",
-      },
-      {
-        Header: "Price",
-        accessor: "price",
-      },
-      {
-        Header: "Status",
-        accessor: "status",
-      },
-      {
-        Header: "Date",
-        accessor: "date",
-      },
-    ],
-    []
-  );
 
   const data = dashboardData?.lastOneMonthOrders?.map((order) => ({
     order_id: String(order._id).slice(0, 7),
-    name: "Rahul",
-    email: "F3ae@dfs",
+    name: order.userId.name,
+    email: order.userId.email,
     price: "₹" + order.totalPrice,
-    status: order.orderStatus,
+    status: (
+      <span
+        className={`${getStatusClass(
+          order.orderStatus
+        )} capitalize font-medium`}
+      >
+        {order.orderStatus}
+      </span>
+    ),
     date: new Date(order.createdAt).toLocaleDateString(),
   }));
 
@@ -62,19 +43,7 @@ const AdminDashboard = () => {
       </h2>
 
       {isLoading ? (
-        <Stack
-          direction={"row"}
-          justifyContent={"center"}
-          flexWrap={"wrap"}
-          rowGap={4}
-          columnGap={4}
-        >
-          {Array.from(
-            [1, 2, 3, 4].map((_, index) => (
-              <Skeleton key={index} width={200} height={150} />
-            ))
-          )}
-        </Stack>
+        <AdminDashboardLoader />
       ) : (
         <>
           <Stack
@@ -137,10 +106,12 @@ const AdminDashboard = () => {
               </div>
             </div>
           </Stack>
-          <div className="flex flex-col lg:flex-row gap-20 mt-10">
-            <div className="w-full  bg-[#fbf8f8] shadow-lg p-3">
-              <h4 className="font-semibold text-lg">Sales Statistics</h4>
-              <Barchart
+          <div className="flex flex-col md:flex-row gap-2 mt-10">
+            <div className="w-full md:w-[50%] bg-[#ffffff] shadow-lg p-3">
+              <h4 className="font-semibold text-lg capitalize">
+                Last Six Months Sales
+              </h4>
+              <SixMonthsSalesBarChart
                 labels={months}
                 data_1={dashboardData?.chart?.revenue}
                 data_2={dashboardData?.chart?.order}
@@ -150,10 +121,29 @@ const AdminDashboard = () => {
                 bgColor_2="rgba(53, 162, 235, 0.8)"
               />
             </div>
+            <div className="w-full md:w-[50%] bg-[#ffffff] shadow-lg p-3">
+              <h4 className="font-semibold text-lg capitalize">
+                Top Selling Products
+              </h4>
+              <TopProductsBarChart
+                topFiveProducts={dashboardData?.topFiveProducts}
+              />
+            </div>
+          </div>
+          <div className="mt-10">
+            <h4 className="font-semibold text-lg capitalize text-center">
+              Comparison of Product Stock Status
+            </h4>
+            <div className="w-[200px] md:w-[400px] mx-auto">
+              <Doughtnut
+                productsInStock={dashboardData?.chart?.productsInStock}
+                productsOutOfStock={dashboardData?.chart?.productsOutOfStock}
+              />
+            </div>
           </div>
           <div className="my-10">
             <h4 className="font-semibold text-lg mb-4">Latest Orders</h4>
-            <MyTable columns={columns} data={data} />
+            <MyTable columns={latestOdersColumns} data={data} />
           </div>
         </>
       )}
