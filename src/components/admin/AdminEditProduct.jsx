@@ -9,6 +9,8 @@ import {
 import toast from "react-hot-toast";
 import { useGetCategoriesByAdminQuery } from "../../redux/api/category-api";
 
+const productTypes = ["top deals", "featured products"];
+
 const AdminEditProduct = () => {
   const { productId } = useParams();
   const { data, isLoading } = useProductDetailsByAdminQuery(productId);
@@ -22,6 +24,7 @@ const AdminEditProduct = () => {
     price: 0,
     stock: 0,
     seller: "",
+    productType: "",
   });
   const [images, setImages] = useState([]);
   const [oldImages, setOldImages] = useState([]);
@@ -46,7 +49,8 @@ const AdminEditProduct = () => {
 
   const handlesubmit = (e) => {
     e.preventDefault();
-    const { name, category, description, price, stock, seller } = productData;
+    const { name, category, description, price, stock, seller, productType } =
+      productData;
 
     const formData = new FormData();
 
@@ -56,6 +60,7 @@ const AdminEditProduct = () => {
     formData.set("price", price);
     formData.set("stock", stock);
     formData.set("seller", seller);
+    formData.set("productType", productType);
     images.forEach((image) => {
       formData.append("images", image);
     });
@@ -83,6 +88,7 @@ const AdminEditProduct = () => {
         price: product.price,
         stock: product.stock,
         seller: product.seller,
+        productType: product.productType,
       });
       setOldImages(product.images.map((image) => image.url) || []);
     }
@@ -95,7 +101,7 @@ const AdminEditProduct = () => {
       </h2>
       <form onSubmit={handlesubmit} noValidate encType="multipart/form-data">
         <div className="grid md:grid-cols-2 gap-x-5 py-3">
-          <div className="">
+          <div>
             <Input
               label="Product Name"
               labelClassName="block text-sm font-medium leading-6 text-gray-900"
@@ -147,7 +153,7 @@ const AdminEditProduct = () => {
             />
           </div>
         </div>
-        <div className="grid grid-cols-3 gap-x-5 py-3">
+        <div className="grid grid-cols-2 gap-x-5 gap-y-5 py-3">
           <div>
             <Input
               label="Product Price"
@@ -182,6 +188,29 @@ const AdminEditProduct = () => {
               value={productData.seller}
               onChange={changeHandler}
             />
+          </div>
+          <div>
+            <label
+              className="block text-sm font-medium leading-6 text-gray-900"
+              htmlFor="productType"
+            >
+              Product type
+            </label>
+            <select
+              id="productType"
+              name="productType"
+              onChange={changeHandler}
+              className="bg-transparent rounded outline-none border border-[#d5d0d0] w-full px-2"
+            >
+              <option value={productData.productType}>
+                {productData.productType}
+              </option>
+              {productTypes.map((type) => (
+                <option value={type} key={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
         <div className="flex gap-3 py-3 flex-wrap justify-center">

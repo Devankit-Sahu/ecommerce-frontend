@@ -6,9 +6,12 @@ import { useCreateProductMutation } from "../../redux/api/product-api";
 import toast from "react-hot-toast";
 import { useGetCategoriesByAdminQuery } from "../../redux/api/category-api";
 
+const productTypes = ["top deals", "featured products"];
+
 const AdminCreateProduct = () => {
   const [name, setProdName] = useState("");
   const [category, setProdcat] = useState("laptop");
+  const [productType, setProductType] = useState("top deals");
   const [description, setProdDesc] = useState("");
   const [price, setProdPrice] = useState("");
   const [stock, setProdStock] = useState("");
@@ -41,6 +44,7 @@ const AdminCreateProduct = () => {
     formData.set("price", price);
     formData.set("stock", stock);
     formData.set("seller", seller);
+    formData.set("productType", productType);
     images.forEach((image) => {
       formData.append("images", image);
     });
@@ -126,7 +130,7 @@ const AdminCreateProduct = () => {
               />
             </div>
           </div>
-          <div className="grid grid-cols-3 gap-x-5 py-2">
+          <div className="grid grid-cols-2 gap-x-5 gap-y-5 py-2">
             <div>
               <Input
                 label="Product Price"
@@ -162,8 +166,28 @@ const AdminCreateProduct = () => {
                 onChange={(e) => setProdSeller(e.target.value)}
               />
             </div>
+            <div>
+              <label
+                className="block text-sm font-medium leading-6 text-gray-900"
+                htmlFor="productType"
+              >
+                Product type
+              </label>
+              <select
+                id="productType"
+                name="productType"
+                onChange={(e) => setProductType(e.target.value)}
+                className="bg-transparent rounded outline-none border border-[#d5d0d0] w-full px-2"
+              >
+                <option value="">Choose Product Type</option>
+                {productTypes.map((type) => (
+                  <option value={type} key={type}>
+                    {type}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
-          <div className="grid md:grid-cols-1 gap-x-3 py-2"></div>
           <div className="py-2">
             <Input
               type="file"

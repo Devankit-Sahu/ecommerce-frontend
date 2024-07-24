@@ -127,26 +127,79 @@ const App = () => {
             />
           </Route>
           {/* admin routes */}
-          <Route
-            path="/admin"
-            element={
-              <ProtectedRoute user={user} isAdmin={true}>
-                <AdminLayout />
-              </ProtectedRoute>
-            }
-          >
-            <Route path="dashboard" element={<AdminDashboard />} />
-            <Route path="products" element={<AdminProducts />} />
-            <Route path="product/create" element={<AdminCreateProduct />} />
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route
+              path="dashboard"
+              element={
+                <ProtectedRoute user={user} isAdmin={true}>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="products"
+              element={
+                <ProtectedRoute user={user} isAdmin={true}>
+                  <AdminProducts />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="product/create"
+              element={
+                <ProtectedRoute user={user} isAdmin={true}>
+                  <AdminCreateProduct />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="product/edit/:productId"
-              element={<AdminEditProduct />}
+              element={
+                <ProtectedRoute user={user} isAdmin={true}>
+                  <AdminEditProduct />
+                </ProtectedRoute>
+              }
             />
-            <Route path="users" element={<AdminUsersList />} />
-            <Route path="orders" element={<AdminOrders />} />
-            <Route path="order/:orderId" element={<AdminOrderDetails />} />
-            <Route path="category" element={<AdminCategories />} />
-            <Route path="profile" element={<Profile />} />
+            <Route
+              path="users"
+              element={
+                <ProtectedRoute user={user} isAdmin={true}>
+                  <AdminUsersList />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="orders"
+              element={
+                <ProtectedRoute user={user} isAdmin={true}>
+                  <AdminOrders />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="order/:orderId"
+              element={
+                <ProtectedRoute user={user} isAdmin={true}>
+                  <AdminOrderDetails />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="category"
+              element={
+                <ProtectedRoute user={user} isAdmin={true}>
+                  <AdminCategories />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="profile"
+              element={
+                <ProtectedRoute user={user} isAdmin={true}>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
           </Route>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<SignupPage />} />

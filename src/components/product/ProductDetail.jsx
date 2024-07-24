@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Box, Button, Stack, Skeleton } from "@mui/material";
 import ProductReviews from "./ProductReviews";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,15 +15,18 @@ const ProductDetail = () => {
   const { productId } = useParams();
   const { data, isLoading, refetch } = useProductDetailsQuery({ productId });
 
-  const changeTabHandler = (value) => {
-    if (value === "description") setTab("description");
-    else setTab("reviews");
-  };
+  const changeTabHandler = useCallback((value) => setTab(value), []);
 
   const addToCartHandler = () => {
     if (user) {
-      dispatch(
-        addItemsToCart({
+      const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+      const itemExists = cartItems.find(
+        (item) => item.productId === data?.product?._id
+      );
+      if (itemExists) {
+        toast.success("Items already in cart.");
+      } else {
+        const newItem = {
           productId: data?.product?._id,
           name: data?.product?.name,
           image: data?.product?.images[0].url,
@@ -31,24 +34,12 @@ const ProductDetail = () => {
           price: data?.product?.price,
           stock: data?.product?.stock,
           totalPrice: data?.product?.price,
-        })
-      );
-      localStorage.setItem(
-        "cartItems",
-        JSON.stringify([
-          {
-            productId: data?.product?._id,
-            name: data?.product?.name,
-            image: data?.product?.images[0].url,
-            quantity: 1,
-            price: data?.product?.price,
-            stock: data?.product?.stock,
-            ...data?.product,
-            totalPrice: data?.product?.price,
-          },
-        ])
-      );
-      toast.success("Items added to cart");
+        };
+        const updatedCartItems = [...cartItems, newItem];
+        dispatch(addItemsToCart(newItem));
+        localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+        toast.success("Items added to cart");
+      }
     } else {
       toast.success("Please login to add items to cart.");
     }
@@ -57,24 +48,7 @@ const ProductDetail = () => {
   return (
     <section className="bg-slate-100 min-h-full pb-5 px-10 lg:px-20">
       {isLoading ? (
-        <Box className="flex flex-col md:flex-row">
-          <Box className="w-full md:w-1/2">
-            <Skeleton height={"100%"} />
-          </Box>
-          <Box className="w-full md:w-1/2 p-5">
-            <Skeleton height={50} />
-            <Skeleton height={50} />
-            <Skeleton height={50} />
-            <Skeleton height={50} />
-            <Skeleton height={50} />
-            <Skeleton height={50} />
-            <Skeleton height={50} />
-            <Stack direction={"row"} gap={2}>
-              <Skeleton width={64} height={84} />
-              <Skeleton width={64} height={84} />
-            </Stack>
-          </Box>
-        </Box>
+        <ProductSkeleton />
       ) : (
         <>
           <Box className="flex flex-col md:flex-row">
@@ -100,6 +74,12 @@ const ProductDetail = () => {
                 category :
                 <span className=" font-normal ml-1">
                   {data?.product?.category}
+                </span>
+              </h1>
+              <h1 className="my-3 capitalize font-bold">
+                product type :
+                <span className=" font-normal ml-1">
+                  {data?.product?.productType}
                 </span>
               </h1>
               <h1 className="my-3 capitalize font-bold">
@@ -180,3 +160,25 @@ const ProductDetail = () => {
 };
 
 export default ProductDetail;
+
+const ProductSkeleton = () => (
+  <Box className="flex flex-col md:flex-row">
+    <Box className="w-full md:w-1/2">
+      <Skeleton height={"100%"} />
+    </Box>
+    <Box className="w-full md:w-1/2 p-5">
+      {Array(7)
+        .fill()
+        .map((_, index) => (
+          <Skeleton key={index} height={50} />
+        ))}
+      <Stack direction={"row"} gap={2}>
+        {Array(2)
+          .fill()
+          .map((_, index) => (
+            <Skeleton key={index} width={64} height={84} />
+          ))}
+      </Stack>
+    </Box>
+  </Box>
+);

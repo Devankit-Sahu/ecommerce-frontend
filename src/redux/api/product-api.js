@@ -21,6 +21,13 @@ const productApi = createApi({
       },
       invalidatesTags: ["Products"],
     }),
+    getProductsUsingProductType: builder.query({
+      query: ({ productType }) => ({
+        url: `type/${productType}`,
+        credentials: "include",
+      }),
+      invalidatesTags: ["Products"],
+    }),
     productDetails: builder.query({
       query: ({ productId }) => ({
         url: `${productId}`,
@@ -83,6 +90,7 @@ const productApi = createApi({
 export default productApi;
 export const {
   useGetProductsQuery,
+  useGetProductsUsingProductTypeQuery,
   useProductDetailsQuery,
   useCreateProductMutation,
   useGetProductsByAdminQuery,

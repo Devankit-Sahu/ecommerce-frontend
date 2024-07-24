@@ -1,6 +1,5 @@
 import { Box, Stack } from "@mui/material";
 import { Link } from "react-router-dom";
-import { Add as AddIcon } from "@mui/icons-material";
 
 const AllProducts = ({ products = [] }) => {
   return (
@@ -13,6 +12,7 @@ const AllProducts = ({ products = [] }) => {
           <Link to={`/product/${product._id}`}>
             <Box className="h-48">
               <img
+                loading="lazy"
                 src={product?.images[0]?.url}
                 alt=""
                 className="w-full h-full object-contain"
@@ -30,9 +30,6 @@ const AllProducts = ({ products = [] }) => {
               marginTop={2}
             >
               <h4>₹ {product.price}</h4>
-              {/* <button className="w-8 h-8 flex items-center justify-center border-[1px] border-solid border-[rgb(239,239,239)] rounded hover:bg-[rgba(1,159,127,1)] text-[rgba(1,159,127,1)] hover:text-white transition-colors">
-                <AddIcon fontSize="small" />
-              </button> */}
             </Stack>
           </Stack>
         </Box>

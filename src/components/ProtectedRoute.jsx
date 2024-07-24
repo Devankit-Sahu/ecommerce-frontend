@@ -1,5 +1,4 @@
 import { Navigate } from "react-router-dom";
-import Loader from "./Loader";
 
 const ProtectedRoute = ({
   children,
@@ -7,9 +6,6 @@ const ProtectedRoute = ({
   isAdmin = false,
   redirect = "/login",
 }) => {
-  if (!user) {
-    return <Loader />;
-  }
   if (!user) return <Navigate to={redirect} />;
   if (isAdmin && user.role !== "admin") return <Navigate to="/404" />;
 

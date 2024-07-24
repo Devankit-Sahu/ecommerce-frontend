@@ -23,7 +23,7 @@ const ProductFilter = ({
 
   return (
     <div className="w-full">
-      <div className="flex items-center justify-between px-2">
+      <div className="flex items-center justify-between border-b-[1px] border-solid border-b-slate-200">
         <h2 className="text-gray-800 hover:text-gray-700 font-medium">
           Filters
         </h2>
@@ -31,11 +31,11 @@ const ProductFilter = ({
           className="bg-gray-300 rounded-full p-1 flex items-center justify-center md:hidden"
           onClick={closeHandler}
         >
-          <CloseIcon sx={{fontSize:"20px"}} />
+          <CloseIcon sx={{ fontSize: "20px" }} />
         </span>
       </div>
-      <div className="w-full border-b border-[#b2b1b1] px-2">
-        <h3 className="font-medium text-gray-900 border-b-[1px] border-solid border-b-[rgb(204,204,204)] py-2">
+      <div>
+        <h3 className="font-medium text-gray-900 border-b-[1px] border-solid border-b-slate-200 py-2">
           Category
         </h3>
         <ul className="w-full">
@@ -55,7 +55,9 @@ const ProductFilter = ({
       </div>
       {/* price filter */}
       <div className="w-full px-1 py-4">
-        <h3 className="font-medium text-gray-900 mb-4">Price</h3>
+        <h3 className="font-medium text-gray-900 mb-4 border-b-[1px] border-solid border-b-slate-200">
+          Price
+        </h3>
         <div className="w-[80%] mx-auto pl-2">
           <Slider
             aria-labelledby="range-slider"
