@@ -26,7 +26,7 @@ const AdminProducts = () => {
   };
 
   const tableData = data?.products?.map((product) => ({
-    product_id: String(product._id).slice(0, 7),
+    product_id: product._id,
     name: product.name,
     stock: product.stock,
     price: "₹" + product.price,

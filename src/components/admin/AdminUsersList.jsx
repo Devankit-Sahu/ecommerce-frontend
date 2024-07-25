@@ -7,7 +7,7 @@ const AdminUsersList = () => {
   const { data, isLoading } = useGetUsersByAdminQuery();
   const usersData = data?.users?.map((user) => ({
     photo: user.avatar.url,
-    user_id: String(user._id).slice(0, 7),
+    user_id: user._id,
     name: user.name,
     email: user.email,
   }));

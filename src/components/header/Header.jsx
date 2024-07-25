@@ -1,14 +1,6 @@
 import { useState } from "react";
 import Search from "../search/Search";
-import {
-  Avatar,
-  Badge,
-  Box,
-  Dialog,
-  Tooltip,
-  Stack,
-  Drawer,
-} from "@mui/material";
+import { Avatar, Badge, Box, Dialog, Tooltip, Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import {
   Search as SearchIcon,
@@ -135,15 +127,12 @@ const Header = () => {
         <Search searchCloseHandler={searchCloseHandler} />
       </Dialog>
       {/* mobile nav */}
-      <Drawer
-        className="block sm:hidden"
-        open={isDrawerOpen}
-        onClose={closeDrawerHandler}
-        PaperProps={{
-          sx: {
-            width: "100%",
-          },
-        }}
+      <div
+        className={`${
+          isDrawerOpen
+            ? "fixed left-0 z-[999] w-full sm:w-[350px] top-0 bg-white h-full lg:hidden"
+            : "hidden"
+        }`}
       >
         <MobileNav
           user={user}
@@ -151,7 +140,7 @@ const Header = () => {
           closeDrawerHandler={closeDrawerHandler}
           searchOpenHandler={searchOpenHandler}
         />
-      </Drawer>
+      </div>
     </header>
   );
 };

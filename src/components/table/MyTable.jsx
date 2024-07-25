@@ -25,69 +25,71 @@ const MyTable = ({ columns, data }) => {
   );
 
   return (
-    <div>
-      <table
-        className="w-full"
-        style={{ boxShadow: "0 0 10px rgba(0,0,0,0.204)" }}
-        {...getTableProps()}
-      >
-        <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th
-                  className="text-left bg-blue-500 text-white text-xs md:text-sm lg:text-base p-1 md:p-2"
-                  {...column.getHeaderProps()}
-                >
-                  {column.render("Header")}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {page.map((row) => {
-            prepareRow(row);
-            return (
-              <tr
-                className="cursor-pointer border-b-[1px] border-solid border-b-[#ced0d5] hover:bg-slate-100"
-                {...row.getRowProps()}
-              >
-                {row.cells.map((cell) => (
-                  <td
-                    className="text-xs md:text-sm lg:text-base p-1 md:p-2"
-                    {...cell.getCellProps()}
+    <>
+      <div className="overflow-x-auto">
+        <table
+          className="min-w-full"
+          style={{ boxShadow: "0 0 10px rgba(0,0,0,0.204)" }}
+          {...getTableProps()}
+        >
+          <thead>
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <th
+                    className="text-left bg-blue-500 text-white text-xs md:text-sm lg:text-base p-1 md:p-2"
+                    {...column.getHeaderProps()}
                   >
-                    {cell.column.id === "photo" ? (
-                      <Avatar
-                        sx={{
-                          width: {
-                            xs: "20px",
-                            sm: "30px",
-                            md: "40px",
-                            lg: "50px",
-                          },
-                          height: {
-                            xs: "20px",
-                            sm: "30px",
-                            md: "40px",
-                            lg: "50px",
-                          },
-                        }}
-                        src={cell.value}
-                        alt="Image"
-                      />
-                    ) : (
-                      cell.render("Cell")
-                    )}
-                  </td>
+                    {column.render("Header")}
+                  </th>
                 ))}
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
-      <div className="mt-5 flex gap-3 items-center">
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {page.map((row) => {
+              prepareRow(row);
+              return (
+                <tr
+                  className="cursor-pointer border-b-[1px] border-solid border-b-[#ced0d5] hover:bg-slate-100"
+                  {...row.getRowProps()}
+                >
+                  {row.cells.map((cell) => (
+                    <td
+                      className="text-xs md:text-sm lg:text-base p-1 md:p-2"
+                      {...cell.getCellProps()}
+                    >
+                      {cell.column.id === "photo" ? (
+                        <Avatar
+                          sx={{
+                            width: {
+                              xs: "20px",
+                              sm: "30px",
+                              md: "40px",
+                              lg: "50px",
+                            },
+                            height: {
+                              xs: "20px",
+                              sm: "30px",
+                              md: "40px",
+                              lg: "50px",
+                            },
+                          }}
+                          src={cell.value}
+                          alt="Image"
+                        />
+                      ) : (
+                        cell.render("Cell")
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      <div className="mt-5 flex gap-3 items-center justify-center md:justify-start">
         <button
           className={`bg-emerald-600 px-3 py-2 text-sm md:text-base rounded text-white ${
             !canPreviousPage ? "cursor-default" : "cursor-pointer"
@@ -113,7 +115,7 @@ const MyTable = ({ columns, data }) => {
           Next
         </button>
       </div>
-    </div>
+    </>
   );
 };
 

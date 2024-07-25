@@ -80,7 +80,7 @@ const SignupPage = () => {
 
   return (
     <section className="h-screen flex items-center justify-center bg-slate-200">
-      <Box bgcolor={"white"} padding={10}>
+      <div className="bg-white px-10 sm:px-20 py-10">
         <h2 className="my-3 text-center text-2xl font-bold leading-9 tracking-tight text-gray-600 capitalize">
           Create your account
         </h2>
@@ -119,7 +119,7 @@ const SignupPage = () => {
                 label={<PersonIcon />}
                 labelClassName="text-gray-500"
                 placeholder="Enter your name"
-                className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full py-2 px-1 ${
+                className={`bg-transparent placeholder:text-sm sm:placeholder:text-base rounded outline-none border border-[#d5d0d0] w-full py-2 px-1 ${
                   errors?.name && "border border-solid border-red-600"
                 }`}
                 register={register}
@@ -151,7 +151,7 @@ const SignupPage = () => {
                 label={<EmailOutlinedIcon />}
                 labelClassName="text-gray-500"
                 placeholder="Enter your email"
-                className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full py-2 px-1 ${
+                className={`bg-transparent placeholder:text-sm sm:placeholder:text-base rounded outline-none border border-[#d5d0d0] w-full py-2 px-1 ${
                   errors?.email && "border border-solid border-red-600"
                 }`}
                 register={register}
@@ -175,7 +175,7 @@ const SignupPage = () => {
                 label={<LockOutlinedIcon />}
                 labelClassName="text-gray-500"
                 placeholder="Enter your password"
-                className={`bg-transparent rounded outline-none border border-[#d5d0d0] w-full py-2 px-1 ${
+                className={`bg-transparent placeholder:text-sm sm:placeholder:text-base rounded outline-none border border-[#d5d0d0] w-full py-2 px-1 ${
                   errors?.password && "border border-solid border-red-600"
                 }`}
                 register={register}
@@ -207,7 +207,7 @@ const SignupPage = () => {
             Sign In
           </Link>
         </p>
-      </Box>
+      </div>
     </section>
   );
 };

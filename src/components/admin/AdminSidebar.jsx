@@ -1,12 +1,20 @@
 import React from "react";
 import { Box } from "@mui/material";
 import { Close as CloseIcon } from "@mui/icons-material";
-import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { sidebarListItems } from "../../constants/constants";
 
 const AdminSidebar = ({ closeHandler }) => {
+  const navigate = useNavigate();
+  const pathname = window.location.pathname;
+
+  const navigateHandler = (to) => {
+    navigate(to);
+    closeHandler();
+  };
+
   return (
-    <div className="h-full w-full overflow-y-auto">
+    <div className="h-full w-full overflow-y-auto border-r ">
       <div className="flex items-center justify-between px-2 py-4 lg:hidden">
         <div className="flex items-end">
           <img src="/logo.png" alt="brand-logo" className="w-[30px]" />
@@ -20,12 +28,14 @@ const AdminSidebar = ({ closeHandler }) => {
         </span>
       </div>
       {sidebarListItems?.map((item) => (
-        <NavLink
+        <div
           key={item.name}
-          to={item.href}
-          className={({ isActive }) =>
-            isActive ? "text-[rgba(1,159,127,1)] font-bold" : "text-slate-700"
-          }
+          onClick={() => navigateHandler(item.href)}
+          className={`w-full ${
+            pathname === item.href
+              ? "text-[rgba(1,159,127,1)] font-bold"
+              : "text-slate-700"
+          }`}
         >
           <Box className="flex items-center gap-2 px-5 py-3 hover:bg-slate-100">
             <span>
@@ -33,7 +43,7 @@ const AdminSidebar = ({ closeHandler }) => {
             </span>
             <h2 className="flex-1">{item.name}</h2>
           </Box>
-        </NavLink>
+        </div>
       ))}
     </div>
   );

@@ -20,7 +20,7 @@ const AdminDashboard = () => {
   const { data: dashboardData, isLoading } = useGetDashboardDataQuery();
 
   const data = dashboardData?.lastOneMonthOrders?.map((order) => ({
-    order_id: String(order._id).slice(0, 7),
+    order_id: order._id,
     name: order.userId.name,
     email: order.userId.email,
     price: "₹" + order.totalPrice,

@@ -1,16 +1,16 @@
 import React, { useState } from "react";
-import { Box, Drawer, useMediaQuery } from "@mui/material";
+import { Box } from "@mui/material";
 import AdminHeader from "../admin/AdminHeader";
 import AdminSidebar from "../admin/AdminSidebar";
 import { Outlet } from "react-router-dom";
 
 const AdminLayout = () => {
-  const isSmallScreen = useMediaQuery("(max-width: 425px)");
   const [open, setOpen] = useState(false);
 
   const openDrawer = () => {
     setOpen(true);
   };
+
   const closeDrawer = () => {
     setOpen(false);
   };
@@ -31,18 +31,15 @@ const AdminLayout = () => {
         </Box>
       </section>
       {/* for mobile screen */}
-      <Drawer
-        className="block lg:hidden"
-        open={open}
-        onClose={closeDrawer}
-        PaperProps={{
-          sx: {
-            width: isSmallScreen ? "100%" : "350px",
-          },
-        }}
+      <div
+        className={`${
+          open
+            ? "fixed left-0 z-[999] w-full sm:w-[350px] top-0 bg-white h-full lg:hidden"
+            : "hidden"
+        }`}
       >
         <AdminSidebar closeHandler={closeDrawer} />
-      </Drawer>
+      </div>
     </Box>
   );
 };
