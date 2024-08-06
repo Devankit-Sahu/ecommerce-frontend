@@ -56,7 +56,7 @@ const MyTable = ({ columns, data }) => {
                 >
                   {row.cells.map((cell) => (
                     <td
-                      className="text-xs md:text-sm lg:text-base p-1 md:p-2"
+                      className="text-xs md:text-sm lg:text-base p-1 md:p-2 text-left"
                       {...cell.getCellProps()}
                     >
                       {cell.column.id === "photo" ? (

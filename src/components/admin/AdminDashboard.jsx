@@ -21,8 +21,8 @@ const AdminDashboard = () => {
 
   const data = dashboardData?.lastOneMonthOrders?.map((order) => ({
     order_id: order._id,
-    name: order.userId.name,
-    email: order.userId.email,
+    name: order.name,
+    email: order.email,
     price: "₹" + order.totalPrice,
     status: (
       <span

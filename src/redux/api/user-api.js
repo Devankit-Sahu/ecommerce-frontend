@@ -33,6 +33,14 @@ const userApi = createApi({
         credentials: "include",
       }),
     }),
+    addShippingDetails: builder.mutation({
+      query: (data) => ({
+        url: "add-shippinginfo",
+        credentials: "include",
+        method: "PUT",
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -43,4 +51,5 @@ export const {
   useRegisterMutation,
   useLazyLogoutQuery,
   useGetUsersByAdminQuery,
+  useAddShippingDetailsMutation,
 } = userApi;

@@ -135,3 +135,22 @@ export const latestOdersColumns = [
     accessor: "date",
   },
 ];
+
+export const cartColumns = [
+  {
+    Header: "Product",
+    accessor: "product",
+  },
+  {
+    Header: "Quantity",
+    accessor: "quantity",
+  },
+  {
+    Header: "Price",
+    accessor: "price",
+  },
+  {
+    Header: "Total",
+    accessor: "total",
+  },
+];

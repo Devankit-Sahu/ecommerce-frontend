@@ -11,7 +11,6 @@ const Orderplaced = () => {
   const dispatch = useDispatch();
   const navigateHandler = () => {
     localStorage.removeItem("cartItems");
-    localStorage.removeItem("shippingInfo");
     dispatch(resetCart());
     dispatch(setIsPaymentCompleted(false));
     navigate("/my-orders");

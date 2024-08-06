@@ -23,13 +23,15 @@ import { SERVER } from "../../config/config";
 
 const Payment = () => {
   const { user } = useSelector((state) => state.auth);
-  const { cartItems, shippingInfo } = useSelector((state) => state.cart);
+  const { cartItems } = useSelector((state) => state.cart);
   const [stripeKey, setStripeKey] = useState(null);
   const navigate = useNavigate();
 
   const getStripeKey = async () => {
     try {
-      const res = await axios.get(`${SERVER}/api/v1/payment/key`);
+      const res = await axios.get(`${SERVER}/api/v1/payment/key`, {
+        withCredentials: true,
+      });
       const publishableKey = await loadStripe(res.data.publishable_key);
       setStripeKey(publishableKey);
     } catch (error) {
@@ -45,19 +47,15 @@ const Payment = () => {
   }, []);
 
   useEffect(() => {
-    if (cartItems.length === 0 || !shippingInfo) {
+    if (!cartItems.length) {
       navigate("/cart");
     }
-  }, [cartItems.length, navigate, shippingInfo]);
+  }, [cartItems.length, navigate]);
 
   return (
     <section className="w-full h-[calc(100vh-80px)] bg-slate-100 flex items-center justify-center">
       <Elements stripe={stripeKey}>
-        <CheckOutForm
-          cartItems={cartItems}
-          shippingInfo={shippingInfo}
-          user={user}
-        />
+        <CheckOutForm cartItems={cartItems} user={user} />
       </Elements>
     </section>
   );
@@ -65,7 +63,7 @@ const Payment = () => {
 
 export default Payment;
 
-const CheckOutForm = ({ cartItems, shippingInfo, user }) => {
+const CheckOutForm = ({ cartItems, user }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [isLoading, setIsLoading] = useState(false);
@@ -84,6 +82,7 @@ const CheckOutForm = ({ cartItems, shippingInfo, user }) => {
         headers: {
           "Content-Type": "application/json",
         },
+        withCredentials: true,
       }
     );
     return res?.data?.clientSecret;
@@ -112,9 +111,9 @@ const CheckOutForm = ({ cartItems, shippingInfo, user }) => {
             billing_details: {
               name: user.name,
               address: {
-                line1: shippingInfo.address1,
-                city: shippingInfo.city,
-                state: shippingInfo.state,
+                line1: user.shippingInfo.address1,
+                city: user.shippingInfo.city,
+                state: user.shippingInfo.state,
                 country: "IN",
               },
             },
@@ -131,8 +130,9 @@ const CheckOutForm = ({ cartItems, shippingInfo, user }) => {
         toast.success("Your payment is successful!", { id: toastId });
         await createOrderMutation({
           orderItems: cartItems,
-          shippingInfo,
+          shippingInfo: user.shippingInfo,
           totalPrice: total,
+          stripePaymentIntentId: paymentIntent.id,
         });
         toast.success("Your order is created!", { id: toastId });
         dispatch(setIsPaymentCompleted(true));
@@ -162,19 +162,19 @@ const CheckOutForm = ({ cartItems, shippingInfo, user }) => {
 
   return (
     <form className="bg-white px-10 py-10" onSubmit={handleSubmit}>
-      <h1 className="capitalize font-semibold mb-5 text-center text-xl">
+      <h1 className="capitalize font-semibold mb-5 text-center text-base md:text-xl">
         payment details
       </h1>
       <Stack direction={"row"} gap={2} marginBottom={1}>
-        <CreditCardIcon className="text-gray-500" />
+        <CreditCardIcon className="text-gray-500" fontSize="10px" />
         <CardNumberElement className="w-full" />
       </Stack>
       <Stack direction={"row"} gap={2} marginBottom={1}>
-        <EventIcon className="text-gray-500" />
+        <EventIcon className="text-gray-500" fontSize="10px" />
         <CardExpiryElement className="w-full" />
       </Stack>
       <Stack direction={"row"} gap={2} marginBottom={1}>
-        <VpnKeyIcon className="text-gray-500" />
+        <VpnKeyIcon className="text-gray-500" fontSize="10px" />
         <CardCvcElement className="w-full" />
       </Stack>
       <button

@@ -1,15 +1,13 @@
 const Input = ({
-  id,
+  id = "",
   type = "text",
-  name,
-  label,
+  name = "",
+  label = "",
   labelClassName = "",
-  value,
-  onChange,
-  placeholder,
+  value = "",
+  onChange = () => {},
+  placeholder = "",
   className = "",
-  register = () => {},
-  errorMessage,
   ...rest
 }) => {
   return (
@@ -28,7 +26,6 @@ const Input = ({
         autoComplete="off"
         className={className}
         placeholder={placeholder}
-        {...register(id, errorMessage)}
         {...rest}
       />
     </>

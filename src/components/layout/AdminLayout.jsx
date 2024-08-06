@@ -19,7 +19,7 @@ const AdminLayout = () => {
     <Box height={"100vh"} width={"100%"}>
       <AdminHeader openDrawer={openDrawer} />
       <section className="flex w-full h-[calc(100%-64px)]">
-        <aside className="h-full overflow-y-auto w-60 hidden lg:block">
+        <aside className="h-full overflow-y-auto w-60 hidden md:block">
           <AdminSidebar />
         </aside>
         <Box
@@ -34,7 +34,7 @@ const AdminLayout = () => {
       <div
         className={`${
           open
-            ? "fixed left-0 z-[999] w-full sm:w-[350px] top-0 bg-white h-full lg:hidden"
+            ? "fixed left-0 z-[999] right-0 bottom-0 top-0 bg-white h-full md:hidden"
             : "hidden"
         }`}
       >

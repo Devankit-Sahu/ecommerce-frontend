@@ -1,11 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate } from "react-router-dom";
 
 const Search = ({ searchCloseHandler = () => {} }) => {
   const [key, setKey] = useState("");
   const navigate = useNavigate();
-  const inputref = useRef(null);
   const submitHandler = (e) => {
     e.preventDefault();
     if (key.trim()) {
@@ -14,10 +13,6 @@ const Search = ({ searchCloseHandler = () => {} }) => {
     }
   };
 
-  useEffect(() => {
-    inputref.current.focus();
-  }, []);
-
   return (
     <form
       onSubmit={submitHandler}
@@ -25,7 +20,6 @@ const Search = ({ searchCloseHandler = () => {} }) => {
       className="sm:w-[300px] lg:w-[600px] flex border-[1px] border-solid border-[rgb(239,239,239)] h-[44px]"
     >
       <input
-        ref={inputref}
         type="text"
         value={key}
         className="w-full h-full outline-none border-none placeholder:text-[#333232] px-3"

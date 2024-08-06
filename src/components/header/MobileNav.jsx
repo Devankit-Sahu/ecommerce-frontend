@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Search from "../search/Search";
 import {
   Store as StoreIcon,
   ShoppingCart as ShoppingCartIcon,
@@ -9,18 +11,18 @@ import {
   Search as SearchIcon,
   Close as CloseIcon,
 } from "@mui/icons-material";
+import { Dialog } from "@mui/material";
 
-const MobileNav = ({
-  user,
-  logoutHandler,
-  closeDrawerHandler,
-  searchOpenHandler,
-}) => {
+const MobileNav = ({ user, logoutHandler, closeDrawerHandler }) => {
+  const [isSearch, setIsSearch] = useState(false);
+  const searchOpenHandler = () => setIsSearch(true);
+  const searchCloseHandler = () => setIsSearch(false);
   const navigate = useNavigate();
   const navigateHandler = (to) => {
     navigate(to);
     closeDrawerHandler();
   };
+
   return (
     <div className="h-screen relative">
       <div
@@ -99,6 +101,14 @@ const MobileNav = ({
           <span className="text-base font-semibold">search</span>
         </div>
       </div>
+      {/* mobile search */}
+      <Dialog
+        className="block md:hidden"
+        open={isSearch}
+        onClose={searchCloseHandler}
+      >
+        <Search searchCloseHandler={searchCloseHandler} />
+      </Dialog>
     </div>
   );
 };

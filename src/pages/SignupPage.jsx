@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import Input from "../components/input/Input";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Box, Stack, Avatar } from "@mui/material";
+import { Avatar } from "@mui/material";
 import {
   Person as PersonIcon,
   EmailOutlined as EmailOutlinedIcon,
@@ -19,7 +18,7 @@ const SignupPage = () => {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm({
     defaultValues: {
       name: "",
@@ -31,6 +30,7 @@ const SignupPage = () => {
 
   const [avatar, setAvatar] = useState("");
   const [avatarPreview, setavatarPreview] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -42,6 +42,7 @@ const SignupPage = () => {
     formData.append("password", data.password);
     formData.append("avatar", avatar);
     const toastId = toast.loading("Account is creating!!!");
+    setIsLoading(true);
     registerMutation(formData)
       .unwrap()
       .then((res) => {
@@ -53,6 +54,7 @@ const SignupPage = () => {
       })
       .finally(() => {
         reset();
+        setIsLoading(false);
       });
   };
 
@@ -112,18 +114,18 @@ const SignupPage = () => {
           </div>
           <div>
             <div className="flex gap-1 items-center">
-              <Input
-                id="name"
-                name="name"
+              <label htmlFor="name" className="text-gray-500">
+                <PersonIcon />
+              </label>
+              <input
                 type="text"
-                label={<PersonIcon />}
-                labelClassName="text-gray-500"
+                name="name"
+                id="name"
                 placeholder="Enter your name"
                 className={`bg-transparent placeholder:text-sm sm:placeholder:text-base rounded outline-none border border-[#d5d0d0] w-full py-2 px-1 ${
                   errors?.name && "border border-solid border-red-600"
                 }`}
-                register={register}
-                errorMessage={{
+                {...register("name", {
                   required: "Name is required",
                   minLength: {
                     value: 5,
@@ -133,7 +135,7 @@ const SignupPage = () => {
                     value: 30,
                     message: "Must not exceed 30 characters",
                   },
-                }}
+                })}
               />
             </div>
             {errors?.name && (
@@ -144,20 +146,24 @@ const SignupPage = () => {
           </div>
           <div>
             <div className="flex gap-1 items-center">
-              <Input
+              <label htmlFor="email" className="text-gray-500">
+                <EmailOutlinedIcon />
+              </label>
+              <input
                 type="email"
                 name="email"
                 id="email"
-                label={<EmailOutlinedIcon />}
-                labelClassName="text-gray-500"
                 placeholder="Enter your email"
                 className={`bg-transparent placeholder:text-sm sm:placeholder:text-base rounded outline-none border border-[#d5d0d0] w-full py-2 px-1 ${
                   errors?.email && "border border-solid border-red-600"
                 }`}
-                register={register}
-                errorMessage={{
-                  required: "This field is required",
-                }}
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                    message: "Invalid email",
+                  },
+                })}
               />
             </div>
             {errors?.email && (
@@ -168,20 +174,20 @@ const SignupPage = () => {
           </div>
           <div>
             <div className="flex gap-1 items-center">
-              <Input
+              <label htmlFor="password" className="text-gray-500">
+                <LockOutlinedIcon />
+              </label>
+              <input
                 type="password"
                 name="password"
                 id="password"
-                label={<LockOutlinedIcon />}
-                labelClassName="text-gray-500"
                 placeholder="Enter your password"
                 className={`bg-transparent placeholder:text-sm sm:placeholder:text-base rounded outline-none border border-[#d5d0d0] w-full py-2 px-1 ${
                   errors?.password && "border border-solid border-red-600"
                 }`}
-                register={register}
-                errorMessage={{
-                  required: "This field is required",
-                }}
+                {...register("password", {
+                  required: "password is required",
+                })}
               />
             </div>
             {errors?.password && (
@@ -193,9 +199,9 @@ const SignupPage = () => {
           <button
             className="w-full rounded-md bg-cyan-500 px-5 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-cyan-600 capitalize"
             type="submit"
-            disabled={isSubmitting ? true : false}
+            disabled={isLoading}
           >
-            sign up
+            {isLoading ? "Loading..." : "Sign Up"}
           </button>
         </form>
         <p className="mt-5 text-sm text-gray-500">

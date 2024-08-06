@@ -3,16 +3,6 @@ const initialState = {
   cartItems: localStorage.getItem("cartItems")
     ? JSON.parse(localStorage.getItem("cartItems"))
     : [],
-  shippingInfo: localStorage.getItem("shippingInfo")
-    ? JSON.parse(localStorage.getItem("shippingInfo"))
-    : {
-        address1: "",
-        address2: "",
-        country: "",
-        state: "",
-        city: "",
-        pincode: "",
-      },
 };
 
 const cartSlice = createSlice({
@@ -76,9 +66,6 @@ const cartSlice = createSlice({
         }),
       };
     },
-    addShippingInfo(state, action) {
-      state.shippingInfo = action.payload;
-    },
     resetCart(state) {
       state.cartItems = [];
       state.shippingInfo = {
@@ -98,7 +85,6 @@ export const {
   removeItemsFromCart,
   increaseItemQuantity,
   decreaseItemQuantity,
-  addShippingInfo,
   resetCart,
 } = cartSlice.actions;
 

@@ -46,7 +46,7 @@ const ShopPage = () => {
   }, [isError]);
 
   return (
-    <section className="flex relative min-h-[calc(100vh-75px)]">
+    <section className="shop flex relative min-h-[calc(100vh-80px)]">
       <Box className="hidden md:block w-[350px] bg-white p-3">
         <ProductFilter
           price={price}

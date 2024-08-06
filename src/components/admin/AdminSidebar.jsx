@@ -4,7 +4,7 @@ import { Close as CloseIcon } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { sidebarListItems } from "../../constants/constants";
 
-const AdminSidebar = ({ closeHandler }) => {
+const AdminSidebar = ({ closeHandler = () => {} }) => {
   const navigate = useNavigate();
   const pathname = window.location.pathname;
 
@@ -15,7 +15,7 @@ const AdminSidebar = ({ closeHandler }) => {
 
   return (
     <div className="h-full w-full overflow-y-auto border-r ">
-      <div className="flex items-center justify-between px-2 py-4 lg:hidden">
+      <div className="flex items-center justify-between px-2 py-4 md:hidden">
         <div className="flex items-end">
           <img src="/logo.png" alt="brand-logo" className="w-[30px]" />
           <p className="font-bold">WonderMart</p>
@@ -37,7 +37,7 @@ const AdminSidebar = ({ closeHandler }) => {
               : "text-slate-700"
           }`}
         >
-          <Box className="flex items-center gap-2 px-5 py-3 hover:bg-slate-100">
+          <Box className="flex items-center gap-2 px-5 py-3 hover:bg-slate-100 cursor-pointer">
             <span>
               <item.icon />
             </span>

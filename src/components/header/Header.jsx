@@ -1,9 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Search from "../search/Search";
-import { Avatar, Badge, Box, Dialog, Tooltip, Stack } from "@mui/material";
+import { Avatar, Badge, Box, Tooltip, Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import {
-  Search as SearchIcon,
   Store as StoreIcon,
   ShoppingCart as ShoppingCartIcon,
   Menu as MenuIcon,
@@ -29,16 +28,15 @@ const StyledBadge = styled(Badge)(() => ({
 const Header = () => {
   const { user } = useSelector((state) => state.auth);
   const { cartItems } = useSelector((state) => state.cart);
-  const [isSearch, setIsSearch] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [logout] = useLazyLogoutQuery();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const searchOpenHandler = () => setIsSearch(true);
-  const searchCloseHandler = () => setIsSearch(false);
   const openDrawerHandler = () => setIsDrawerOpen(true);
   const closeDrawerHandler = () => setIsDrawerOpen(false);
+  const openMenuHandler = () => setIsMenuOpen(true);
+  const closeMenuHandler = () => setIsMenuOpen(false);
 
   const logoutHandler = () => {
     if (user) {
@@ -55,8 +53,21 @@ const Header = () => {
     }
   };
 
+  const onScroll = () => {
+    if (window.scrollY > 50) {
+      document.querySelector("header").classList.add("sticky-header");
+    } else {
+      document.querySelector("header").classList.remove("sticky-header");
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <header className="border-[1px] border-solid border-[rgb(239,239,239)] py-3 w-full">
+    <header className="border-[1px] border-solid border-[rgb(239,239,239)] py-3 w-full bg-white">
       <Stack
         direction={"row"}
         justifyContent={"space-between"}
@@ -76,8 +87,8 @@ const Header = () => {
         <Box className="hidden md:block">
           <Search />
         </Box>
-        <Box className="relative hidden sm:flex items-center gap-4 sm:gap-6">
-          <Link to={"/shop"}>
+        <Box className="relative flex items-center gap-6">
+          <Link className="hidden md:block" to={"/shop"}>
             <Tooltip title="Store" placement="bottom">
               <StoreIcon />
             </Tooltip>
@@ -91,46 +102,39 @@ const Header = () => {
               </StyledBadge>
             </Tooltip>
           </Link>
-          <button
-            onClick={searchOpenHandler}
-            className="flex md:hidden border-[1px] border-solid border-[rgb(216,215,215)] rounded-full items-center justify-center p-1"
-          >
-            <SearchIcon />
-          </button>
           <Box
-            className="cursor-pointer"
-            onClick={() => setIsOpen((prev) => !prev)}
+            className="hidden md:block cursor-pointer"
+            onClick={openMenuHandler}
           >
             <Avatar src={user?.avatar?.url} />
           </Box>
-          <ProfileMenu
-            user={user}
-            open={isOpen}
-            handleClose={setIsOpen}
-            logoutHandler={logoutHandler}
-          />
-        </Box>
-        <Box
-          onClick={openDrawerHandler}
-          className="block sm:hidden cursor-pointer"
-        >
-          <MenuIcon />
+          <Box
+            onClick={openDrawerHandler}
+            className="block md:hidden cursor-pointer"
+          >
+            <MenuIcon />
+          </Box>
         </Box>
       </Stack>
-
-      {/* mobile search */}
-      <Dialog
-        className="block md:hidden"
-        open={isSearch}
-        onClose={searchCloseHandler}
+      {/* profile menu */}
+      <div
+        className={`${
+          isMenuOpen ? "fixed top-0 left-0 right-0 bottom-0 z-[999]" : "hidden"
+        }`}
+        onClick={closeMenuHandler}
       >
-        <Search searchCloseHandler={searchCloseHandler} />
-      </Dialog>
+        <ProfileMenu
+          user={user}
+          open={isMenuOpen}
+          logoutHandler={logoutHandler}
+          closeMenu={closeMenuHandler}
+        />
+      </div>
       {/* mobile nav */}
       <div
         className={`${
           isDrawerOpen
-            ? "fixed left-0 z-[999] w-full sm:w-[350px] top-0 bg-white h-full lg:hidden"
+            ? "fixed left-0 z-[999] right-0 bottom-0 top-0 bg-white md:hidden"
             : "hidden"
         }`}
       >
@@ -138,7 +142,6 @@ const Header = () => {
           user={user}
           logoutHandler={logoutHandler}
           closeDrawerHandler={closeDrawerHandler}
-          searchOpenHandler={searchOpenHandler}
         />
       </div>
     </header>

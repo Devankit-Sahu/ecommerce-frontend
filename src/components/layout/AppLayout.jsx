@@ -6,7 +6,7 @@ import { Box } from "@mui/material";
 
 const AppLayout = () => {
   return (
-    <Box minHeight={"100vh"} width={"100%"}>
+    <Box minHeight={"100vh"} height={"100%"} width={"100%"}>
       <Header />
       <Outlet />
       <Footer />

@@ -35,26 +35,26 @@ const OrderDetails = () => {
   };
 
   return (
-    <section className="w-full">
-      <div className="container mx-auto px-10 2xl:px">
+    <section className="w-full pb-10">
+      <div className="max-w-7xl w-full mx-auto px-10 2xl:px">
         {data?.order && (
           <>
-            <h1 className="font-bold text-base sm:text-xl my-2">
+            <h1 className="font-medium text-sm sm:text-xl my-2 capitalize">
               Order Id :
-              <span className="text-red-700 font-semibold ml-1">
+              <span className="text-red-700 font-semibold ml-1 text-xs sm:text-base">
                 {data?.order?._id}
               </span>
             </h1>
             <div className="flex md:items-center flex-col md:flex-row justify-between">
-              <h4 className="capitalize">
+              <h4 className="font-medium text-sm sm:text-xl my-2 capitalize">
                 PlacedAt :
-                <span className="ml-1">
+                <span className="font-normal ml-1 text-xs sm:text-base">
                   {new Date(data?.order?.createdAt).toLocaleDateString()}
                 </span>
               </h4>
-              <h4 className="capitalize">
+              <h4 className="font-medium text-sm sm:text-xl my-2 capitalize">
                 Expected delivery :
-                <span className="ml-1">
+                <span className="font-normal ml-1 text-xs sm:text-base">
                   {new Date(data?.order?.deliveredAt).toLocaleDateString()}
                 </span>
               </h4>
@@ -72,9 +72,15 @@ const OrderDetails = () => {
                   <Step key={label}>
                     <StepLabel
                       sx={{
-                        textTransform: "uppercase",
+                        textTransform: "capitalize",
                         color: "black",
-                        fontWeight: 900,
+                        "& .MuiStepLabel-label": {
+                          fontSize: {
+                            xs: "0.75rem",
+                            sm: "0.875rem",
+                            md: "1rem",
+                          },
+                        },
                       }}
                     >
                       {label}
@@ -83,7 +89,7 @@ const OrderDetails = () => {
                 ))}
               </Stepper>
             </div>
-            <div className="border border-solid border-slate-300 bg-slate-100 rounded-lg my-5">
+            <div className="border border-solid border-slate-300 rounded-lg my-5">
               <h2 className="border-b border-solid border-slate-300 p-2 font-bold capitalize text-xl">
                 order items
               </h2>
@@ -93,16 +99,32 @@ const OrderDetails = () => {
                   alignItems={"center"}
                   justifyContent={"space-between"}
                   padding={2}
+                  gap={2}
                   key={item._id}
                 >
-                  <img src={item.image} alt="" className="w-20 h-20" />
-                  <h3>{item.name}</h3>
-                  <h3>{item.quantity}</h3>
-                  <h3>₹ {item.price}</h3>
+                  <img
+                    src={item.image}
+                    alt=""
+                    className="w-10 h-10 sm:w-20 sm:h-20"
+                  />
+                  <h3 className="w-[50%]">{item.name}</h3>
+                  <h3 className="w-[10%]">{item.quantity}</h3>
+                  <h3 className="w-[10%]">₹ {item.price}</h3>
                 </Stack>
               ))}
             </div>
-            <div className="border border-solid border-slate-300 bg-slate-100 rounded-lg my-10">
+            <div className="border border-solid border-slate-300 rounded-lg my-10">
+              <h2 className="border-b border-solid border-slate-300 p-2 font-bold capitalize text-xl">
+                shipping info
+              </h2>
+              <p className="p-2">
+                {data?.order?.shippingInfo?.address1 ||
+                  data?.order?.shippingInfo?.address2}
+                ,{data?.order?.shippingInfo?.city},
+                {data?.order?.shippingInfo?.state}
+              </p>
+            </div>
+            <div className="border border-solid border-slate-300 rounded-lg my-10">
               <h2 className="border-b border-solid border-slate-300 p-2 font-bold capitalize text-xl">
                 order summary
               </h2>

@@ -45,13 +45,6 @@ const TopProductsBarChart = ({ topFiveProducts }) => {
       title: {
         display: false,
       },
-      tooltip: {
-        callbacks: {
-          label: function (tooltipItem) {
-            return `Total Sales: ${tooltipItem.raw}`;
-          },
-        },
-      },
     },
     scales: {
       y: {
@@ -63,6 +56,13 @@ const TopProductsBarChart = ({ topFiveProducts }) => {
       x: {
         grid: {
           display: false,
+        },
+        ticks: {
+          callback: function (value, index, ticks) {
+            return labels[index] && labels[index].length > 10
+              ? labels[index].substring(0, 10) + "..."
+              : labels[index];
+          },
         },
       },
     },

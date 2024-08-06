@@ -56,7 +56,7 @@ const AdminOrderDetails = () => {
   };
 
   return (
-    <div className="container mx-auto px-10 2xl:px">
+    <div className="max-w-7xl w-full mx-auto px-10 2xl:px">
       {data?.order && (
         <>
           <h4 className="font-semibold text-base my-2 capitalize">
@@ -105,6 +105,7 @@ const AdminOrderDetails = () => {
                 alignItems={"center"}
                 justifyContent={"space-between"}
                 padding={2}
+                gap={2}
                 key={item._id}
               >
                 <img
@@ -112,9 +113,9 @@ const AdminOrderDetails = () => {
                   alt=""
                   className="w-10 h-10 md:w-20 md:h-20"
                 />
-                <h3>{item.name}</h3>
-                <h3>x{item.quantity}</h3>
-                <h3>₹ {item.price}</h3>
+                <h3 className="w-[50%]">{item.name}</h3>
+                <h3 className="w-[50%]">x{item.quantity}</h3>
+                <h3 className="w-[50%]">₹ {item.price}</h3>
               </Stack>
             ))}
           </div>

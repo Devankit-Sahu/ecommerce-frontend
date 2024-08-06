@@ -1,9 +1,7 @@
-import React, { useEffect } from "react";
-import Input from "../components/input/Input";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
-import { Box } from "@mui/material";
 import {
   EmailOutlined as EmailOutlinedIcon,
   LockOutlined as LockOutlinedIcon,
@@ -14,11 +12,12 @@ import { useLoginMutation } from "../redux/api/user-api";
 
 const LoginPage = () => {
   const { user } = useSelector((state) => state.auth);
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm({
     defaultValues: {
       email: "",
@@ -32,6 +31,7 @@ const LoginPage = () => {
 
   const handleLoginSubmit = (data) => {
     const { email, password } = data;
+    setIsLoading(true);
     loginMutation({ email, password })
       .unwrap()
       .then((res) => {
@@ -43,6 +43,7 @@ const LoginPage = () => {
       })
       .finally(() => {
         reset();
+        setIsLoading(false);
       });
   };
 
@@ -67,20 +68,19 @@ const LoginPage = () => {
           noValidate
         >
           <div>
-            {" "}
             <div className="flex gap-1 items-center">
-              <Input
+              <label htmlFor="email" className="text-gray-500">
+                <EmailOutlinedIcon />
+              </label>
+              <input
                 type="email"
                 name="email"
                 id="email"
-                label={<EmailOutlinedIcon />}
-                labelClassName="text-gray-500"
                 placeholder="Enter your email"
                 className={`bg-transparent placeholder:text-sm sm:placeholder:text-base rounded outline-none border border-[#d5d0d0] w-full py-2 px-1 ${
                   errors?.email && "border border-solid border-red-600"
                 }`}
-                register={register}
-                errorMessage={{ required: "This field is required" }}
+                {...register("email", { required: "This field is required" })}
               />
             </div>
             {errors?.email && (
@@ -91,18 +91,20 @@ const LoginPage = () => {
           </div>
           <div>
             <div className="flex gap-1 items-center">
-              <Input
+              <label htmlFor="password" className="text-gray-500">
+                <LockOutlinedIcon />
+              </label>
+              <input
                 type="password"
                 name="password"
                 id="password"
-                label={<LockOutlinedIcon />}
-                labelClassName="text-gray-500"
                 placeholder="Enter your password"
                 className={`bg-transparent placeholder:text-sm sm:placeholder:text-base rounded outline-none border border-[#d5d0d0] w-full py-2 px-1 ${
-                  errors?.password && "border border-solid border-red-600"
+                  errors?.email && "border border-solid border-red-600"
                 }`}
-                register={register}
-                errorMessage={{ required: "This field is required" }}
+                {...register("password", {
+                  required: "This field is required",
+                })}
               />
             </div>
             {errors?.password && (
@@ -114,9 +116,9 @@ const LoginPage = () => {
           <button
             className="w-full rounded-md bg-cyan-500 px-5 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-cyan-600"
             type="submit"
-            disabled={isSubmitting}
+            disabled={isLoading}
           >
-            login
+            {isLoading ? "Loading..." : "Login"}
           </button>
         </form>
         <p className="mt-5 text-sm text-gray-500">

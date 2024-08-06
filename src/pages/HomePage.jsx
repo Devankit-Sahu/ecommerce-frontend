@@ -12,10 +12,7 @@ const HomePage = () => {
     useGetProductsUsingProductTypeQuery({ productType: "featured products" });
 
   return (
-    <Box
-      className="bg-slate-50 pt-4 pb-5"
-      style={{ minHeight: "calc(100vh - 90px)" }}
-    >
+    <section className="home min-h-[calc(100vh - 80px)] bg-slate-100 pt-4 pb-5">
       <Box className="px-10 2xl:px-20">
         <Box marginBottom={5}>
           <ProductSection
@@ -32,7 +29,7 @@ const HomePage = () => {
           />
         </Box>
       </Box>
-    </Box>
+    </section>
   );
 };
 

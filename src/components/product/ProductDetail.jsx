@@ -46,13 +46,13 @@ const ProductDetail = () => {
   };
 
   return (
-    <section className="bg-slate-100 min-h-full pb-5 px-10 lg:px-20">
+    <section className="product-detail min-h-[calc(100vh-80px)] pb-5 px-10 lg:px-20">
       {isLoading ? (
         <ProductSkeleton />
       ) : (
         <>
           <Box className="flex flex-col md:flex-row">
-            <Box className="w-full md:w-1/2 h-[500px]">
+            <Box className="w-full md:w-1/2 md:h-[500px]">
               <img
                 src={data?.product?.images[0].url}
                 alt="product preview"

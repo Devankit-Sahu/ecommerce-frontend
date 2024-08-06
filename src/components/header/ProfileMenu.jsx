@@ -7,50 +7,70 @@ import {
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
-const ProfileMenu = ({ user, open, handleClose, logoutHandler }) => {
+const ProfileMenu = ({ open, user, logoutHandler, closeMenu }) => {
   const navigate = useNavigate();
   const navigateHandler = (to) => {
-    handleClose(false);
     navigate(to);
+    closeMenu();
   };
 
   return (
     <div
-      className={`absolute z-10 top-[55px] bg-white right-0 border border-solid border-gray-300 transition-transform duration-300 ease-in-out transform ${
+      className={`absolute z-10 top-[70px] bg-slate-200 right-[50px]  transition-transform duration-300 ease-in-out transform ${
         open ? "scale-100" : "scale-0"
       } origin-top`}
     >
+      <div
+        style={{
+          position: "absolute",
+          top: "-9px",
+          right: "0px",
+          width: 0,
+          height: 0,
+          borderLeft: "10px solid transparent",
+          borderRight: "10px solid transparent",
+          borderBottom: "10px solid #e2e7f1",
+        }}
+      />
       <ul>
         <li
-          className="px-5 py-2 flex items-center gap-3 hover:bg-gray-200 cursor-pointer border-b border-solid border-gray-300"
-          onClick={() => navigateHandler("/profile")}
+          className="px-5 py-2 flex items-center gap-3 hover:text-white hover:bg-gray-400 cursor-pointer border-b border-solid border-gray-300"
+          onClick={() =>
+            navigateHandler(
+              user.role !== "admin" ? "/profile" : "/admin/profile"
+            )
+          }
         >
           <span>
             <AccountCircleIcon fontSize="small" />
           </span>
           <span>Profile</span>
         </li>
-        <li
-          className="px-5 py-2 flex items-center gap-3 hover:bg-gray-200 cursor-pointer border-b border-solid border-gray-300"
-          onClick={() => navigateHandler("/cart")}
-        >
-          <span>
-            <ShoppingCartIcon fontSize="small" />
-          </span>
-          <span>Cart</span>
-        </li>
-        <li
-          className="px-5 py-2 flex items-center gap-3 hover:bg-gray-200 cursor-pointer border-b border-solid border-gray-300"
-          onClick={() => navigateHandler("/my-orders")}
-        >
-          <span>
-            <CategoryIcon fontSize="small" />
-          </span>
-          <span>Orders</span>
-        </li>
+        {user && user.role !== "admin" && (
+          <li
+            className="px-5 py-2 flex items-center gap-3 hover:text-white hover:bg-gray-400 cursor-pointer border-b border-solid border-gray-300"
+            onClick={() => navigateHandler("/cart")}
+          >
+            <span>
+              <ShoppingCartIcon fontSize="small" />
+            </span>
+            <span>Cart</span>
+          </li>
+        )}
+        {user && user.role !== "admin" && (
+          <li
+            className="px-5 py-2 flex items-center gap-3 hover:text-white hover:bg-gray-400 cursor-pointer border-b border-solid border-gray-300"
+            onClick={() => navigateHandler("/my-orders")}
+          >
+            <span>
+              <CategoryIcon fontSize="small" />
+            </span>
+            <span>Orders</span>
+          </li>
+        )}
         {user && (
           <li
-            className="px-5 py-2 flex items-center gap-3 hover:bg-gray-200 cursor-pointer border-b border-solid border-gray-300"
+            className="px-5 py-2 flex items-center gap-3 hover:text-white hover:bg-gray-400 cursor-pointer border-b border-solid border-gray-300"
             onClick={logoutHandler}
           >
             <span>
@@ -61,7 +81,7 @@ const ProfileMenu = ({ user, open, handleClose, logoutHandler }) => {
         )}
         {!user && (
           <li
-            className="px-5 py-2 flex items-center gap-3 hover:bg-gray-200 cursor-pointer border-b border-solid border-gray-300"
+            className="px-5 py-2 flex items-center gap-3 hover:text-white hover:bg-gray-400 cursor-pointer border-b border-solid border-gray-300"
             onClick={() => navigateHandler("/login")}
           >
             <span>

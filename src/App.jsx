@@ -30,7 +30,6 @@ const AdminCategories = lazy(() =>
   import("./components/admin/AdminCategories")
 );
 const PageNotFound = lazy(() => import("./components/PageNotFound"));
-const Shipping = lazy(() => import("./components/payment/Shipping"));
 const Payment = lazy(() => import("./components/payment/Payment"));
 const Orderplaced = lazy(() => import("./components/payment/Orderplaced"));
 const OrderDetails = lazy(() => import("./pages/OrderDetails"));
@@ -98,14 +97,6 @@ const App = () => {
               element={
                 <ProtectedRoute user={user}>
                   <OrderDetails />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/shipping"
-              element={
-                <ProtectedRoute user={user}>
-                  <Shipping />
                 </ProtectedRoute>
               }
             />
