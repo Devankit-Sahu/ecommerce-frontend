@@ -37,7 +37,7 @@ const ProfileMenu = ({ open, user, logoutHandler, closeMenu }) => {
           className="px-5 py-2 flex items-center gap-3 hover:text-white hover:bg-gray-400 cursor-pointer border-b border-solid border-gray-300"
           onClick={() =>
             navigateHandler(
-              user.role !== "admin" ? "/profile" : "/admin/profile"
+              user && user.role !== "admin" ? "/profile" : "/admin/profile"
             )
           }
         >

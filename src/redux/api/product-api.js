@@ -7,13 +7,12 @@ const productApi = createApi({
   tagTypes: ["Products"],
   endpoints: (builder) => ({
     getProducts: builder.query({
-      query: ({ key = "", category, price = [], page = 1 }) => {
-        let url = "";
-        if (key)
-          url = `all?key=${key}&price[gte]=${price[0]}&price[lte]=${price[1]}&page=${page}`;
-        else if (category)
-          url = `all?category=${category}&price[gte]=${price[0]}&price[lte]=${price[1]}&page=${page}`;
-        else url = "all";
+      query: ({ key = "", category = [], price = [], page = 1 }) => {
+        let url = `all?price[gte]=${price[0]}&price[lte]=${price[1]}&page=${page}`;
+        if (key) url += `&key=${key}`;
+        else if (category.length > 0) {
+          url += `&category=${category}`;
+        }
         return {
           url,
           credentials: "include",

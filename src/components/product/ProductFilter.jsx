@@ -15,9 +15,11 @@ const ProductFilter = ({
   const handleCategoryChange = (event) => {
     const categoryName = event.target.value;
     if (event.target.checked) {
-      setCategories([...categories, categoryName]);
+      setCategories((prevCategories) => [...prevCategories, categoryName]);
     } else {
-      setCategories(categories.filter((category) => category !== categoryName));
+      setCategories((prevCategories) =>
+        prevCategories.filter((category) => category !== categoryName)
+      );
     }
   };
 
@@ -46,6 +48,7 @@ const ProductFilter = ({
                 name={cat?.categoryName}
                 id={cat?.categoryName}
                 value={cat?.categoryName}
+                checked={categories.includes(cat.categoryName)}
                 onChange={handleCategoryChange}
               />
               <label htmlFor={cat?.categoryName}>{cat?.categoryName}</label>
